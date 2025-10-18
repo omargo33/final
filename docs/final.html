@@ -208,6 +208,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#clustering-de-toxicidad" id="toc-clustering-de-toxicidad" class="nav-link" data-scroll-target="#clustering-de-toxicidad">5. Clustering de Toxicidad</a>
   <ul class="collapse">
   <li><a href="#determinación-del-número-óptimo-de-clusters" id="toc-determinación-del-número-óptimo-de-clusters" class="nav-link" data-scroll-target="#determinación-del-número-óptimo-de-clusters">5.1 Determinación del número óptimo de clusters</a></li>
+  <li><a href="#aplicación-de-k-means-con-k-óptimo" id="toc-aplicación-de-k-means-con-k-óptimo" class="nav-link" data-scroll-target="#aplicación-de-k-means-con-k-óptimo">5.2 Aplicación de K-Means con k óptimo</a></li>
+  <li><a href="#preparación-para-visualización-con-pca" id="toc-preparación-para-visualización-con-pca" class="nav-link" data-scroll-target="#preparación-para-visualización-con-pca">5.3 Preparación para visualización con PCA</a></li>
+  <li><a href="#clustering-adicional-agglomerative-clustering" id="toc-clustering-adicional-agglomerative-clustering" class="nav-link" data-scroll-target="#clustering-adicional-agglomerative-clustering">5.4 Clustering adicional: Agglomerative Clustering</a></li>
+  <li><a href="#visualización-de-clusters" id="toc-visualización-de-clusters" class="nav-link" data-scroll-target="#visualización-de-clusters">5.5 Visualización de clusters</a>
+  <ul class="collapse">
+  <li><a href="#visualización-2d-de-clusters" id="toc-visualización-2d-de-clusters" class="nav-link" data-scroll-target="#visualización-2d-de-clusters">5.5.1 Visualización 2D de clusters</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -246,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Proyecto final de Aprendizaje de Maquina Autor Omar Vele</p>
 <section id="importar-librerías" class="level2">
 <h2 class="anchored" data-anchor-id="importar-librerías">Importar librerías</h2>
-<div id="d23c5ccb" class="cell" data-execution_count="1">
+<div id="af4b836e" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -291,14 +298,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'stopwords'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="61">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>True</code></pre>
 </div>
 </div>
 </section>
 <section id="cargar-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="cargar-dataset">Cargar dataset</h2>
-<div id="a7280f7d" class="cell" data-execution_count="2">
+<div id="50a0f089" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el dataset</span></span>
@@ -311,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>1. Análisis Exploratorio de Datos (EDA)</h1>
 <section id="información-general-del-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="información-general-del-dataset">1.1 Información general del dataset</h2>
-<div id="5ba4f4f8" class="cell" data-execution_count="3">
+<div id="ce71b72c" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Número de filas: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -395,7 +402,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="análisis-de-valores-nulos" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-valores-nulos">1.2 Análisis de valores nulos</h2>
-<div id="65cc4733" class="cell" data-execution_count="4">
+<div id="37ae948b" class="cell" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>missing_data <span class="op">=</span> df.isnull().<span class="bu">sum</span>()</span>
@@ -421,7 +428,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="estadísticas-descriptivas" class="level2">
 <h2 class="anchored" data-anchor-id="estadísticas-descriptivas">1.3 Estadísticas descriptivas</h2>
-<div id="3ecfd77b" class="cell" data-execution_count="5">
+<div id="32314065" class="cell" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables numéricas</span></span>
@@ -515,7 +522,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="análisis-de-la-variable-toxicity-toxicity_score" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-la-variable-toxicity-toxicity_score">1.4 Análisis de la variable TOXICITY (toxicity_score)</h2>
-<div id="09b88a30" class="cell" data-execution_count="6">
+<div id="455296a1" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'toxicity_score'</span>].describe())</span>
@@ -564,7 +571,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="análisis-de-texto" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-texto">1.5 Análisis de texto</h2>
-<div id="bb5c6df0" class="cell" data-execution_count="7">
+<div id="4e54371a" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas de texto</span></span>
@@ -630,7 +637,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="análisis-de-variables-categóricas" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-variables-categóricas">1.6 Análisis de variables categóricas</h2>
-<div id="7e004dcf" class="cell" data-execution_count="8">
+<div id="1ac081f5" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>categorical_to_analyze <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> categorical_cols <span class="cf">if</span> df[col].nunique() <span class="op">&lt;</span> <span class="dv">20</span> <span class="kw">and</span> col <span class="op">!=</span> <span class="st">'content'</span>][:<span class="dv">4</span>]</span>
@@ -661,7 +668,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="correlaciones-entre-variables-numéricas" class="level2">
 <h2 class="anchored" data-anchor-id="correlaciones-entre-variables-numéricas">1.7 Correlaciones entre variables numéricas</h2>
-<div id="1e2b5a48" class="cell" data-execution_count="9">
+<div id="b4e3efb5" class="cell" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(numeric_cols) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
@@ -706,7 +713,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis" class="level2">
 <h2 class="anchored" data-anchor-id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis">1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)</h2>
-<div id="50ad663d" class="cell" data-execution_count="10">
+<div id="3698bdf6" class="cell" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">1. DISTRIBUCIÓN DE LOS DATOS:"</span>)</span>
@@ -750,7 +757,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 <h1>2. Preprocesamiento y Codificación</h1>
 <section id="limpieza-de-datos-básica" class="level2">
 <h2 class="anchored" data-anchor-id="limpieza-de-datos-básica">2.1 Limpieza de datos básica</h2>
-<div id="2104b3b0" class="cell" data-execution_count="11">
+<div id="58b44e3f" class="cell" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_procesar <span class="op">=</span> df[[<span class="st">'content'</span>, <span class="st">'toxicity_score'</span>]].copy()</span>
@@ -763,7 +770,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="procesamiento-del-texto-content" class="level2">
 <h2 class="anchored" data-anchor-id="procesamiento-del-texto-content">2.2 Procesamiento del texto (content)</h2>
-<div id="8c256de5" class="cell" data-execution_count="12">
+<div id="604341de" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Función simple de limpieza de texto</span></span>
@@ -799,7 +806,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="codificación-de-texto-con-tf-idf" class="level2">
 <h2 class="anchored" data-anchor-id="codificación-de-texto-con-tf-idf">2.3 Codificación de texto con TF-IDF</h2>
-<div id="47b33391" class="cell" data-execution_count="13">
+<div id="41fcd8d1" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar TF-IDF</span></span>
@@ -833,7 +840,7 @@ Primeros 10 términos: ['abre' 'abuso' 'acaba' 'acabar' 'acabar correismo' 'acas
 </section>
 <section id="pipeline-simplificado-con-columntransformer" class="level2">
 <h2 class="anchored" data-anchor-id="pipeline-simplificado-con-columntransformer">2.4 Pipeline simplificado con ColumnTransformer</h2>
-<div id="b2b05f60" class="cell" data-execution_count="14">
+<div id="e0346768" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipeline simple: solo texto → TF-IDF</span></span>
@@ -870,7 +877,7 @@ Datos finales preparados:
 </section>
 <section id="división-de-datos-para-regresión" class="level2">
 <h2 class="anchored" data-anchor-id="división-de-datos-para-regresión">2.5 División de datos para regresión</h2>
-<div id="9fd318ed" class="cell" data-execution_count="15">
+<div id="03909105" class="cell" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># División simple para regresión</span></span>
@@ -902,7 +909,7 @@ Std: 0.2395</code></pre>
 <section id="transformación-de-toxicity_score-a-variable-categórica" class="level2">
 <h2 class="anchored" data-anchor-id="transformación-de-toxicity_score-a-variable-categórica">3.1 Transformación de toxicity_score a variable categórica</h2>
 <p>En el histograma se dibujan el promedio en ROJO y la media en VERDE</p>
-<div id="db85dfc3" class="cell" data-execution_count="16">
+<div id="c11665ba" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
@@ -969,7 +976,7 @@ Std: 0.2395</code></pre>
 <li>Clase 0 (No Tóxico): aprox 75%</li>
 <li>Clase 1 (Tóxico): aprox 25%</li>
 </ul>
-<div id="21aeac72" class="cell" data-execution_count="17">
+<div id="f1227da0" class="cell" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>umbral_binario <span class="op">=</span> np.percentile(df_procesar[<span class="st">'toxicity_score'</span>], <span class="dv">75</span>)</span>
@@ -995,7 +1002,7 @@ Std: 0.2395</code></pre>
 <li>Clase 1 (Media): aprox 33.3%</li>
 <li>Clase 2 (Alta): aprox 33.3%</li>
 </ul>
-<div id="24e8c4c8" class="cell" data-execution_count="18">
+<div id="e71a37dd" class="cell" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>p33 <span class="op">=</span> np.percentile(df_procesar[<span class="st">'toxicity_score'</span>], <span class="fl">33.33</span>)</span>
@@ -1026,7 +1033,7 @@ Std: 0.2395</code></pre>
 </section>
 <section id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual" class="level3">
 <h3 class="anchored" data-anchor-id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual">Presentación gráfica de mis estadísticas para comparación visual</h3>
-<div id="45968253" class="cell" data-execution_count="19">
+<div id="8c7597b8" class="cell" data-execution_count="19">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
@@ -1058,7 +1065,7 @@ Std: 0.2395</code></pre>
 </section>
 <section id="preparación-de-datos-para-clasificación" class="level2">
 <h2 class="anchored" data-anchor-id="preparación-de-datos-para-clasificación">3.3 Preparación de datos para clasificación</h2>
-<div id="7135296c" class="cell" data-execution_count="20">
+<div id="41518495" class="cell" data-execution_count="20">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>X_classificacion <span class="op">=</span> X_final</span>
@@ -1104,7 +1111,7 @@ Std: 0.2395</code></pre>
 <blockquote class="blockquote">
 <p>Se usa OVR para que “sea uno contra el resto” en la etiquetacion de clases en multi capa.</p>
 </blockquote>
-<div id="3bb49e42" class="cell" data-execution_count="21">
+<div id="2221419b" class="cell" data-execution_count="21">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seteo los modelos en un arreglo.</span></span>
@@ -1234,7 +1241,7 @@ Entrenando SVC...
 <section id="evaluación-detallada-y-métricas" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-detallada-y-métricas">3.5 Evaluación detallada y métricas</h2>
 <p>Creo un data set con los resultados para poder buscar el F1-Score mas Alto y el modelo al que corresponde.</p>
-<div id="e462b4e4" class="cell" data-execution_count="22">
+<div id="63c21ddd" class="cell" data-execution_count="22">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> analizo_modelo_por_metrica(results, y_test, paso_nombre, class_names<span class="op">=</span><span class="va">None</span>):</span>
@@ -1281,7 +1288,7 @@ Valor del F1-Score: 0.5738</code></pre>
 </section>
 <section id="métricas-binarias" class="level2">
 <h2 class="anchored" data-anchor-id="métricas-binarias">3.6.1 Métricas binarias</h2>
-<div id="9783cedb" class="cell" data-execution_count="23">
+<div id="e8afb7c5" class="cell" data-execution_count="23">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">12</span>))</span>
@@ -1316,7 +1323,7 @@ Valor del F1-Score: 0.5738</code></pre>
 </section>
 <section id="matriz-de-confusión-para-el-mejor-modelo-binario" class="level2">
 <h2 class="anchored" data-anchor-id="matriz-de-confusión-para-el-mejor-modelo-binario">3.6.2 Matriz de confusión para el mejor modelo binario</h2>
-<div id="00a5cb1d" class="cell" data-execution_count="24">
+<div id="6538bab4" class="cell" data-execution_count="24">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>best_model_bin <span class="op">=</span> results_binary[best_binary][<span class="st">'model'</span>]</span>
@@ -1334,7 +1341,7 @@ Valor del F1-Score: 0.5738</code></pre>
 <span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Verdadero'</span>)</span>
 <span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Predicho'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="84">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>Text(0.5, 25.13333333333333, 'Predicho')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1348,7 +1355,7 @@ Valor del F1-Score: 0.5738</code></pre>
 </section>
 <section id="matriz-de-confusión-para-el-mejor-modelo-multi-capa" class="level2">
 <h2 class="anchored" data-anchor-id="matriz-de-confusión-para-el-mejor-modelo-multi-capa">3.6.3 Matriz de confusión para el mejor modelo Multi Capa</h2>
-<div id="7d991e91" class="cell" data-execution_count="25">
+<div id="31d1753e" class="cell" data-execution_count="25">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Matriz de confusión multiclase</span></span>
@@ -1381,7 +1388,7 @@ Valor del F1-Score: 0.5738</code></pre>
 <li>ROC Binaria</li>
 <li>ROC Multiclase</li>
 </ul>
-<div id="1188e3ff" class="cell" data-execution_count="26">
+<div id="85852bfc" class="cell" data-execution_count="26">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>)) <span class="co">## Dimensiones</span></span>
@@ -1435,7 +1442,7 @@ Valor del F1-Score: 0.5738</code></pre>
 <h1>4. Regresión de Toxicidad</h1>
 <section id="algoritmos-de-regresión-supervisada-con-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="algoritmos-de-regresión-supervisada-con-pipeline">4.1 Algoritmos de regresión supervisada con Pipeline</h2>
-<div id="4a94a8d1" class="cell" data-execution_count="27">
+<div id="0564b2ea" class="cell" data-execution_count="27">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> crear_pipeline_regresion(modelo_regresion):</span>
@@ -1515,37 +1522,37 @@ Valor del F1-Score: 0.5738</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Entrenando Linear Regression
-  - Tiempo entrenamiento: 0.059s
+  - Tiempo entrenamiento: 0.027s
   - MAE (test): 0.1698
   - RMSE (test): 0.2246
   - R2 (test): 0.1206
 
 Entrenando Ridge Regression
-  - Tiempo entrenamiento: 0.046s
+  - Tiempo entrenamiento: 0.018s
   - MAE (test): 0.1518
   - RMSE (test): 0.1867
   - R2 (test): 0.3925
 
 Entrenando Lasso Regression
-  - Tiempo entrenamiento: 0.051s
+  - Tiempo entrenamiento: 0.018s
   - MAE (test): 0.2079
   - RMSE (test): 0.2397
   - R2 (test): -0.0018
 
 Entrenando Random Forest
-  - Tiempo entrenamiento: 4.773s
+  - Tiempo entrenamiento: 3.365s
   - MAE (test): 0.1531
   - RMSE (test): 0.2006
   - R2 (test): 0.2986
 
 Entrenando Gradient Boosting
-  - Tiempo entrenamiento: 0.306s
+  - Tiempo entrenamiento: 0.152s
   - MAE (test): 0.1786
   - RMSE (test): 0.2070
   - R2 (test): 0.2528
 
 Entrenando SVR
-  - Tiempo entrenamiento: 0.102s
+  - Tiempo entrenamiento: 0.050s
   - MAE (test): 0.1654
   - RMSE (test): 0.2011
   - R2 (test): 0.2951</code></pre>
@@ -1554,7 +1561,7 @@ Entrenando SVR
 </section>
 <section id="evaluación-detallada-con-métricas" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-detallada-con-métricas">4.2 Evaluación detallada con métricas</h2>
-<div id="4dcbc56f" class="cell" data-execution_count="28">
+<div id="466ad95a" class="cell" data-execution_count="28">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>metricas_regresion <span class="op">=</span> pd.DataFrame({</span>
@@ -1599,12 +1606,12 @@ Entrenando SVR
 <div class="cell-output cell-output-stdout">
 <pre><code>TABLA COMPARATIVA DE MODELOS:
            Modelo  Tiempo_Entrenamiento  MAE_Train  RMSE_Train  R2_Train  MAE_Test  RMSE_Test  R2_Test
-Linear Regression                0.0589     0.0878      0.1216    0.7532    0.1698     0.2246   0.1206
- Ridge Regression                0.0458     0.1159      0.1467    0.6411    0.1518     0.1867   0.3925
- Lasso Regression                0.0514     0.2085      0.2449    0.0000    0.2079     0.2397  -0.0018
-    Random Forest                4.7735     0.0704      0.1000    0.8331    0.1531     0.2006   0.2986
-Gradient Boosting                0.3056     0.1587      0.1823    0.4455    0.1786     0.2070   0.2528
-              SVR                0.1023     0.0932      0.1097    0.7992    0.1654     0.2011   0.2951
+Linear Regression                0.0266     0.0878      0.1216    0.7532    0.1698     0.2246   0.1206
+ Ridge Regression                0.0181     0.1159      0.1467    0.6411    0.1518     0.1867   0.3925
+ Lasso Regression                0.0178     0.2085      0.2449    0.0000    0.2079     0.2397  -0.0018
+    Random Forest                3.3651     0.0704      0.1000    0.8331    0.1531     0.2006   0.2986
+Gradient Boosting                0.1525     0.1587      0.1823    0.4455    0.1786     0.2070   0.2528
+              SVR                0.0504     0.0932      0.1097    0.7992    0.1654     0.2011   0.2951
 
 MEJOR MODELO: Ridge Regression
 R2 en prueba: 0.3925
@@ -1624,7 +1631,7 @@ SVR: R2_train=0.7992, R2_Test=0.2951, Dif=0.5041 Sobreajuste</code></pre>
 <section id="visualizaciones-de-resultados-gráfico-de-barras-comparativo" class="level2">
 <h2 class="anchored" data-anchor-id="visualizaciones-de-resultados-gráfico-de-barras-comparativo">4.3 Visualizaciones de resultados Gráfico de barras comparativo</h2>
 <p>El uso de la variables relacionados son: MAE(Mean Absolute Error), Root Mean Square Error (RMSE), Coeficiente de Determinacion(R2) y el Tiempo de Entrega.</p>
-<div id="d000ee6e" class="cell" data-execution_count="29">
+<div id="47c72bd7" class="cell" data-execution_count="29">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Dimensiones del grafico</span></span>
@@ -1692,7 +1699,7 @@ SVR: R2_train=0.7992, R2_Test=0.2951, Dif=0.5041 Sobreajuste</code></pre>
 <section id="determinación-del-número-óptimo-de-clusters" class="level2">
 <h2 class="anchored" data-anchor-id="determinación-del-número-óptimo-de-clusters">5.1 Determinación del número óptimo de clusters</h2>
 <p><strong>Método del Codo (Elbow Method)</strong></p>
-<div id="d2709fa0" class="cell" data-execution_count="30">
+<div id="d5445a86" class="cell" data-execution_count="30">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>k_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">11</span>)</span>
@@ -1700,60 +1707,59 @@ SVR: R2_train=0.7992, R2_Test=0.2951, Dif=0.5041 Sobreajuste</code></pre>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>silhouette_scores <span class="op">=</span> []</span>
 <span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>X_clustering <span class="op">=</span> X_final.toarray()  <span class="co"># Convertir sparse matrix a dense para clustering</span></span>
 <span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Probar diferentes números de clusters entre el 2 y el 10</span></span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> k_range:</span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Probando k=</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">..."</span>)</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>k, random_state<span class="op">=</span><span class="dv">42</span>, n_init<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    kmeans.fit(X_clustering)</span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>    inertias.append(kmeans.inertia_)</span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    silhouette_avg <span class="op">=</span> silhouette_score(X_clustering, kmeans.labels_)</span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>    silhouette_scores.append(silhouette_avg)</span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"- Inercia: </span><span class="sc">{</span>kmeans<span class="sc">.</span>inertia_<span class="sc">:.2f}</span><span class="ss"> - Silhouette Score: </span><span class="sc">{</span>silhouette_avg<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>best_k_silhouette <span class="op">=</span> k_range[np.argmax(silhouette_scores)]</span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>best_silhouette <span class="op">=</span> <span class="bu">max</span>(silhouette_scores)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Probar diferentes números de clusters entre el 2 y el 10</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> k_range:</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Probando k=</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>k, random_state<span class="op">=</span><span class="dv">42</span>, n_init<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    kmeans.fit(X_clustering)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    inertias.append(kmeans.inertia_)</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>    silhouette_avg <span class="op">=</span> silhouette_score(X_clustering, kmeans.labels_)</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    silhouette_scores.append(silhouette_avg)</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"- Inercia: </span><span class="sc">{</span>kmeans<span class="sc">.</span>inertia_<span class="sc">:.2f}</span><span class="ss"> - Silhouette Score: </span><span class="sc">{</span>silhouette_avg<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>best_k_silhouette <span class="op">=</span> k_range[np.argmax(silhouette_scores)]</span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>best_silhouette <span class="op">=</span> <span class="bu">max</span>(silhouette_scores)</span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="co">## Dimension del grafico</span></span>
-<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">6</span>))</span>
-<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico del codo</span></span>
-<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(k_range, inertias, <span class="st">'bo-'</span>)</span>
-<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Número de (k)'</span>)</span>
-<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Inercia (WCSS)'</span>)</span>
-<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Método del Codo'</span>)</span>
-<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregar valores de inercia sobre cada punto del gráfico</span></span>
-<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, inertia <span class="kw">in</span> <span class="bu">enumerate</span>(inertias):</span>
-<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> k_range[i]  <span class="co"># Número de clusters (2, 3, 4, ...)</span></span>
-<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Poner el texto un poco arriba del punto</span></span>
-<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].text(k, inertia <span class="op">+</span> <span class="dv">100</span>, <span class="ss">f'</span><span class="sc">{</span>inertia<span class="sc">:.0f}</span><span class="ss">'</span>, </span>
-<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a>                ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico Silhouette Score</span></span>
-<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(k_range, silhouette_scores, <span class="st">'ro-'</span>)</span>
-<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Número de Clusters (k)'</span>)</span>
-<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Silhouette Score'</span>)</span>
-<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Silhouette Score vs Número de Clusters'</span>)</span>
-<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregar valores de silhouette score sobre cada punto del gráfico</span></span>
-<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, score <span class="kw">in</span> <span class="bu">enumerate</span>(silhouette_scores):</span>
-<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> k_range[i]  <span class="co"># Número de clusters (2, 3, 4, ...)</span></span>
-<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Poner el texto un poco arriba del punto</span></span>
-<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].text(k, score <span class="op">+</span> <span class="fl">0.01</span>, <span class="ss">f'</span><span class="sc">{</span>score<span class="sc">:.3f}</span><span class="ss">'</span>, </span>
-<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a>                ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- Mejor k según Silhouette Score: </span><span class="sc">{</span>best_k_silhouette<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a>k_optimo <span class="op">=</span> best_k_silhouette</span>
-<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- K óptimo seleccionado: </span><span class="sc">{</span>k_optimo<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="co">## Dimension del grafico</span></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">6</span>))</span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico del codo</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(k_range, inertias, <span class="st">'bo-'</span>)</span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Número de (k)'</span>)</span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Inercia (WCSS)'</span>)</span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Método del Codo'</span>)</span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregar valores de inercia sobre cada punto del gráfico</span></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, inertia <span class="kw">in</span> <span class="bu">enumerate</span>(inertias):</span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> k_range[i]  <span class="co"># Número de clusters (2, 3, 4, ...)</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Poner el texto un poco arriba del punto</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].text(k, inertia <span class="op">+</span> <span class="dv">100</span>, <span class="ss">f'</span><span class="sc">{</span>inertia<span class="sc">:.0f}</span><span class="ss">'</span>, </span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a>                ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico Silhouette Score</span></span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(k_range, silhouette_scores, <span class="st">'ro-'</span>)</span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Número de Clusters (k)'</span>)</span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Silhouette Score'</span>)</span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Silhouette Score vs Número de Clusters'</span>)</span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregar valores de silhouette score sobre cada punto del gráfico</span></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, score <span class="kw">in</span> <span class="bu">enumerate</span>(silhouette_scores):</span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> k_range[i]  <span class="co"># Número de clusters (2, 3, 4, ...)</span></span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Poner el texto un poco arriba del punto</span></span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].text(k, score <span class="op">+</span> <span class="fl">0.01</span>, <span class="ss">f'</span><span class="sc">{</span>score<span class="sc">:.3f}</span><span class="ss">'</span>, </span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a>                ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- Mejor k según Silhouette Score: </span><span class="sc">{</span>best_k_silhouette<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a>k_optimo <span class="op">=</span> best_k_silhouette</span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- K óptimo seleccionado: </span><span class="sc">{</span>k_optimo<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Probando k=2...
@@ -1787,8 +1793,165 @@ Probando k=10...
 - K óptimo seleccionado: 6</code></pre>
 </div>
 </div>
+</section>
+<section id="aplicación-de-k-means-con-k-óptimo" class="level2">
+<h2 class="anchored" data-anchor-id="aplicación-de-k-means-con-k-óptimo">5.2 Aplicación de K-Means con k óptimo</h2>
+<div id="3b1b9fca" class="cell" data-execution_count="31">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar K-Means con el k óptimo</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>kmeans_final <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>k_optimo, random_state<span class="op">=</span><span class="dv">42</span>, n_init<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>clusters_kmeans <span class="op">=</span> kmeans_final.fit_predict(X_clustering)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- Inercia final: </span><span class="sc">{</span>kmeans_final<span class="sc">.</span>inertia_<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- Silhouette Score: </span><span class="sc">{</span>silhouette_score(X_clustering, clusters_kmeans)<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="co"># IMPORTANTE!! se hace la distribucion de los clusters.</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Distribución de los clusters </span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>cluster_counts <span class="op">=</span> pd.Series(clusters_kmeans).value_counts().sort_index()</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cluster_id, count <span class="kw">in</span> cluster_counts.items():</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>    percentage <span class="op">=</span> (count <span class="op">/</span> <span class="bu">len</span>(clusters_kmeans)) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  - Cluster </span><span class="sc">{</span>cluster_id<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> tweets (</span><span class="sc">{</span>percentage<span class="sc">:.1f}</span><span class="ss">%)"</span>)</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregar clusters al DataFrame</span></span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>df_clustering <span class="op">=</span> df_procesar.copy()</span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>df_clustering[<span class="st">'cluster_kmeans'</span>] <span class="op">=</span> clusters_kmeans</span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Mi DF actualizado con </span><span class="sc">{</span><span class="bu">len</span>(df_clustering)<span class="sc">}</span><span class="ss"> registros totales"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>- Inercia final: 1109.28
+- Silhouette Score: 0.0577
+  - Cluster 0: 995 tweets (73.9%)
+  - Cluster 1: 98 tweets (7.3%)
+  - Cluster 2: 31 tweets (2.3%)
+  - Cluster 3: 58 tweets (4.3%)
+  - Cluster 4: 86 tweets (6.4%)
+  - Cluster 5: 79 tweets (5.9%)
+
+Mi DF actualizado con 1347 registros totales</code></pre>
+</div>
+</div>
+</section>
+<section id="preparación-para-visualización-con-pca" class="level2">
+<h2 class="anchored" data-anchor-id="preparación-para-visualización-con-pca">5.3 Preparación para visualización con PCA</h2>
+<div id="31ced21b" class="cell" data-execution_count="32">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>pca_2d <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>X_pca_2d <span class="op">=</span> pca_2d.fit_transform(X_clustering)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>pca_3d <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>X_pca_3d <span class="op">=</span> pca_3d.fit_transform(X_clustering)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Componentes Principales</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">🔍 COMPONENTES PRINCIPALES (2D):"</span>)</span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, var_ratio <span class="kw">in</span> <span class="bu">enumerate</span>(pca_2d.explained_variance_ratio_):</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"- CP</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>var_ratio<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% de varianza"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+🔍 COMPONENTES PRINCIPALES (2D):
+- CP1: 1.55% de varianza
+- CP2: 1.27% de varianza</code></pre>
+</div>
+</div>
+</section>
+<section id="clustering-adicional-agglomerative-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="clustering-adicional-agglomerative-clustering">5.4 Clustering adicional: Agglomerative Clustering</h2>
+<div id="de2842aa" class="cell" data-execution_count="33">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar Agglomerative Clustering para comparación</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>agg_clustering <span class="op">=</span> AgglomerativeClustering(n_clusters<span class="op">=</span>k_optimo)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>clusters_agg <span class="op">=</span> agg_clustering.fit_predict(X_clustering)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparar métricas</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>silhouette_agg <span class="op">=</span> silhouette_score(X_clustering, clusters_agg)</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f" COMPARACIÓN DE ALGORITMOS:"</span>)</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- K-Means Silhouette: </span><span class="sc">{</span>silhouette_score(X_clustering, clusters_kmeans)<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- Agglomerative Silhouette: </span><span class="sc">{</span>silhouette_agg<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>df_clustering[<span class="st">'cluster_agg'</span>] <span class="op">=</span> clusters_agg</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>cluster_counts_agg <span class="op">=</span> pd.Series(clusters_agg).value_counts().sort_index()</span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">DISTRIBUCIÓN AGGLOMERATIVE:"</span>)</span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cluster_id, count <span class="kw">in</span> cluster_counts_agg.items():</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>    percentage <span class="op">=</span> (count <span class="op">/</span> <span class="bu">len</span>(clusters_agg)) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  - Cluster </span><span class="sc">{</span>cluster_id<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> tweets (</span><span class="sc">{</span>percentage<span class="sc">:.1f}</span><span class="ss">%)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> COMPARACIÓN DE ALGORITMOS:
+- K-Means Silhouette: 0.0577
+- Agglomerative Silhouette: 0.0546
+
+DISTRIBUCIÓN AGGLOMERATIVE:
+  - Cluster 0: 1254 tweets (93.1%)
+  - Cluster 1: 25 tweets (1.9%)
+  - Cluster 2: 22 tweets (1.6%)
+  - Cluster 3: 18 tweets (1.3%)
+  - Cluster 4: 12 tweets (0.9%)
+  - Cluster 5: 16 tweets (1.2%)</code></pre>
+</div>
+</div>
+</section>
+<section id="visualización-de-clusters" class="level2">
+<h2 class="anchored" data-anchor-id="visualización-de-clusters">5.5 Visualización de clusters</h2>
+<section id="visualización-2d-de-clusters" class="level3">
+<h3 class="anchored" data-anchor-id="visualización-2d-de-clusters">5.5.1 Visualización 2D de clusters</h3>
+<div id="98c32fe8" class="cell" data-execution_count="34">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensio de los graficos</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">6</span>))</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="co"># K-Means</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> axes[<span class="dv">0</span>].scatter(X_pca_2d[:, <span class="dv">0</span>], X_pca_2d[:, <span class="dv">1</span>], </span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>                         c<span class="op">=</span>clusters_kmeans, cmap<span class="op">=</span><span class="st">'tab10'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, s<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="ss">f'PC1 (</span><span class="sc">{</span>pca_2d<span class="sc">.</span>explained_variance_ratio_[<span class="dv">0</span>]<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)'</span>)</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="ss">f'PC2 (</span><span class="sc">{</span>pca_2d<span class="sc">.</span>explained_variance_ratio_[<span class="dv">1</span>]<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)'</span>)</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="ss">f'K-Means Clustering (</span><span class="sc">{</span>k_optimo<span class="sc">}</span><span class="ss"> clusters)'</span>)</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>centroids_pca <span class="op">=</span> pca_2d.transform(kmeans_final.cluster_centers_)</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].scatter(centroids_pca[:, <span class="dv">0</span>], centroids_pca[:, <span class="dv">1</span>], </span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>               c<span class="op">=</span><span class="st">'red'</span>, marker<span class="op">=</span><span class="st">'x'</span>, s<span class="op">=</span><span class="dv">200</span>, linewidths<span class="op">=</span><span class="dv">3</span>, label<span class="op">=</span><span class="st">'Centroides'</span>)</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend()</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Agglomeraciones</span></span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>scatter2 <span class="op">=</span> axes[<span class="dv">1</span>].scatter(X_pca_2d[:, <span class="dv">0</span>], X_pca_2d[:, <span class="dv">1</span>], </span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>                          c<span class="op">=</span>clusters_agg, cmap<span class="op">=</span><span class="st">'tab10'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, s<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="ss">f'PC1 (</span><span class="sc">{</span>pca_2d<span class="sc">.</span>explained_variance_ratio_[<span class="dv">0</span>]<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)'</span>)</span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="ss">f'PC2 (</span><span class="sc">{</span>pca_2d<span class="sc">.</span>explained_variance_ratio_[<span class="dv">1</span>]<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)'</span>)</span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="ss">f'Aglomeracion Clustering (</span><span class="sc">{</span>k_optimo<span class="sc">}</span><span class="ss"> clusters)'</span>)</span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Toxicidad binaria</span></span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>scatter3 <span class="op">=</span> axes[<span class="dv">2</span>].scatter(X_pca_2d[:, <span class="dv">0</span>], X_pca_2d[:, <span class="dv">1</span>], </span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>                          c<span class="op">=</span>df_clustering[<span class="st">'toxicity_binario'</span>], cmap<span class="op">=</span><span class="st">'RdYlBu'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, s<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="ss">f'PC1 (</span><span class="sc">{</span>pca_2d<span class="sc">.</span>explained_variance_ratio_[<span class="dv">0</span>]<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)'</span>)</span>
+<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="ss">f'PC2 (</span><span class="sc">{</span>pca_2d<span class="sc">.</span>explained_variance_ratio_[<span class="dv">1</span>]<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)'</span>)</span>
+<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Clases Verdaderas (Tóxico/No Tóxico)'</span>)</span>
+<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Barra de colores</span></span>
+<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> plt.colorbar(scatter3, ax<span class="op">=</span>axes[<span class="dv">2</span>])</span>
+<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a>cbar.set_label(<span class="st">'Toxicidad (0=No Tóxico, 1=Tóxico)'</span>)</span>
+<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-35-output-1.png" width="1892" height="566" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 

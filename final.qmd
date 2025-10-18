@@ -64,7 +64,6 @@ from scipy import stats
 from nltk.corpus import stopwords
 nltk.download('stopwords')
 
-
 ```
 
 
@@ -919,7 +918,6 @@ inertias = []
 silhouette_scores = []
 X_clustering = X_final.toarray()  # Convertir sparse matrix a dense para clustering
 
-
 # Probar diferentes números de clusters entre el 2 y el 10
 for k in k_range:
     print(f"Probando k={k}...")
@@ -975,3 +973,110 @@ k_optimo = best_k_silhouette
 print(f"- K óptimo seleccionado: {k_optimo}")
 ```
 
+## 5.2 Aplicación de K-Means con k óptimo
+
+```{python}
+
+# Aplicar K-Means con el k óptimo
+kmeans_final = KMeans(n_clusters=k_optimo, random_state=42, n_init=10)
+clusters_kmeans = kmeans_final.fit_predict(X_clustering)
+
+print(f"- Inercia final: {kmeans_final.inertia_:.2f}")
+print(f"- Silhouette Score: {silhouette_score(X_clustering, clusters_kmeans):.4f}")
+
+# IMPORTANTE!! se hace la distribucion de los clusters.
+# Distribución de los clusters 
+cluster_counts = pd.Series(clusters_kmeans).value_counts().sort_index()
+for cluster_id, count in cluster_counts.items():
+    percentage = (count / len(clusters_kmeans)) * 100
+    print(f"  - Cluster {cluster_id}: {count} tweets ({percentage:.1f}%)")
+
+# Agregar clusters al DataFrame
+df_clustering = df_procesar.copy()
+df_clustering['cluster_kmeans'] = clusters_kmeans
+
+print(f"\nMi DF actualizado con {len(df_clustering)} registros totales")
+```
+
+## 5.3 Preparación para visualización con PCA
+
+```{python}
+pca_2d = PCA(n_components=2, random_state=42)
+X_pca_2d = pca_2d.fit_transform(X_clustering)
+
+pca_3d = PCA(n_components=3, random_state=42)
+X_pca_3d = pca_3d.fit_transform(X_clustering)
+
+# Componentes Principales
+print(f"\n🔍 COMPONENTES PRINCIPALES (2D):")
+for i, var_ratio in enumerate(pca_2d.explained_variance_ratio_):
+    print(f"- CP{i+1}: {var_ratio*100:.2f}% de varianza")
+```
+
+## 5.4 Clustering adicional: Agglomerative Clustering
+
+```{python}
+
+# Aplicar Agglomerative Clustering para comparación
+agg_clustering = AgglomerativeClustering(n_clusters=k_optimo)
+clusters_agg = agg_clustering.fit_predict(X_clustering)
+
+# Comparar métricas
+silhouette_agg = silhouette_score(X_clustering, clusters_agg)
+print(f" COMPARACIÓN DE ALGORITMOS:")
+print(f"- K-Means Silhouette: {silhouette_score(X_clustering, clusters_kmeans):.4f}")
+print(f"- Agglomerative Silhouette: {silhouette_agg:.4f}")
+
+df_clustering['cluster_agg'] = clusters_agg
+
+cluster_counts_agg = pd.Series(clusters_agg).value_counts().sort_index()
+print(f"\nDISTRIBUCIÓN AGGLOMERATIVE:")
+for cluster_id, count in cluster_counts_agg.items():
+    percentage = (count / len(clusters_agg)) * 100
+    print(f"  - Cluster {cluster_id}: {count} tweets ({percentage:.1f}%)")
+```
+
+## 5.5 Visualización de clusters
+
+### 5.5.1 Visualización 2D de clusters
+
+```{python}
+# Dimensio de los graficos
+fig, axes = plt.subplots(1, 3, figsize=(20, 6))
+
+# K-Means
+scatter = axes[0].scatter(X_pca_2d[:, 0], X_pca_2d[:, 1], 
+                         c=clusters_kmeans, cmap='tab10', alpha=0.7, s=50)
+axes[0].set_xlabel(f'PC1 ({pca_2d.explained_variance_ratio_[0]*100:.1f}%)')
+axes[0].set_ylabel(f'PC2 ({pca_2d.explained_variance_ratio_[1]*100:.1f}%)')
+axes[0].set_title(f'K-Means Clustering ({k_optimo} clusters)')
+axes[0].grid(True, alpha=0.3)
+
+centroids_pca = pca_2d.transform(kmeans_final.cluster_centers_)
+axes[0].scatter(centroids_pca[:, 0], centroids_pca[:, 1], 
+               c='red', marker='x', s=200, linewidths=3, label='Centroides')
+axes[0].legend()
+
+# Agglomeraciones
+scatter2 = axes[1].scatter(X_pca_2d[:, 0], X_pca_2d[:, 1], 
+                          c=clusters_agg, cmap='tab10', alpha=0.7, s=50)
+axes[1].set_xlabel(f'PC1 ({pca_2d.explained_variance_ratio_[0]*100:.1f}%)')
+axes[1].set_ylabel(f'PC2 ({pca_2d.explained_variance_ratio_[1]*100:.1f}%)')
+axes[1].set_title(f'Aglomeracion Clustering ({k_optimo} clusters)')
+axes[1].grid(True, alpha=0.3)
+
+# Toxicidad binaria
+scatter3 = axes[2].scatter(X_pca_2d[:, 0], X_pca_2d[:, 1], 
+                          c=df_clustering['toxicity_binario'], cmap='RdYlBu', alpha=0.7, s=50)
+axes[2].set_xlabel(f'PC1 ({pca_2d.explained_variance_ratio_[0]*100:.1f}%)')
+axes[2].set_ylabel(f'PC2 ({pca_2d.explained_variance_ratio_[1]*100:.1f}%)')
+axes[2].set_title('Clases Verdaderas (Tóxico/No Tóxico)')
+axes[2].grid(True, alpha=0.3)
+
+# Barra de colores
+cbar = plt.colorbar(scatter3, ax=axes[2])
+cbar.set_label('Toxicidad (0=No Tóxico, 1=Tóxico)')
+
+plt.tight_layout()
+plt.show()
+```
