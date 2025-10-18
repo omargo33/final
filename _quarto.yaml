@@ -9,7 +9,7 @@ website:
     search: true
     contents:
       - text: "Proyecto Final"
-        href: proyectoFinal.qmd
+        href: final.qmd
 format:
   html:
     theme: cosmo

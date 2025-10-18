@@ -62,3 +62,6 @@ Thumbs.db
 1500_tweets_con_toxicity.csv
 1500_tweets_con_toxicity_clean.csv
 proyectoFinal.qmd_
+
+/.quarto/
+**/*.quarto_ipynb
