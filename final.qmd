@@ -19,6 +19,10 @@ Proyecto final de Aprendizaje de Maquina
 Autor Omar Vele
 
 
+***Se Analizara si se debe valorar entre Toxico o No toxico***
+
+***Se Analizara si se debe valorar entre Toxico nivel Bajo, Medio O Alto***
+
 ## Importar librerías
 
 ```{python}
