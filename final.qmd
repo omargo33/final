@@ -607,3 +607,43 @@ results_multi_capa = entrenamiento_evaluacion_masiva(
 ```
 
 
+## 3.5 Evaluación detallada y métricas
+
+```{python}
+print("=== EVALUACIÓN DETALLADA DE MODELOS ===")
+
+# Función para mostrar reporte detallado
+def detailed_evaluation(results, y_test, task_name, class_names=None):
+    print(f"\n{'='*50}")
+    print(f"{task_name.upper()} - REPORTE DETALLADO")
+    print(f"{'='*50}")
+    
+    # Crear DataFrame con resultados
+    metrics_df = pd.DataFrame({
+        'Model': list(results.keys()),
+        'Accuracy': [results[model]['accuracy'] for model in results.keys()],
+        'Precision': [results[model]['precision'] for model in results.keys()],
+        'Recall': [results[model]['recall'] for model in results.keys()],
+        'F1-Score': [results[model]['f1_score'] for model in results.keys()],
+        'ROC-AUC': [results[model]['roc_auc'] for model in results.keys()]
+    }).round(4)
+    
+    print(metrics_df.to_string(index=False))
+    
+    # Encontrar mejor modelo
+    best_model_name = metrics_df.loc[metrics_df['F1-Score'].idxmax(), 'Model']
+    print(f"\n🏆 MEJOR MODELO: {best_model_name}")
+    print(f"   F1-Score: {metrics_df.loc[metrics_df['Model'] == best_model_name, 'F1-Score'].iloc[0]}")
+    
+    return metrics_df, best_model_name
+
+# Evaluación detallada binaria
+metrics_binary, best_binary = detailed_evaluation(
+    results_binary, y_test_bin, "Clasificación Binaria", ['No Tóxico', 'Tóxico']
+)
+
+# Evaluación detallada multiclase
+metrics_multi, best_multi = detailed_evaluation(
+    results_multi_capa, y_test_multi, "Clasificación Multiclase", labels_multiCapas
+)
+```
