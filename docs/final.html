@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Omar Velez">
+
+<title>Examen Final - Machine Learning – Machine Learning Proyecto Final Omar Velez</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-de3ea0f65d651299b7fd2e20c461246a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./final.html">Proyecto Final</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./final.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Proyecto Final</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">Introducción</a>
+  <ul class="collapse">
+  <li><a href="#importar-librerías" id="toc-importar-librerías" class="nav-link" data-scroll-target="#importar-librerías">Importar librerías</a></li>
+  <li><a href="#cargar-dataset" id="toc-cargar-dataset" class="nav-link" data-scroll-target="#cargar-dataset">Cargar dataset</a></li>
+  </ul></li>
+  <li><a href="#análisis-exploratorio-de-datos-eda" id="toc-análisis-exploratorio-de-datos-eda" class="nav-link" data-scroll-target="#análisis-exploratorio-de-datos-eda">1. Análisis Exploratorio de Datos (EDA)</a>
+  <ul class="collapse">
+  <li><a href="#información-general-del-dataset" id="toc-información-general-del-dataset" class="nav-link" data-scroll-target="#información-general-del-dataset">1.1 Información general del dataset</a></li>
+  <li><a href="#análisis-de-valores-nulos" id="toc-análisis-de-valores-nulos" class="nav-link" data-scroll-target="#análisis-de-valores-nulos">1.2 Análisis de valores nulos</a></li>
+  <li><a href="#estadísticas-descriptivas" id="toc-estadísticas-descriptivas" class="nav-link" data-scroll-target="#estadísticas-descriptivas">1.3 Estadísticas descriptivas</a></li>
+  <li><a href="#análisis-de-la-variable-toxicity-toxicity_score" id="toc-análisis-de-la-variable-toxicity-toxicity_score" class="nav-link" data-scroll-target="#análisis-de-la-variable-toxicity-toxicity_score">1.4 Análisis de la variable TOXICITY (toxicity_score)</a></li>
+  <li><a href="#análisis-de-texto" id="toc-análisis-de-texto" class="nav-link" data-scroll-target="#análisis-de-texto">1.5 Análisis de texto</a></li>
+  <li><a href="#análisis-de-variables-categóricas" id="toc-análisis-de-variables-categóricas" class="nav-link" data-scroll-target="#análisis-de-variables-categóricas">1.6 Análisis de variables categóricas</a></li>
+  <li><a href="#correlaciones-entre-variables-numéricas" id="toc-correlaciones-entre-variables-numéricas" class="nav-link" data-scroll-target="#correlaciones-entre-variables-numéricas">1.7 Correlaciones entre variables numéricas</a></li>
+  <li><a href="#hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis" id="toc-hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis" class="nav-link" data-scroll-target="#hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis">1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)</a></li>
+  </ul></li>
+  <li><a href="#preprocesamiento-y-codificación" id="toc-preprocesamiento-y-codificación" class="nav-link" data-scroll-target="#preprocesamiento-y-codificación">2. Preprocesamiento y Codificación</a>
+  <ul class="collapse">
+  <li><a href="#limpieza-de-datos-básica" id="toc-limpieza-de-datos-básica" class="nav-link" data-scroll-target="#limpieza-de-datos-básica">2.1 Limpieza de datos básica</a></li>
+  <li><a href="#procesamiento-del-texto-content" id="toc-procesamiento-del-texto-content" class="nav-link" data-scroll-target="#procesamiento-del-texto-content">2.2 Procesamiento del texto (content)</a></li>
+  <li><a href="#codificación-de-texto-con-tf-idf" id="toc-codificación-de-texto-con-tf-idf" class="nav-link" data-scroll-target="#codificación-de-texto-con-tf-idf">2.3 Codificación de texto con TF-IDF</a></li>
+  <li><a href="#pipeline-simplificado-con-columntransformer" id="toc-pipeline-simplificado-con-columntransformer" class="nav-link" data-scroll-target="#pipeline-simplificado-con-columntransformer">2.4 Pipeline simplificado con ColumnTransformer</a></li>
+  <li><a href="#división-de-datos-para-regresión" id="toc-división-de-datos-para-regresión" class="nav-link" data-scroll-target="#división-de-datos-para-regresión">2.5 División de datos para regresión</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Examen Final - Machine Learning</h1>
+<p class="subtitle lead">Análisis de Tweets Ecuatorianos con Medición de Toxicidad</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Omar Velez </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introducción" class="level1">
+<h1>Introducción</h1>
+<p>Proyecto final de Aprendizaje de Maquina Autor Omar Vele</p>
+<section id="importar-librerías" class="level2">
+<h2 class="anchored" data-anchor-id="importar-librerías">Importar librerías</h2>
+<div id="b917d12b" class="cell" data-execution_count="1">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importaciones corregidas para análisis de texto</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> TfidfVectorizer, CountVectorizer</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, LabelEncoder</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer  <span class="co"># Corrección aquí</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier, RandomForestRegressor</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression, LinearRegression</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, confusion_matrix, mean_squared_error, r2_score</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">## Borrar OJO</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wordcloud <span class="im">import</span> WordCloud  <span class="co"># Esta importación faltaba</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar NLTK y definir stopwords</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar stopwords en español (solo ejecutar una vez)</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'stopwords'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>True</code></pre>
+</div>
+</div>
+</section>
+<section id="cargar-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="cargar-dataset">Cargar dataset</h2>
+<div id="0646d3c2" class="cell" data-execution_count="2">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el dataset</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'./1500_tweets_con_toxicity.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="análisis-exploratorio-de-datos-eda" class="level1">
+<h1>1. Análisis Exploratorio de Datos (EDA)</h1>
+<section id="información-general-del-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="información-general-del-dataset">1.1 Información general del dataset</h2>
+<div id="00eeeb78" class="cell" data-execution_count="3">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Número de filas: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Número de columnas: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== TIPOS DE DATOS"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.dtypes)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== INFO"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Número de filas: 1500
+Número de columnas: 27
+
+=== TIPOS DE DATOS
+tweetId                  int64
+tweetUrl                object
+content                 object
+isReply                   bool
+replyTo                 object
+createdAt               object
+authorId                 int64
+authorName              object
+authorUsername          object
+authorVerified            bool
+authorFollowers          int64
+authorProfilePic        object
+authorJoinDate          object
+source                  object
+hashtags                object
+mentions                object
+conversationId           int64
+inReplyToId              int64
+Date                    object
+time_response          float64
+account_age_days         int64
+mentions_count           int64
+hashtags_count           int64
+content_length           int64
+has_profile_picture       bool
+sentiment_polarity     float64
+toxicity_score         float64
+dtype: object
+
+=== INFO
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 1500 entries, 0 to 1499
+Data columns (total 27 columns):
+ #   Column               Non-Null Count  Dtype  
+---  ------               --------------  -----  
+ 0   tweetId              1500 non-null   int64  
+ 1   tweetUrl             1500 non-null   object 
+ 2   content              1500 non-null   object 
+ 3   isReply              1500 non-null   bool   
+ 4   replyTo              1490 non-null   object 
+ 5   createdAt            1500 non-null   object 
+ 6   authorId             1500 non-null   int64  
+ 7   authorName           1500 non-null   object 
+ 8   authorUsername       1500 non-null   object 
+ 9   authorVerified       1500 non-null   bool   
+ 10  authorFollowers      1500 non-null   int64  
+ 11  authorProfilePic     1500 non-null   object 
+ 12  authorJoinDate       1500 non-null   object 
+ 13  source               1500 non-null   object 
+ 14  hashtags             121 non-null    object 
+ 15  mentions             1499 non-null   object 
+ 16  conversationId       1500 non-null   int64  
+ 17  inReplyToId          1500 non-null   int64  
+ 18  Date                 1500 non-null   object 
+ 19  time_response        1500 non-null   float64
+ 20  account_age_days     1500 non-null   int64  
+ 21  mentions_count       1500 non-null   int64  
+ 22  hashtags_count       1500 non-null   int64  
+ 23  content_length       1500 non-null   int64  
+ 24  has_profile_picture  1500 non-null   bool   
+ 25  sentiment_polarity   1500 non-null   float64
+ 26  toxicity_score       1347 non-null   float64
+dtypes: bool(3), float64(3), int64(9), object(12)
+memory usage: 285.8+ KB</code></pre>
+</div>
+</div>
+</section>
+<section id="análisis-de-valores-nulos" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-de-valores-nulos">1.2 Análisis de valores nulos</h2>
+<div id="dc615741" class="cell" data-execution_count="4">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>missing_data <span class="op">=</span> df.isnull().<span class="bu">sum</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>missing_percent <span class="op">=</span> (missing_data <span class="op">/</span> <span class="bu">len</span>(df)) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>missing_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Columna'</span>: missing_data.index,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Valores_Nulos'</span>: missing_data.values,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Porcentaje'</span>: missing_percent.values</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>}).sort_values(<span class="st">'Porcentaje'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== VALORES NULOS POR COLUMNA"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(missing_df[missing_df[<span class="st">'Valores_Nulos'</span>] <span class="op">&gt;</span> <span class="dv">0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== VALORES NULOS POR COLUMNA
+           Columna  Valores_Nulos  Porcentaje
+14        hashtags           1379   91.933333
+26  toxicity_score            153   10.200000
+4          replyTo             10    0.666667
+15        mentions              1    0.066667</code></pre>
+</div>
+</div>
+</section>
+<section id="estadísticas-descriptivas" class="level2">
+<h2 class="anchored" data-anchor-id="estadísticas-descriptivas">1.3 Estadísticas descriptivas</h2>
+<div id="75da68ae" class="cell" data-execution_count="5">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables numéricas</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>numeric_cols <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[np.number]).columns.tolist()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== VARIABLES NUMÉRICAS"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[numeric_cols].describe())</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables categóricas</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>categorical_cols <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[<span class="st">'object'</span>, <span class="st">'bool'</span>]).columns.tolist()</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== VARIABLES CATEGÓRICAS"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> categorical_cols[:<span class="dv">5</span>]:  <span class="co"># Mostrar primeras 5</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">:"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df[col].value_counts().head())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== VARIABLES NUMÉRICAS
+            tweetId      authorId  authorFollowers  conversationId  \
+count  1.500000e+03  1.500000e+03     1.500000e+03    1.500000e+03   
+mean   1.893421e+18  9.838015e+17     3.625721e+03    1.893127e+18   
+std    1.166584e+16  7.900284e+17     1.184447e+05    1.161854e+16   
+min    1.876011e+18  1.159021e+06     0.000000e+00    1.876001e+18   
+25%    1.883283e+18  9.690383e+08     7.000000e+00    1.883238e+18   
+50%    1.887876e+18  1.318014e+18     4.300000e+01    1.887344e+18   
+75%    1.904588e+18  1.710233e+18     1.992500e+02    1.904198e+18   
+max    1.922145e+18  1.908229e+18     4.577730e+06    1.910014e+18   
+
+        inReplyToId  time_response  account_age_days  mentions_count  \
+count  1.500000e+03    1500.000000       1500.000000     1500.000000   
+mean   1.893147e+18    1170.037578       2271.134000        1.723333   
+std    1.162094e+16    3273.929808       1984.156805        0.946248   
+min    1.876001e+18       0.133333        -90.000000        0.000000   
+25%    1.883238e+18     136.300000        455.750000        1.000000   
+50%    1.887355e+18     515.625000       1538.000000        2.000000   
+75%    1.904234e+18    1265.716667       4420.750000        2.000000   
+max    1.910015e+18   63569.000000       6506.000000       10.000000   
+
+       hashtags_count  content_length  sentiment_polarity  toxicity_score  
+count          1500.0     1500.000000         1500.000000     1347.000000  
+mean              0.0      116.528000           -0.007907        0.253879  
+std               0.0       77.493712            0.119796        0.243942  
+min               0.0       17.000000           -1.000000        0.001940  
+25%               0.0       57.000000            0.000000        0.028444  
+50%               0.0       96.000000            0.000000        0.188392  
+75%               0.0      150.000000            0.000000        0.426917  
+max               0.0      684.000000            1.000000        0.939145  
+
+=== VARIABLES CATEGÓRICAS
+
+tweetUrl:
+tweetUrl
+https://x.com/Pableins15/status/1878630970745901259         1
+https://x.com/solma1201/status/1904041877503983746          1
+https://x.com/Mediterran67794/status/1877463444649046092    1
+https://x.com/ardededa/status/1881356046108885494           1
+https://x.com/LMarquinezm/status/1888331962063978998        1
+Name: count, dtype: int64
+
+content:
+content
+@LuisaGonzalezEc #LuisaPorLaVida \n#LuisaPresidenta🇪🇨    5
+@LuisaGonzalezEc #LuisaPorLaVida\n#LuisaPresidenta🇪🇨     3
+@DanielNoboaOk Inútil                                    2
+@LuisaGonzalezEc @RC5Oficial #LuisaPresidenta            2
+@LuisaGonzalezEc #LuisaPresidenta 🇪🇨\n#LuisaPorLaVida    2
+Name: count, dtype: int64
+
+isReply:
+isReply
+True    1500
+Name: count, dtype: int64
+
+replyTo:
+replyTo
+LuisaGonzalezEc    804
+DanielNoboaOk      410
+SoyBelenix           7
+ecuarauz             6
+aguschmer            5
+Name: count, dtype: int64
+
+createdAt:
+createdAt
+2025-03-24 03:15:00    3
+2025-01-30 22:35:00    2
+2025-01-31 22:29:00    2
+2025-02-04 02:27:00    2
+2025-03-24 19:42:00    2
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="análisis-de-la-variable-toxicity-toxicity_score" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-de-la-variable-toxicity-toxicity_score">1.4 Análisis de la variable TOXICITY (toxicity_score)</h2>
+<div id="50b812d7" class="cell" data-execution_count="6">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'toxicity_score'</span>].describe())</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar distribución de toxicidad</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograma</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].hist(df[<span class="st">'toxicity_score'</span>].dropna(), bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'skyblue'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Distribución de Toxicidad'</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Toxicidad'</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Frecuencia'</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].boxplot(df[<span class="st">'toxicity_score'</span>].dropna())</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Boxplot de Toxicidad'</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Toxicidad'</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Q-Q plot</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>stats.probplot(df[<span class="st">'toxicity_score'</span>].dropna(), dist<span class="op">=</span><span class="st">"norm"</span>, plot<span class="op">=</span>axes[<span class="dv">2</span>])</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Q-Q Plot vs Normal'</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>count    1347.000000
+mean        0.253879
+std         0.243942
+min         0.001940
+25%         0.028444
+50%         0.188392
+75%         0.426917
+max         0.939145
+Name: toxicity_score, dtype: float64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-7-output-2.png" width="1430" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="análisis-de-texto" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-de-texto">1.5 Análisis de texto</h2>
+<div id="8668e203" class="cell" data-execution_count="7">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas de texto</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'word_count'</span>] <span class="op">=</span> df[<span class="st">'content'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.split().<span class="bu">str</span>.<span class="bu">len</span>()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== ESTADÍSTICAS DE TEXTO ==="</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Longitud promedio: </span><span class="sc">{</span>df[<span class="st">'content_length'</span>]<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss"> caracteres"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Número promedio de palabras: </span><span class="sc">{</span>df[<span class="st">'word_count'</span>]<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar longitud de textos</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">5</span>))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].hist(df[<span class="st">'content_length'</span>], bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'lightgreen'</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Distribución de Longitud de Texto'</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Número de Caracteres'</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].hist(df[<span class="st">'word_count'</span>], bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'salmon'</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Distribución de Número de Palabras'</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Número de Palabras'</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Nube de palabras</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>text_sample <span class="op">=</span> <span class="st">' '</span>.join(df[<span class="st">'content'</span>].dropna().sample(<span class="bu">min</span>(<span class="dv">1000</span>, <span class="bu">len</span>(df))).astype(<span class="bu">str</span>))</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpiar texto para nube de palabras</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>text_clean <span class="op">=</span> re.sub(<span class="vs">r'http</span><span class="dv">\S</span><span class="op">+</span><span class="cf">|</span><span class="vs">www</span><span class="dv">\S</span><span class="op">+</span><span class="cf">|</span><span class="vs">@</span><span class="dv">\w</span><span class="op">+</span><span class="cf">|</span><span class="vs">#</span><span class="dv">\w</span><span class="op">+</span><span class="cf">|</span><span class="dv">\d</span><span class="op">+</span><span class="vs">'</span>, <span class="st">''</span>, text_sample)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>text_clean <span class="op">=</span> re.sub(<span class="vs">r'</span><span class="pp">[^</span><span class="dv">\w\s</span><span class="pp">]</span><span class="vs">'</span>, <span class="st">' '</span>, text_clean)</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>wordcloud <span class="op">=</span> WordCloud(width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">400</span>, </span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>                    background_color<span class="op">=</span><span class="st">'white'</span>,</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>                    max_words<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>                    colormap<span class="op">=</span><span class="st">'viridis'</span>).generate(text_clean)</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>plt.imshow(wordcloud, interpolation<span class="op">=</span><span class="st">'bilinear'</span>)</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Nube de Palabras'</span>)</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== ESTADÍSTICAS DE TEXTO ===
+Longitud promedio: 116.53 caracteres
+Número promedio de palabras: 16.97</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-8-output-2.png" width="1142" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-8-output-3.png" width="758" height="409" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="análisis-de-variables-categóricas" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-de-variables-categóricas">1.6 Análisis de variables categóricas</h2>
+<div id="686027ff" class="cell" data-execution_count="8">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>categorical_to_analyze <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> categorical_cols <span class="cf">if</span> df[col].nunique() <span class="op">&lt;</span> <span class="dv">20</span> <span class="kw">and</span> col <span class="op">!=</span> <span class="st">'content'</span>][:<span class="dv">4</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> categorical_to_analyze:</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">10</span>))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    axes <span class="op">=</span> axes.ravel()</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, col <span class="kw">in</span> <span class="bu">enumerate</span>(categorical_to_analyze):</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="op">&lt;</span> <span class="dv">4</span>:</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>            value_counts <span class="op">=</span> df[col].value_counts().head(<span class="dv">10</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>            axes[i].bar(<span class="bu">range</span>(<span class="bu">len</span>(value_counts)), value_counts.values)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>            axes[i].set_title(<span class="ss">f'Distribución de </span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>            axes[i].set_xticks(<span class="bu">range</span>(<span class="bu">len</span>(value_counts)))</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>            axes[i].set_xticklabels(value_counts.index, rotation<span class="op">=</span><span class="dv">45</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-9-output-1.png" width="1430" height="949" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="correlaciones-entre-variables-numéricas" class="level2">
+<h2 class="anchored" data-anchor-id="correlaciones-entre-variables-numéricas">1.7 Correlaciones entre variables numéricas</h2>
+<div id="503266a8" class="cell" data-execution_count="9">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(numeric_cols) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Matriz de correlación</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    correlation_matrix <span class="op">=</span> df[numeric_cols].corr()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    sns.heatmap(correlation_matrix, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, center<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                square<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'.2f'</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">'Matriz de Correlación de Variables Numéricas'</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Top correlaciones con toxicidad</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'toxicity_score'</span> <span class="kw">in</span> numeric_cols:</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        toxicity_corr <span class="op">=</span> correlation_matrix[<span class="st">'toxicity_score'</span>].<span class="bu">abs</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"=== CORRELACIONES CON </span><span class="sc">{</span><span class="st">'toxicity_score'</span><span class="sc">.</span>upper()<span class="sc">}</span><span class="ss"> ==="</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(toxicity_corr.head(<span class="dv">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-10-output-1.png" width="856" height="757" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== CORRELACIONES CON TOXICITY_SCORE ===
+toxicity_score        1.000000
+content_length        0.178799
+sentiment_polarity    0.165296
+conversationId        0.110512
+inReplyToId           0.110335
+tweetId               0.105659
+time_response         0.059059
+authorId              0.037683
+account_age_days      0.032867
+mentions_count        0.026670
+Name: toxicity_score, dtype: float64</code></pre>
+</div>
+</div>
+</section>
+<section id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis" class="level2">
+<h2 class="anchored" data-anchor-id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis">1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)</h2>
+<div id="cce0ca08" class="cell" data-execution_count="10">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== HALLAZGOS CLAVE DEL ANÁLISIS EXPLORATORIO"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">1. DISTRIBUCIÓN DE DATOS:"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Mi Set de datos tiene </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> observaciones y </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> variables"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Variables numéricas son: </span><span class="sc">{</span><span class="bu">len</span>(numeric_cols)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Variables categóricas son: </span><span class="sc">{</span><span class="bu">len</span>(categorical_cols)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">2. CALIDAD DE DATOS:"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>missing_summary <span class="op">=</span> missing_df[missing_df[<span class="st">'Valores_Nulos'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(missing_summary) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"   - Se detectaron valores nulos en </span><span class="sc">{</span><span class="bu">len</span>(missing_summary)<span class="sc">}</span><span class="ss"> columnas"</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"   - Columna con más nulos: </span><span class="sc">{</span>missing_summary<span class="sc">.</span>iloc[<span class="dv">0</span>][<span class="st">'Columna'</span>]<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>missing_summary<span class="sc">.</span>iloc[<span class="dv">0</span>][<span class="st">'Porcentaje'</span>]<span class="sc">:.1f}</span><span class="ss">%)"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"   - No se detectaron valores nulos en el dataset"</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">3. VARIABLE OBJETIVO (Score de TOXICIDAD):"</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>toxicity_mean <span class="op">=</span> df[<span class="st">'toxicity_score'</span>].mean()</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>toxicity_std <span class="op">=</span> df[<span class="st">'toxicity_score'</span>].std()</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Media de toxicidad: </span><span class="sc">{</span>toxicity_mean<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Desviación estándar: </span><span class="sc">{</span>toxicity_std<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - La mayoría de tweets tienen baja toxicidad pues son menores a 0.5, la toxicidad media es: </span><span class="sc">{</span>toxicity_mean<span class="sc">:.4f}</span><span class="ss">"</span>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== HALLAZGOS CLAVE DEL ANÁLISIS EXPLORATORIO
+
+1. DISTRIBUCIÓN DE DATOS:
+   - Mi Set de datos tiene 1500 observaciones y 28 variables
+   - Variables numéricas son: 12
+   - Variables categóricas son: 15
+
+2. CALIDAD DE DATOS:
+   - Se detectaron valores nulos en 4 columnas
+   - Columna con más nulos: hashtags (91.9%)
+
+3. VARIABLE OBJETIVO (Score de TOXICIDAD):
+   - Media de toxicidad: 0.2539
+   - Desviación estándar: 0.2439
+   - La mayoría de tweets tienen baja toxicidad pues son menores a 0.5, la toxicidad media es: 0.2539</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="preprocesamiento-y-codificación" class="level1">
+<h1>2. Preprocesamiento y Codificación</h1>
+<section id="limpieza-de-datos-básica" class="level2">
+<h2 class="anchored" data-anchor-id="limpieza-de-datos-básica">2.1 Limpieza de datos básica</h2>
+<div id="e44dafb6" class="cell" data-execution_count="11">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== LIMPIEZA DE DATOS BÁSICA"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>df_processed <span class="op">=</span> df[[<span class="st">'content'</span>, <span class="st">'toxicity_score'</span>]].copy()</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>initial_rows <span class="op">=</span> <span class="bu">len</span>(df_processed)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>df_processed <span class="op">=</span> df_processed.dropna(subset<span class="op">=</span>[<span class="st">'toxicity_score'</span>, <span class="st">'content'</span>])</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>final_rows <span class="op">=</span> <span class="bu">len</span>(df_processed)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificar tipos de datos</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Tipos de datos:"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - content: </span><span class="sc">{</span>df_processed[<span class="st">'content'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - toxicity_score: </span><span class="sc">{</span>df_processed[<span class="st">'toxicity_score'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== LIMPIEZA DE DATOS BÁSICA
+
+Tipos de datos:
+  - content: object
+  - toxicity_score: float64</code></pre>
+</div>
+</div>
+</section>
+<section id="procesamiento-del-texto-content" class="level2">
+<h2 class="anchored" data-anchor-id="procesamiento-del-texto-content">2.2 Procesamiento del texto (content)</h2>
+<div id="3232e55f" class="cell" data-execution_count="12">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== PROCESAMIENTO DEL CAMPO CONTENT"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Función simple de limpieza de texto</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_text(text):</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> pd.isna(text):</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">""</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> <span class="bu">str</span>(text).lower()</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remover URLs, menciones, hashtags, ademas números y caracteres especiales</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'http</span><span class="dv">\S</span><span class="op">+</span><span class="cf">|</span><span class="vs">www</span><span class="dv">\S</span><span class="op">+</span><span class="vs">'</span>, <span class="st">''</span>, text)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'@</span><span class="dv">\w</span><span class="op">+</span><span class="vs">'</span>, <span class="st">''</span>, text)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'#</span><span class="dv">\w</span><span class="op">+</span><span class="vs">'</span>, <span class="st">''</span>, text)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'</span><span class="dv">\d</span><span class="op">+</span><span class="vs">'</span>, <span class="st">''</span>, text)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'</span><span class="pp">[^</span><span class="dv">\w\s</span><span class="pp">]</span><span class="vs">'</span>, <span class="st">' '</span>, text)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> <span class="st">' '</span>.join(text.split())</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> text</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar limpieza</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>df_processed[<span class="st">'content_clean'</span>] <span class="op">=</span> df_processed[<span class="st">'content'</span>].<span class="bu">apply</span>(clean_text)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Remover stopwords en español</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>spanish_stopwords <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">'spanish'</span>))</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_stopwords(text):</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>    words <span class="op">=</span> text.split()</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">' '</span>.join([word <span class="cf">for</span> word <span class="kw">in</span> words <span class="cf">if</span> word <span class="kw">not</span> <span class="kw">in</span> spanish_stopwords <span class="kw">and</span> <span class="bu">len</span>(word) <span class="op">&gt;</span> <span class="dv">2</span>])</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear texto procesado final</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>df_processed[<span class="st">'text_processed'</span>] <span class="op">=</span> df_processed[<span class="st">'content_clean'</span>].<span class="bu">apply</span>(remove_stopwords)</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Texto procesado:"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== PROCESAMIENTO DEL CAMPO CONTENT
+Texto procesado:</code></pre>
+</div>
+</div>
+</section>
+<section id="codificación-de-texto-con-tf-idf" class="level2">
+<h2 class="anchored" data-anchor-id="codificación-de-texto-con-tf-idf">2.3 Codificación de texto con TF-IDF</h2>
+<div id="d9461753" class="cell" data-execution_count="13">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== CODIFICACIÓN DE TEXTO CON TF-IDF"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar TF-IDF</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>tfidf_vectorizer <span class="op">=</span> TfidfVectorizer(</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    max_features<span class="op">=</span><span class="dv">1000</span>,          </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    min_df<span class="op">=</span><span class="dv">2</span>,                   </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    max_df<span class="op">=</span><span class="fl">0.8</span>,                 </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    ngram_range<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">2</span>),       </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    stop_words<span class="op">=</span><span class="bu">list</span>(spanish_stopwords)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar TF-IDF al texto procesado</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>X_tfidf <span class="op">=</span> tfidf_vectorizer.fit_transform(df_processed[<span class="st">'text_processed'</span>])</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Dimensiones de TF-IDF: </span><span class="sc">{</span>X_tfidf<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar términos más importantes</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>feature_names <span class="op">=</span> tfidf_vectorizer.get_feature_names_out()</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total de términos extraídos: </span><span class="sc">{</span><span class="bu">len</span>(feature_names)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Primeros 10 términos: </span><span class="sc">{</span>feature_names[:<span class="dv">10</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Últimos 10 términos: </span><span class="sc">{</span>feature_names[<span class="op">-</span><span class="dv">10</span>:]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== CODIFICACIÓN DE TEXTO CON TF-IDF
+Dimensiones de TF-IDF: (1347, 1000)
+Total de términos extraídos: 1000
+Primeros 10 términos: ['abre' 'abuso' 'acaba' 'acabar' 'acabar correismo' 'acaso' 'acciones'
+ 'aceptan' 'aceptar' 'acuerdos']
+Últimos 10 términos: ['zorra' 'zorro' 'zurda' 'zurdos' 'época' 'ósea' 'última' 'último' 'única'
+ 'único']</code></pre>
+</div>
+</div>
+</section>
+<section id="pipeline-simplificado-con-columntransformer" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-simplificado-con-columntransformer">2.4 Pipeline simplificado con ColumnTransformer</h2>
+<div id="54fcf178" class="cell" data-execution_count="14">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== PIPELINE SIMPLIFICADO ==="</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipeline simple: solo texto → TF-IDF</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>preprocessor_simple <span class="op">=</span> ColumnTransformer(</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    transformers<span class="op">=</span>[</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'text'</span>, TfidfVectorizer(</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>            max_features<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>            min_df<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>            max_df<span class="op">=</span><span class="fl">0.8</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>            ngram_range<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>            stop_words<span class="op">=</span><span class="bu">list</span>(spanish_stopwords)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        ), <span class="st">'text_processed'</span>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span><span class="st">'drop'</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar transformación</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>X_final <span class="op">=</span> preprocessor_simple.fit_transform(df_processed)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>y_final <span class="op">=</span> df_processed[<span class="st">'toxicity_score'</span>].values</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Datos finales preparados:"</span>)</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - X: </span><span class="sc">{</span>X_final<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - y: </span><span class="sc">{</span>y_final<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Rango de toxicity_score: [</span><span class="sc">{</span>y_final<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.4f}</span><span class="ss">, </span><span class="sc">{</span>y_final<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.4f}</span><span class="ss">]"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== PIPELINE SIMPLIFICADO ===
+
+Datos finales preparados:
+  - X: (1347, 500)
+  - y: (1347,)
+  - Rango de toxicity_score: [0.0019, 0.9391]</code></pre>
+</div>
+</div>
+</section>
+<section id="división-de-datos-para-regresión" class="level2">
+<h2 class="anchored" data-anchor-id="división-de-datos-para-regresión">2.5 División de datos para regresión</h2>
+<div id="e6d223e3" class="cell" data-execution_count="15">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== DIVISIÓN DE DATOS"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># División simple para regresión</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    X_final, y_final, </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    test_size<span class="op">=</span><span class="fl">0.2</span>, </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Distribución del target (toxicity_score):"</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  Entrenamiento - Media: </span><span class="sc">{</span>y_train<span class="sc">.</span>mean()<span class="sc">:.4f}</span><span class="ss">"</span>) </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  Std: </span><span class="sc">{</span>y_train<span class="sc">.</span>std()<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  Prueba - Media: </span><span class="sc">{</span>y_test<span class="sc">.</span>mean()<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  Std: </span><span class="sc">{</span>y_test<span class="sc">.</span>std()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== DIVISIÓN DE DATOS
+
+Distribución del target (toxicity_score):
+  Entrenamiento - Media: 0.2559
+  Std: 0.2449
+  Prueba - Media: 0.2457
+  Std: 0.2395</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

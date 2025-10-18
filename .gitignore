@@ -39,13 +39,6 @@ build/
 .Rproj.user
 
 # Archivos de compilación / salida (HTML/PDF/LaTeX)
-*.html
-*.pdf
-*.tex
-*.log
-*.aux
-*.out
-*.synctex.gz
 
 # Archivos de sistema y editor
 .DS_Store
