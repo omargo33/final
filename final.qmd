@@ -21,7 +21,6 @@ Autor Omar Vele
 
 ## Importar librerías
 
-
 ```{python}
 # Importaciones corregidas para análisis de texto
 import pandas as pd
@@ -45,6 +44,11 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
 
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.svm import SVR
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import time
 
 ## Borrar OJO
 import re
@@ -72,8 +76,6 @@ nltk.download('stopwords')
 df = pd.read_csv('./1500_tweets_con_toxicity.csv')
 
 ```
-
-
 
 # 1. Análisis Exploratorio de Datos (EDA)
 
@@ -239,26 +241,23 @@ if len(numeric_cols) > 1:
 ## 1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)
 
 ```{python}
-print("=== HALLAZGOS CLAVE DEL ANÁLISIS EXPLORATORIO")
-print("\n1. DISTRIBUCIÓN DE DATOS:")
-print(f"   - Mi Set de datos tiene {df.shape[0]} observaciones y {df.shape[1]} variables")
-print(f"   - Variables numéricas son: {len(numeric_cols)}")
-print(f"   - Variables categóricas son: {len(categorical_cols)}")
+print("\n1. DISTRIBUCIÓN DE LOS DATOS:")
+print(f"- Mi Set de datos tiene {df.shape[0]} observaciones y {df.shape[1]} variables")
+print(f"- Variables numéricas son: {len(numeric_cols)}")
+print(f"- Variables categóricas son: {len(categorical_cols)}")
 
-print(f"\n2. CALIDAD DE DATOS:")
+print(f"\n2. CALIDAD DE LOS DATOS:")
 missing_summary = missing_df[missing_df['Valores_Nulos'] > 0]
 if len(missing_summary) > 0:
-    print(f"   - Se detectaron valores nulos en {len(missing_summary)} columnas")
-    print(f"   - Columna con más nulos: {missing_summary.iloc[0]['Columna']} ({missing_summary.iloc[0]['Porcentaje']:.1f}%)")
-else:
-    print("   - No se detectaron valores nulos en el dataset")
+    print(f"- Se detectaron valores nulos en {len(missing_summary)} columnas")
+    print(f"- Columna con más nulos: {missing_summary.iloc[0]['Columna']} ({missing_summary.iloc[0]['Porcentaje']:.1f}%)")
 
 print(f"\n3. VARIABLE OBJETIVO (Score de TOXICIDAD):")
 toxicity_mean = df['toxicity_score'].mean()
 toxicity_std = df['toxicity_score'].std()
-print(f"   - Media de toxicidad: {toxicity_mean:.4f}")
-print(f"   - Desviación estándar: {toxicity_std:.4f}")
-print(f"   - La mayoría de tweets tienen baja toxicidad pues son menores a 0.5, la toxicidad media es: {toxicity_mean:.4f}"  )
+print(f"- Media de toxicidad: {toxicity_mean:.4f}")
+print(f"- Desviación estándar: {toxicity_std:.4f}")
+print(f"- La mayoría de tweets tienen baja toxicidad pues son menores a 0.5, la toxicidad media es: {toxicity_mean:.4f}")
 
 ```
 # 2. Preprocesamiento y Codificación
@@ -266,24 +265,16 @@ print(f"   - La mayoría de tweets tienen baja toxicidad pues son menores a 0.5,
 ## 2.1 Limpieza de datos básica
 
 ```{python}
-print("=== LIMPIEZA DE DATOS BÁSICA")
+df_procesar = df[['content', 'toxicity_score']].copy()
 
-df_processed = df[['content', 'toxicity_score']].copy()
-
-initial_rows = len(df_processed)
-df_processed = df_processed.dropna(subset=['toxicity_score', 'content'])
-final_rows = len(df_processed)
-# Verificar tipos de datos
-print(f"\nTipos de datos:")
-print(f"  - content: {df_processed['content'].dtype}")
-print(f"  - toxicity_score: {df_processed['toxicity_score'].dtype}")
+initial_rows = len(df_procesar)
+df_procesar = df_procesar.dropna(subset=['toxicity_score', 'content'])
+final_rows = len(df_procesar)
 ```
 
 ## 2.2 Procesamiento del texto (content)
 
 ```{python}
-print("=== PROCESAMIENTO DEL CAMPO CONTENT")
-
 # Función simple de limpieza de texto
 def clean_text(text):
     if pd.isna(text):
@@ -301,7 +292,7 @@ def clean_text(text):
     return text
 
 # Aplicar limpieza
-df_processed['content_clean'] = df_processed['content'].apply(clean_text)
+df_procesar['content_clean'] = df_procesar['content'].apply(clean_text)
 
 # Remover stopwords en español
 spanish_stopwords = set(stopwords.words('spanish'))
@@ -311,15 +302,12 @@ def remove_stopwords(text):
     return ' '.join([word for word in words if word not in spanish_stopwords and len(word) > 2])
 
 # Crear texto procesado final
-df_processed['text_processed'] = df_processed['content_clean'].apply(remove_stopwords)
-
-print(f"Texto procesado:")
+df_procesar['text_processed'] = df_procesar['content_clean'].apply(remove_stopwords)
 ```
 
 ## 2.3 Codificación de texto con TF-IDF
 
 ```{python}
-print("=== CODIFICACIÓN DE TEXTO CON TF-IDF")
 
 # Configurar TF-IDF
 tfidf_vectorizer = TfidfVectorizer(
@@ -331,7 +319,7 @@ tfidf_vectorizer = TfidfVectorizer(
 )
 
 # Aplicar TF-IDF al texto procesado
-X_tfidf = tfidf_vectorizer.fit_transform(df_processed['text_processed'])
+X_tfidf = tfidf_vectorizer.fit_transform(df_procesar['text_processed'])
 print(f"Dimensiones de TF-IDF: {X_tfidf.shape}")
 
 # Mostrar términos más importantes
@@ -344,8 +332,6 @@ print(f"Últimos 10 términos: {feature_names[-10:]}")
 ## 2.4 Pipeline simplificado con ColumnTransformer
 
 ```{python}
-print("=== PIPELINE SIMPLIFICADO ===")
-
 # Pipeline simple: solo texto → TF-IDF
 preprocessor_simple = ColumnTransformer(
     transformers=[
@@ -361,20 +347,18 @@ preprocessor_simple = ColumnTransformer(
 )
 
 # Aplicar transformación
-X_final = preprocessor_simple.fit_transform(df_processed)
-y_final = df_processed['toxicity_score'].values
+X_final = preprocessor_simple.fit_transform(df_procesar)
+y_final = df_procesar['toxicity_score'].values
 
 print(f"\nDatos finales preparados:")
-print(f"  - X: {X_final.shape}")
-print(f"  - y: {y_final.shape}")
-print(f"  - Rango de toxicity_score: [{y_final.min():.4f}, {y_final.max():.4f}]")
+print(f"- X: {X_final.shape}")
+print(f"- y: {y_final.shape}")
+print(f"- Rango de toxicity_score: [{y_final.min():.4f}, {y_final.max():.4f}]")
 ```
 
 ## 2.5 División de datos para regresión
 
 ```{python}
-print("=== DIVISIÓN DE DATOS")
-
 # División simple para regresión
 X_train, X_test, y_train, y_test = train_test_split(
     X_final, y_final, 
@@ -383,28 +367,26 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 print(f"\nDistribución del target (toxicity_score):")
-print(f"  Entrenamiento - Media: {y_train.mean():.4f}") 
-print(f"  Std: {y_train.std():.4f}")
-print(f"  Prueba - Media: {y_test.mean():.4f}")
-print(f"  Std: {y_test.std():.4f}")
-
+print(f"Entrenamiento - Media: {y_train.mean():.4f}") 
+print(f"Std: {y_train.std():.4f}")
+print(f"Prueba - Media: {y_test.mean():.4f}")
+print(f"Std: {y_test.std():.4f}")
 ```
-
 
 # 3. Clasificación de Toxicidad
 
 ## 3.1 Transformación de toxicity_score a variable categórica
 
-```{python}
-print("=== TRANSFORMACIÓN A VARIABLE CATEGÓRICA")
+En el histograma se dibujan el promedio en ROJO y la media en VERDE
 
+```{python}
 plt.figure(figsize=(15, 5))
 
 # Histograma detallado
 plt.subplot(1, 3, 1)
-plt.hist(df_processed['toxicity_score'], bins=50, alpha=0.7, color='skyblue', edgecolor='black')
-plt.axvline(df_processed['toxicity_score'].mean(), color='red', linestyle='--', label=f'Media: {df_processed["toxicity_score"].mean():.3f}')
-plt.axvline(df_processed['toxicity_score'].median(), color='green', linestyle='--', label=f'Mediana: {df_processed["toxicity_score"].median():.3f}')
+plt.hist(df_procesar['toxicity_score'], bins=50, alpha=0.7, color='skyblue', edgecolor='black')
+plt.axvline(df_procesar['toxicity_score'].mean(), color='red', linestyle='--', label=f'Media: {df_procesar["toxicity_score"].mean():.3f}')
+plt.axvline(df_procesar['toxicity_score'].median(), color='green', linestyle='--', label=f'Mediana: {df_procesar["toxicity_score"].median():.3f}')
 plt.xlabel('Toxicity Score')
 plt.ylabel('Frecuencia')
 plt.title('Distribución')
@@ -413,7 +395,7 @@ plt.legend()
 # Percentiles
 plt.subplot(1, 3, 2)
 percentiles = [25, 50, 75, 100] ## relacionados a los quartiles
-perc_values = [np.percentile(df_processed['toxicity_score'], p) for p in percentiles]
+perc_values = [np.percentile(df_procesar['toxicity_score'], p) for p in percentiles]
 plt.bar(range(len(percentiles)), perc_values, alpha=0.7, color='lightcoral')
 plt.xlabel('Percentiles')
 plt.ylabel('Toxicity Score')
@@ -422,7 +404,7 @@ plt.xticks(range(len(percentiles)), [f'P{p}' for p in percentiles])
 
 # Boxplot con estadísticas
 plt.subplot(1, 3, 3)
-plt.boxplot(df_processed['toxicity_score'])
+plt.boxplot(df_procesar['toxicity_score'])
 plt.ylabel('Toxicity Score')
 plt.title('Boxplot')
 
@@ -431,10 +413,10 @@ plt.show()
 
 # Mostrar estadísticas clave para justificar umbral
 print(f"Estadísticas para determinar umbral, desde el inicio mediria la toxicidad en quartiles y aca se presenta los procentajes:")
-print(f"  - Q1 (25%): {np.percentile(df_processed['toxicity_score'], 25):.4f}")
-print(f"  - Q1 (50%): {np.percentile(df_processed['toxicity_score'], 50):.4f}")
-print(f"  - Q3 (75%): {np.percentile(df_processed['toxicity_score'], 75):.4f}")
-print(f"  - Q3 (100%): {np.percentile(df_processed['toxicity_score'], 100):.4f}")
+print(f"- Q1 (25%): {np.percentile(df_procesar['toxicity_score'], 25):.4f}")
+print(f"- Q1 (50%): {np.percentile(df_procesar['toxicity_score'], 50):.4f}")
+print(f"- Q3 (75%): {np.percentile(df_procesar['toxicity_score'], 75):.4f}")
+print(f"- Q4 (100%): {np.percentile(df_procesar['toxicity_score'], 100):.4f}")
 ```
 
 ## 3.2 Estrategia de discretización justificada
@@ -446,17 +428,15 @@ print(f"  - Q3 (100%): {np.percentile(df_processed['toxicity_score'], 100):.4f}"
 - Clase 1 (Tóxico): aprox 25%
 
 ```{python}
-print("=== JUSTIFICACIÓN Y APLICACIÓN DE UMBRALES ===")
-
-umbral_binario = np.percentile(df_processed['toxicity_score'], 75)
+umbral_binario = np.percentile(df_procesar['toxicity_score'], 75)
 
 # Crear variable binaria
-df_processed['toxicity_binario'] = (df_processed['toxicity_score'] >= umbral_binario).astype(int)
+df_procesar['toxicity_binario'] = (df_procesar['toxicity_score'] >= umbral_binario).astype(int)
 
 # Mostrar distribución binaria
-count_binary = df_processed['toxicity_binario'].value_counts()
-print(f"   - Clase 0 (No Tóxico): {count_binary[0]} ({count_binary[0]/len(df_processed)*100:.1f}%)")
-print(f"   - Clase 1 (Tóxico): {count_binary[1]} ({count_binary[1]/len(df_processed)*100:.1f}%)")
+count_binary = df_procesar['toxicity_binario'].value_counts()
+print(f"- Clase 0 (No Tóxico): {count_binary[0]} ({count_binary[0]/len(df_procesar)*100:.1f}%)")
+print(f"- Clase 1 (Tóxico): {count_binary[1]} ({count_binary[1]/len(df_procesar)*100:.1f}%)")
 ```
 
 ### ESTRATEGIA 2: Clasificación multiclase a tres cortes
@@ -464,8 +444,8 @@ print(f"   - Clase 1 (Tóxico): {count_binary[1]} ({count_binary[1]/len(df_proce
    - Clase 1 (Media): aprox 33.3%
    - Clase 2 (Alta): aprox 33.3%
 ```{python}
-p33 = np.percentile(df_processed['toxicity_score'], 33.33)
-p66 = np.percentile(df_processed['toxicity_score'], 66.66)
+p33 = np.percentile(df_procesar['toxicity_score'], 33.33)
+p66 = np.percentile(df_procesar['toxicity_score'], 66.66)
 
 def categorize_toxicity(score):
     if score <= p33:
@@ -475,15 +455,14 @@ def categorize_toxicity(score):
     else:
         return 2  # Alta (troll??)
 
-df_processed['toxicity_multi_capa'] = df_processed['toxicity_score'].apply(categorize_toxicity)
+df_procesar['toxicity_multi_capa'] = df_procesar['toxicity_score'].apply(categorize_toxicity)
 
 # Mostrar distribución multi capa
-count_multi = df_processed['toxicity_multi_capa'].value_counts().sort_index()
-print(f"   - Clase 0 (Baja): {count_multi[0]} ({count_multi[0]/len(df_processed)*100:.1f}%)")
-print(f"   - Clase 1 (Moderada): {count_multi[1]} ({count_multi[1]/len(df_processed)*100:.1f}%)")
-print(f"   - Clase 2 (Alta): {count_multi[2]} ({count_multi[2]/len(df_processed)*100:.1f}%)")
+count_multi = df_procesar['toxicity_multi_capa'].value_counts().sort_index()
+print(f"- Clase 0 (Baja): {count_multi[0]} ({count_multi[0]/len(df_procesar)*100:.1f}%)")
+print(f"- Clase 1 (Moderada): {count_multi[1]} ({count_multi[1]/len(df_procesar)*100:.1f}%)")
+print(f"- Clase 2 (Alta): {count_multi[2]} ({count_multi[2]/len(df_procesar)*100:.1f}%)")
 ```
-
 
 ### Presentación gráfica de mis estadísticas para comparación visual
 
@@ -513,8 +492,8 @@ plt.show()
 
 X_classificacion = X_final
 
-y_binary = df_processed['toxicity_binario'].values
-y_multi_capa = df_processed['toxicity_multi_capa'].values
+y_binary = df_procesar['toxicity_binario'].values
+y_multi_capa = df_procesar['toxicity_multi_capa'].values
 
 X_train_bin, X_test_bin, y_train_bin, y_test_bin = train_test_split(
     X_classificacion, y_binary, test_size=0.2, random_state=42, stratify=y_binary
@@ -523,27 +502,27 @@ X_train_bin, X_test_bin, y_train_bin, y_test_bin = train_test_split(
 X_train_multi, X_test_multi, y_train_multi, y_test_multi = train_test_split(
     X_classificacion, y_multi_capa, test_size=0.2, random_state=42, stratify=y_multi_capa
 )
-print(f"  - Clasificación Capa binaria:")
-print(f"    * X_train: {X_train_bin.shape}, X_test: {X_test_bin.shape}")
-print(f"    * y_train: {y_train_bin.shape}, y_test: {y_test_bin.shape}")
-print(f"  - Entrenamiento: {np.bincount(y_train_bin)}")
-print(f"  - Prueba: {np.bincount(y_test_bin)}")
-print(f"  - Clasificación Multi Capa:")
-print(f"    * X_train: {X_train_multi.shape}, X_test: {X_test_multi.shape}")
-print(f"    * y_train: {y_train_multi.shape}, y_test: {y_test_multi.shape}")
-print(f"  - Entrenameinto: {np.bincount(y_train_multi)}")
-print(f"  - Prueba: {np.bincount(y_test_multi)}")
+print(f"- Clasificación Binaria:")
+print(f" * X_train: {X_train_bin.shape}, X_test: {X_test_bin.shape}")
+print(f" * y_train: {y_train_bin.shape}, y_test: {y_test_bin.shape}")
+print(f"- Entrenamiento: {np.bincount(y_train_bin)}")
+print(f"- Prueba: {np.bincount(y_test_bin)}")
+print(f"- Clasificación Multi Capa:")
+print(f" * X_train: {X_train_multi.shape}, X_test: {X_test_multi.shape}")
+print(f" * y_train: {y_train_multi.shape}, y_test: {y_test_multi.shape}")
+print(f"- Entrenameinto: {np.bincount(y_train_multi)}")
+print(f"- Prueba: {np.bincount(y_test_multi)}")
 ```
 
 ## 3.4 Clasificación supervisada
 
-**Hago un loop para entrenar el modelo, en la entrega anterior pense en que programaticamente se puede hacer un bucle para ejecutar los modelos, y puedo comparar de mejor manera al convertirla en una funcion de facil uso** 
+**Hago un bucle para entrenar el modelo, en la entrega anterior pense en que programaticamente se puede hacer un loop para ejecutar los modelos, y puedo comparar de mejor manera al convertirla en una funcion de facil uso** 
 
-Se usa OVR para que sea uno contra el resto en la etiquetacion de clases en multi capa.
+> Se usa OVR para que "sea uno contra el resto" en la etiquetacion de clases en multi capa.
     
 
 ```{python}
-# Inicializar modelos
+# Seteo los modelos en un arreglo.
 models = {
     'logReg': LogisticRegression(random_state=42, max_iter=1000),
     'ramFor': RandomForestClassifier(n_estimators=100, random_state=42),
@@ -551,16 +530,14 @@ models = {
     'SVC': SVC(probability=True, random_state=42)
 }
 
-
-def entrenamiento_evaluacion_masiva(X_train, X_test, y_train, y_test, models, task_name):
+def entrenamiento_evaluacion_masiva(X_train, X_test, y_train, y_test, models, paso_nombre):
     results = {}
     for name, model in models.items():
         print(f"\nEntrenando {name}...")
         
         model.fit(X_train, y_train)
         
-        y_pred = model.predict(X_test)
-        
+        y_pred = model.predict(X_test)        
 
         accuracy = accuracy_score(y_test, y_pred)
         precision = precision_score(y_test, y_pred, average='weighted')
@@ -586,11 +563,11 @@ def entrenamiento_evaluacion_masiva(X_train, X_test, y_train, y_test, models, ta
             'y_pred_proba': y_pred_proba
         }
         
-        print(f"  - Accuracy: {accuracy:.4f}")
-        print(f"  - Precision: {precision:.4f}")
-        print(f"  - Recall: {recall:.4f}")
-        print(f"  - F1-Score: {f1:.4f}")
-        print(f"  - ROC-AUC: {roc_auc:.4f}")
+        print(f"- Accuracy: {accuracy:.4f}")
+        print(f"- Precision: {precision:.4f}")
+        print(f"- Recall: {recall:.4f}")
+        print(f"- F1-Score: {f1:.4f}")
+        print(f"- ROC-AUC: {roc_auc:.4f}")
     
     return results
 
@@ -609,17 +586,11 @@ results_multi_capa = entrenamiento_evaluacion_masiva(
 
 ## 3.5 Evaluación detallada y métricas
 
-```{python}
-print("=== EVALUACIÓN DETALLADA DE MODELOS ===")
+Creo un data set con los resultados para poder buscar el F1-Score mas Alto y el modelo al que corresponde.
 
-# Función para mostrar reporte detallado
-def detailed_evaluation(results, y_test, task_name, class_names=None):
-    print(f"\n{'='*50}")
-    print(f"{task_name.upper()} - REPORTE DETALLADO")
-    print(f"{'='*50}")
-    
-    # Crear DataFrame con resultados
-    metrics_df = pd.DataFrame({
+```{python}
+def analizo_modelo_por_metrica(results, y_test, paso_nombre, class_names=None):
+    metricas_df = pd.DataFrame({
         'Model': list(results.keys()),
         'Accuracy': [results[model]['accuracy'] for model in results.keys()],
         'Precision': [results[model]['precision'] for model in results.keys()],
@@ -628,22 +599,312 @@ def detailed_evaluation(results, y_test, task_name, class_names=None):
         'ROC-AUC': [results[model]['roc_auc'] for model in results.keys()]
     }).round(4)
     
-    print(metrics_df.to_string(index=False))
+    # Encontrar mejor modelo, tomado de: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html
+    best_model_name = metricas_df.loc[metricas_df['F1-Score'].idxmax(), 'Model']
     
-    # Encontrar mejor modelo
-    best_model_name = metrics_df.loc[metrics_df['F1-Score'].idxmax(), 'Model']
-    print(f"\n🏆 MEJOR MODELO: {best_model_name}")
-    print(f"   F1-Score: {metrics_df.loc[metrics_df['Model'] == best_model_name, 'F1-Score'].iloc[0]}")
+    print(f"\nMEJOR MODELO: {best_model_name} {paso_nombre}")
     
-    return metrics_df, best_model_name
+    print(f"Valor del F1-Score: {metricas_df.loc[metricas_df['Model'] == best_model_name, 'F1-Score'].iloc[0]}")
+    
+    return metricas_df, best_model_name
 
 # Evaluación detallada binaria
-metrics_binary, best_binary = detailed_evaluation(
+metricas_binary, best_binary = analizo_modelo_por_metrica(
     results_binary, y_test_bin, "Clasificación Binaria", ['No Tóxico', 'Tóxico']
 )
 
 # Evaluación detallada multiclase
-metrics_multi, best_multi = detailed_evaluation(
-    results_multi_capa, y_test_multi, "Clasificación Multiclase", labels_multiCapas
+metricas_multi_capa, best_multi_capa = analizo_modelo_por_metrica(
+    results_multi_capa, y_test_multi, "Clasificación Multicapa", labels_multiCapas
 )
+```
+
+## 3.6 Visualizaciones de resultados
+
+## 3.6.1 Métricas binarias
+
+```{python}
+fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+metricas_to_plot = ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'ROC-AUC']
+x_pos = np.arange(len(metricas_binary))
+
+for i, metric in enumerate(metricas_to_plot):
+    if i < 4:
+        row, col = i // 2, i % 2
+        axes[row, col].bar(metricas_binary['Model'], metricas_binary[metric], alpha=0.7)
+        axes[row, col].set_title(f'{metric} - Clasificación Binaria')
+        axes[row, col].set_ylabel(metric)
+        axes[row, col].tick_params(axis='x', rotation=45)
+        axes[row, col].set_ylim(0, 1)
+        
+        # Agregar valores en las barras
+        for j, v in enumerate(metricas_binary[metric]):
+            axes[row, col].text(j, v + 0.01, f'{v:.3f}', ha='center', va='bottom')
+
+plt.tight_layout()
+plt.show()
+```
+
+# 3.6.2 Matriz de confusión para el mejor modelo binario
+```{python}
+best_model_bin = results_binary[best_binary]['model']
+y_pred_best_bin = results_binary[best_binary]['y_pred']
+
+plt.figure(figsize=(12, 5))
+
+# Matriz de confusión binaria
+plt.subplot(1, 2, 1)
+cm_bin = confusion_matrix(y_test_bin, y_pred_best_bin)
+sns.heatmap(cm_bin, annot=True, fmt='d', cmap='Blues', 
+           xticklabels=['No Tóxico', 'Tóxico'], 
+           yticklabels=['No Tóxico', 'Tóxico'])
+plt.title(f'Matriz de Confusión - {best_binary}\n(Clasificación Binaria)')
+plt.ylabel('Verdadero')
+plt.xlabel('Predicho')
+
+```
+
+## 3.6.3 Matriz de confusión para el mejor modelo Multi Capa
+```{python}
+
+# Matriz de confusión multiclase
+plt.subplot(1, 2, 2)
+best_model_multi = results_multi_capa[best_multi_capa]['model']
+y_pred_best_multi = results_multi_capa[best_multi_capa]['y_pred']
+cm_multi = confusion_matrix(y_test_multi, y_pred_best_multi)
+sns.heatmap(cm_multi, annot=True, fmt='d', cmap='Reds',
+           xticklabels=['Baja', 'Moderada', 'Alta'],
+           yticklabels=['Baja', 'Moderada', 'Alta'])
+plt.title(f'Matriz de Confusión - {best_multi_capa}\n(Clasificación Multi capa)')
+plt.ylabel('Verdadero')
+plt.xlabel('Predicho')
+
+plt.tight_layout()
+plt.show()
+```
+
+## 3.7 Curvas ROC
+
+- ROC Binaria
+- ROC Multiclase
+
+```{python}
+plt.figure(figsize=(15, 5)) ## Dimensiones
+
+plt.subplot(1, 2, 1)
+for name, result in results_binary.items():
+    y_pred_proba = result['y_pred_proba'][:, 1]
+    fpr, tpr, _ = roc_curve(y_test_bin, y_pred_proba)
+    auc_score = auc(fpr, tpr)
+    plt.plot(fpr, tpr, label=f'{name} (AUC = {auc_score:.3f})')
+
+plt.plot([0, 1], [0, 1], 'k--', label='Random')
+plt.xlabel('Tasa de Falsos Positivos')
+plt.ylabel('Tasa de Verdaderos Positivos')
+plt.title('Curvas ROC - Clasificación Binaria')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+## -- ROC multi capa
+plt.subplot(1, 2, 2)
+for name, result in results_multi_capa.items():
+    y_pred_proba = result['y_pred_proba']
+    y_binary_high = (y_test_multi == 2).astype(int)
+    y_pred_proba_high = y_pred_proba[:, 2]
+    
+    fpr, tpr, _ = roc_curve(y_binary_high, y_pred_proba_high)
+    auc_score = auc(fpr, tpr)
+    plt.plot(fpr, tpr, label=f'{name} (AUC = {auc_score:.3f})')
+
+plt.plot([0, 1], [0, 1], 'k--', label='Random')
+plt.xlabel('Tasa de Falsos Positivos')
+plt.ylabel('Tasa de Verdaderos Positivos')
+plt.title('Curvas ROC - "Alta Toxicidad" vs Resto')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
+
+# 4. Regresión de Toxicidad
+
+## 4.1 Algoritmos de regresión supervisada con Pipeline
+
+```{python}
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+
+def crear_pipeline_regresion(modelo_regresion):
+    pipeline = Pipeline([
+        ('preprocessor', preprocessor_simple),  # TF-IDF ya definido
+        ('regressor', modelo_regresion)
+    ])
+    return pipeline
+
+pipelines_regresion = {
+    'Linear Regression': crear_pipeline_regresion(LinearRegression()),
+    'Ridge Regression': crear_pipeline_regresion(Ridge(alpha=1.0, random_state=42)),
+    'Lasso Regression': crear_pipeline_regresion(Lasso(alpha=0.01, random_state=42, max_iter=2000)),
+    'Random Forest': crear_pipeline_regresion(RandomForestRegressor(n_estimators=100, random_state=42)),
+    'Gradient Boosting': crear_pipeline_regresion(GradientBoostingRegressor(n_estimators=100, random_state=42)),
+    'SVR': crear_pipeline_regresion(SVR(kernel='rbf', C=1.0))
+}
+
+def entrenar_evaluar_regresion_pipeline(X_train, X_test, y_train, y_test, pipelines):
+    resultados = {}
+    
+    for nombre, pipeline in pipelines.items():
+        print(f"\nEntrenando {nombre}")
+        
+        start_time = time.time()        
+        pipeline.fit(X_train, y_train)
+        
+        tiempo_entrenamiento = time.time() - start_time
+        
+        y_pred_train = pipeline.predict(X_train)
+        y_pred_test = pipeline.predict(X_test)
+        
+        mae_train = mean_absolute_error(y_train, y_pred_train)
+        rmse_train = np.sqrt(mean_squared_error(y_train, y_pred_train))
+        r2_train = r2_score(y_train, y_pred_train)
+        
+        mae_test = mean_absolute_error(y_test, y_pred_test)
+        rmse_test = np.sqrt(mean_squared_error(y_test, y_pred_test))
+        r2_test = r2_score(y_test, y_pred_test)
+        
+        resultados[nombre] = {
+            'pipeline': pipeline,
+            'modelo': pipeline.named_steps['regressor'], 
+            'tiempo_entrenamiento': tiempo_entrenamiento,
+            'mae_train': mae_train,
+            'rmse_train': rmse_train,
+            'r2_train': r2_train,
+            'mae_test': mae_test,
+            'rmse_test': rmse_test,
+            'r2_test': r2_test,
+            'y_pred_train': y_pred_train,
+            'y_pred_test': y_pred_test
+        }
+        
+        print(f"  - Tiempo entrenamiento: {tiempo_entrenamiento:.3f}s")
+        print(f"  - MAE (test): {mae_test:.4f}")
+        print(f"  - RMSE (test): {rmse_test:.4f}")
+        print(f"  - R2 (test): {r2_test:.4f}")
+    
+    return resultados
+
+# IMPORTANTE: Para usar pipelines necesitamos los datos SIN preprocesar
+# Usar df_procesar['text_processed'] directamente y no X_final
+X_raw = df_procesar[['text_processed']]  # DataFrame con columna text_processed
+y_raw = df_procesar['toxicity_score'].values
+
+X_train_raw, X_test_raw, y_train_raw, y_test_raw = train_test_split(
+    X_raw, y_raw, test_size=0.2, random_state=42
+)
+
+# Entrenar todos los pipelines
+resultados_regresion_pipeline = entrenar_evaluar_regresion_pipeline(
+    X_train_raw, X_test_raw, y_train_raw, y_test_raw, pipelines_regresion
+)
+
+```
+
+## 4.2 Evaluación detallada con métricas
+
+```{python}
+metricas_regresion = pd.DataFrame({
+    'Modelo': list(resultados_regresion_pipeline.keys()),
+    'Tiempo_Entrenamiento': [resultados_regresion_pipeline[m]['tiempo_entrenamiento'] for m in resultados_regresion_pipeline.keys()],
+    'MAE_Train': [resultados_regresion_pipeline[m]['mae_train'] for m in resultados_regresion_pipeline.keys()],
+    'RMSE_Train': [resultados_regresion_pipeline[m]['rmse_train'] for m in resultados_regresion_pipeline.keys()],
+    'R2_Train': [resultados_regresion_pipeline[m]['r2_train'] for m in resultados_regresion_pipeline.keys()],
+    'MAE_Test': [resultados_regresion_pipeline[m]['mae_test'] for m in resultados_regresion_pipeline.keys()],
+    'RMSE_Test': [resultados_regresion_pipeline[m]['rmse_test'] for m in resultados_regresion_pipeline.keys()],
+    'R2_Test': [resultados_regresion_pipeline[m]['r2_test'] for m in resultados_regresion_pipeline.keys()]
+}).round(4)
+
+print("TABLA COMPARATIVA DE MODELOS:")
+print(metricas_regresion.to_string(index=False))
+
+# Encontrar mejor modelo (mayor R2 en test)
+mejor_modelo_nombre = metricas_regresion.loc[metricas_regresion['R2_Test'].idxmax(), 'Modelo']
+mejor_r2 = metricas_regresion.loc[metricas_regresion['R2_Test'].idxmax(), 'R2_Test']
+
+print(f"\nMEJOR MODELO: {mejor_modelo_nombre}")
+print(f"R2 en prueba: {mejor_r2:.4f}")
+print(f"MAE en prueba: {metricas_regresion.loc[metricas_regresion['Modelo'] == mejor_modelo_nombre, 'MAE_Test'].iloc[0]:.4f}")
+print(f"RMSE en prueba: {metricas_regresion.loc[metricas_regresion['Modelo'] == mejor_modelo_nombre, 'RMSE_Test'].iloc[0]:.4f}")
+
+# Revisar Sobre Ajuste
+print(f"\nANÁLISIS DE OVERFITTING O SOBREAJUSTE:")
+for modelo in resultados_regresion_pipeline.keys():
+    r2_train = resultados_regresion_pipeline[modelo]['r2_train']
+    r2_test = resultados_regresion_pipeline[modelo]['r2_test']
+    diferencia = r2_train - r2_test
+    
+    if diferencia > 0.1:
+        status = "Sobreajuste"
+    elif diferencia < 0.05:
+        status = "Buen balance"
+    else:
+        status = "Aceptable"
+    
+    print(f"{modelo}: R2_train={r2_train:.4f}, R2_Test={r2_test:.4f}, Dif={diferencia:.4f} {status}")
+```
+
+## 4.3 Visualizaciones de resultados Gráfico de barras comparativo
+
+El uso de la variables relacionados son: MAE(Mean Absolute Error), Root Mean Square Error (RMSE), Coeficiente de Determinacion(R2) y el Tiempo de Entrega.
+```{python}
+## Dimensiones del grafico
+## Para cada elemento se enumera metricas_regresion para generar los labels en el campo "text"
+
+fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+# MAE
+axes[0, 0].bar(metricas_regresion['Modelo'], metricas_regresion['MAE_Test'], 
+               alpha=0.7, color='skyblue')
+axes[0, 0].set_title('Mean Absolute Error (MAE) - Test')
+axes[0, 0].set_ylabel('MAE')
+axes[0, 0].tick_params(axis='x', rotation=45)
+
+# Agregar valores en las barras
+for i, v in enumerate(metricas_regresion['MAE_Test']):
+    axes[0, 0].text(i, v + 0.001, f'{v:.4f}', ha='center', va='bottom')
+
+# RMSE
+axes[0, 1].bar(metricas_regresion['Modelo'], metricas_regresion['RMSE_Test'], 
+               alpha=0.7, color='lightcoral')
+axes[0, 1].set_title('Root Mean Square Error (RMSE) - Test')
+axes[0, 1].set_ylabel('RMSE')
+axes[0, 1].tick_params(axis='x', rotation=45)
+
+for i, v in enumerate(metricas_regresion['RMSE_Test']):
+    axes[0, 1].text(i, v + 0.001, f'{v:.4f}', ha='center', va='bottom')
+
+# R2
+axes[1, 0].bar(metricas_regresion['Modelo'], metricas_regresion['R2_Test'], 
+               alpha=0.7, color='lightgreen')
+axes[1, 0].set_title('Coeficiente de Determinación (R2) - Test')
+axes[1, 0].set_ylabel('R2')
+axes[1, 0].tick_params(axis='x', rotation=45)
+axes[1, 0].set_ylim(0, 1)
+
+for i, v in enumerate(metricas_regresion['R2_Test']):
+    axes[1, 0].text(i, v + 0.01, f'{v:.4f}', ha='center', va='bottom')
+
+# Tiempo de entrenamiento
+axes[1, 1].bar(metricas_regresion['Modelo'], metricas_regresion['Tiempo_Entrenamiento'], 
+               alpha=0.7, color='gold')
+axes[1, 1].set_title('Tiempo de Entrenamiento')
+axes[1, 1].set_ylabel('Segundos')
+axes[1, 1].tick_params(axis='x', rotation=45)
+
+for i, v in enumerate(metricas_regresion['Tiempo_Entrenamiento']):
+    axes[1, 1].text(i, v + 0.1, f'{v:.2f}s', ha='center', va='bottom')
+
+plt.tight_layout()
+plt.show()
 ```

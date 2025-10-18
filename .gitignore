@@ -58,3 +58,4 @@ proyectoFinal.qmd_
 
 /.quarto/
 **/*.quarto_ipynb
+*.txt
