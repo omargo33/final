@@ -230,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Proyecto final de Aprendizaje de Maquina Autor Omar Vele</p>
 <section id="importar-librerías" class="level2">
 <h2 class="anchored" data-anchor-id="importar-librerías">Importar librerías</h2>
-<div id="11f66aae" class="cell" data-execution_count="1">
+<div id="6a835236" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importaciones corregidas para análisis de texto</span></span>
@@ -271,14 +271,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar stopwords en español (solo ejecutar una vez)</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'stopwords'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>True</code></pre>
 </div>
 </div>
 </section>
 <section id="cargar-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="cargar-dataset">Cargar dataset</h2>
-<div id="abe31f8a" class="cell" data-execution_count="2">
+<div id="62665103" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el dataset</span></span>
@@ -291,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>1. Análisis Exploratorio de Datos (EDA)</h1>
 <section id="información-general-del-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="información-general-del-dataset">1.1 Información general del dataset</h2>
-<div id="3757123c" class="cell" data-execution_count="3">
+<div id="fc654296" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Número de filas: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -375,7 +375,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="análisis-de-valores-nulos" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-valores-nulos">1.2 Análisis de valores nulos</h2>
-<div id="88323018" class="cell" data-execution_count="4">
+<div id="928f2695" class="cell" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>missing_data <span class="op">=</span> df.isnull().<span class="bu">sum</span>()</span>
@@ -401,7 +401,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="estadísticas-descriptivas" class="level2">
 <h2 class="anchored" data-anchor-id="estadísticas-descriptivas">1.3 Estadísticas descriptivas</h2>
-<div id="ea2d5048" class="cell" data-execution_count="5">
+<div id="8db7832a" class="cell" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables numéricas</span></span>
@@ -495,7 +495,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="análisis-de-la-variable-toxicity-toxicity_score" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-la-variable-toxicity-toxicity_score">1.4 Análisis de la variable TOXICITY (toxicity_score)</h2>
-<div id="db2ffb9d" class="cell" data-execution_count="6">
+<div id="1aa77686" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'toxicity_score'</span>].describe())</span>
@@ -544,7 +544,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="análisis-de-texto" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-texto">1.5 Análisis de texto</h2>
-<div id="b0cb509a" class="cell" data-execution_count="7">
+<div id="dfcabd14" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas de texto</span></span>
@@ -610,7 +610,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="análisis-de-variables-categóricas" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-variables-categóricas">1.6 Análisis de variables categóricas</h2>
-<div id="696c5c44" class="cell" data-execution_count="8">
+<div id="ac57a078" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>categorical_to_analyze <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> categorical_cols <span class="cf">if</span> df[col].nunique() <span class="op">&lt;</span> <span class="dv">20</span> <span class="kw">and</span> col <span class="op">!=</span> <span class="st">'content'</span>][:<span class="dv">4</span>]</span>
@@ -641,7 +641,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="correlaciones-entre-variables-numéricas" class="level2">
 <h2 class="anchored" data-anchor-id="correlaciones-entre-variables-numéricas">1.7 Correlaciones entre variables numéricas</h2>
-<div id="0aa2ff8a" class="cell" data-execution_count="9">
+<div id="6125c12d" class="cell" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(numeric_cols) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
@@ -686,7 +686,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis" class="level2">
 <h2 class="anchored" data-anchor-id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis">1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)</h2>
-<div id="f8eb95c6" class="cell" data-execution_count="10">
+<div id="e1731c34" class="cell" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== HALLAZGOS CLAVE DEL ANÁLISIS EXPLORATORIO"</span>)</span>
@@ -734,7 +734,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 <h1>2. Preprocesamiento y Codificación</h1>
 <section id="limpieza-de-datos-básica" class="level2">
 <h2 class="anchored" data-anchor-id="limpieza-de-datos-básica">2.1 Limpieza de datos básica</h2>
-<div id="07e38bbf" class="cell" data-execution_count="11">
+<div id="ccef05c3" class="cell" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== LIMPIEZA DE DATOS BÁSICA"</span>)</span>
@@ -760,7 +760,7 @@ Tipos de datos:
 </section>
 <section id="procesamiento-del-texto-content" class="level2">
 <h2 class="anchored" data-anchor-id="procesamiento-del-texto-content">2.2 Procesamiento del texto (content)</h2>
-<div id="4807ce9f" class="cell" data-execution_count="12">
+<div id="07c661ec" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== PROCESAMIENTO DEL CAMPO CONTENT"</span>)</span>
@@ -804,7 +804,7 @@ Texto procesado:</code></pre>
 </section>
 <section id="codificación-de-texto-con-tf-idf" class="level2">
 <h2 class="anchored" data-anchor-id="codificación-de-texto-con-tf-idf">2.3 Codificación de texto con TF-IDF</h2>
-<div id="96e44554" class="cell" data-execution_count="13">
+<div id="c72894d4" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== CODIFICACIÓN DE TEXTO CON TF-IDF"</span>)</span>
@@ -841,7 +841,7 @@ Primeros 10 términos: ['abre' 'abuso' 'acaba' 'acabar' 'acabar correismo' 'acas
 </section>
 <section id="pipeline-simplificado-con-columntransformer" class="level2">
 <h2 class="anchored" data-anchor-id="pipeline-simplificado-con-columntransformer">2.4 Pipeline simplificado con ColumnTransformer</h2>
-<div id="cd338129" class="cell" data-execution_count="14">
+<div id="f9f6d8ea" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== PIPELINE SIMPLIFICADO ==="</span>)</span>
@@ -881,7 +881,7 @@ Datos finales preparados:
 </section>
 <section id="división-de-datos-para-regresión" class="level2">
 <h2 class="anchored" data-anchor-id="división-de-datos-para-regresión">2.5 División de datos para regresión</h2>
-<div id="5bbc6733" class="cell" data-execution_count="15">
+<div id="2003caab" class="cell" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== DIVISIÓN DE DATOS"</span>)</span>
@@ -915,7 +915,7 @@ Distribución del target (toxicity_score):
 <h1>3. Clasificación de Toxicidad</h1>
 <section id="transformación-de-toxicity_score-a-variable-categórica" class="level2">
 <h2 class="anchored" data-anchor-id="transformación-de-toxicity_score-a-variable-categórica">3.1 Transformación de toxicity_score a variable categórica</h2>
-<div id="c8ff9e4c" class="cell" data-execution_count="16">
+<div id="46c347de" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== TRANSFORMACIÓN A VARIABLE CATEGÓRICA"</span>)</span>
@@ -987,7 +987,7 @@ Distribución del target (toxicity_score):
 <li>Clase 0 (No Tóxico): aprox 75%</li>
 <li>Clase 1 (Tóxico): aprox 25%</li>
 </ul>
-<div id="ec0d8dc5" class="cell" data-execution_count="17">
+<div id="d3d1c8e9" class="cell" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== JUSTIFICACIÓN Y APLICACIÓN DE UMBRALES ==="</span>)</span>
@@ -1016,7 +1016,7 @@ Distribución del target (toxicity_score):
 <li>Clase 1 (Media): aprox 33.3%</li>
 <li>Clase 2 (Alta): aprox 33.3%</li>
 </ul>
-<div id="f684ea44" class="cell" data-execution_count="18">
+<div id="0f6a4e0d" class="cell" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>p33 <span class="op">=</span> np.percentile(df_processed[<span class="st">'toxicity_score'</span>], <span class="fl">33.33</span>)</span>
@@ -1047,7 +1047,7 @@ Distribución del target (toxicity_score):
 </section>
 <section id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual" class="level3">
 <h3 class="anchored" data-anchor-id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual">Presentación gráfica de mis estadísticas para comparación visual</h3>
-<div id="2961bbf8" class="cell" data-execution_count="19">
+<div id="e9586923" class="cell" data-execution_count="19">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
@@ -1079,7 +1079,7 @@ Distribución del target (toxicity_score):
 </section>
 <section id="preparación-de-datos-para-clasificación" class="level2">
 <h2 class="anchored" data-anchor-id="preparación-de-datos-para-clasificación">3.3 Preparación de datos para clasificación</h2>
-<div id="f5c59ff7" class="cell" data-execution_count="20">
+<div id="1e06dedd" class="cell" data-execution_count="20">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>X_classificacion <span class="op">=</span> X_final</span>
@@ -1123,7 +1123,7 @@ Distribución del target (toxicity_score):
 <h2 class="anchored" data-anchor-id="clasificación-supervisada">3.4 Clasificación supervisada</h2>
 <p><strong>Hago un loop para entrenar el modelo, en la entrega anterior pense en que programaticamente se puede hacer un bucle para ejecutar los modelos, y puedo comparar de mejor manera al convertirla en una funcion de facil uso</strong></p>
 <p>Se usa OVR para que sea uno contra el resto en la etiquetacion de clases en multi capa.</p>
-<div id="e3f70084" class="cell" data-execution_count="21">
+<div id="2af57b10" class="cell" data-execution_count="21">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inicializar modelos</span></span>
@@ -1178,16 +1178,20 @@ Distribución del target (toxicity_score):
 <span id="cb39-50"><a href="#cb39-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
 <span id="cb39-51"><a href="#cb39-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-52"><a href="#cb39-52" aria-hidden="true" tabindex="-1"></a><span class="co">## Los resultados deben ser presentados en bucle</span></span>
-<span id="cb39-53"><a href="#cb39-53" aria-hidden="true" tabindex="-1"></a>results_binary <span class="op">=</span> entrenamiento_evaluacion_masiva(</span>
-<span id="cb39-54"><a href="#cb39-54" aria-hidden="true" tabindex="-1"></a>    X_train_bin, X_test_bin, y_train_bin, y_test_bin, models, <span class="st">"Clasificación Binaria"</span></span>
-<span id="cb39-55"><a href="#cb39-55" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb39-56"><a href="#cb39-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-57"><a href="#cb39-57" aria-hidden="true" tabindex="-1"></a>results_multi_capa <span class="op">=</span> entrenamiento_evaluacion_masiva(</span>
-<span id="cb39-58"><a href="#cb39-58" aria-hidden="true" tabindex="-1"></a>    X_train_multi, X_test_multi, y_train_multi, y_test_multi, models, <span class="st">"Clasificación Multiclase"</span></span>
-<span id="cb39-59"><a href="#cb39-59" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb39-53"><a href="#cb39-53" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">==== ANALISIS BINARIO"</span>)</span>
+<span id="cb39-54"><a href="#cb39-54" aria-hidden="true" tabindex="-1"></a>results_binary <span class="op">=</span> entrenamiento_evaluacion_masiva(</span>
+<span id="cb39-55"><a href="#cb39-55" aria-hidden="true" tabindex="-1"></a>    X_train_bin, X_test_bin, y_train_bin, y_test_bin, models, <span class="st">"Clasificación Binaria"</span></span>
+<span id="cb39-56"><a href="#cb39-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-57"><a href="#cb39-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-58"><a href="#cb39-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== ANALISIS MULTI CAPA"</span>)</span>
+<span id="cb39-59"><a href="#cb39-59" aria-hidden="true" tabindex="-1"></a>results_multi_capa <span class="op">=</span> entrenamiento_evaluacion_masiva(</span>
+<span id="cb39-60"><a href="#cb39-60" aria-hidden="true" tabindex="-1"></a>    X_train_multi, X_test_multi, y_train_multi, y_test_multi, models, <span class="st">"Clasificación Multi Capa"</span></span>
+<span id="cb39-61"><a href="#cb39-61" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
+==== ANALISIS BINARIO
+
 Entrenando logReg...
   - Accuracy: 0.7556
   - Precision: 0.7427
@@ -1215,6 +1219,8 @@ Entrenando SVC...
   - Recall: 0.7778
   - F1-Score: 0.7249
   - ROC-AUC: 0.7421
+
+=== ANALISIS MULTI CAPA
 
 Entrenando logReg...
   - Accuracy: 0.5778

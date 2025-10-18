@@ -595,12 +595,14 @@ def entrenamiento_evaluacion_masiva(X_train, X_test, y_train, y_test, models, ta
     return results
 
 ## Los resultados deben ser presentados en bucle
+print("\n==== ANALISIS BINARIO")
 results_binary = entrenamiento_evaluacion_masiva(
     X_train_bin, X_test_bin, y_train_bin, y_test_bin, models, "Clasificación Binaria"
 )
 
+print("\n=== ANALISIS MULTI CAPA")
 results_multi_capa = entrenamiento_evaluacion_masiva(
-    X_train_multi, X_test_multi, y_train_multi, y_test_multi, models, "Clasificación Multiclase"
+    X_train_multi, X_test_multi, y_train_multi, y_test_multi, models, "Clasificación Multi Capa"
 )
 ```
 
