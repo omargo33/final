@@ -1084,3 +1084,47 @@ cbar.set_label('Toxicidad (0=No Tóxico, 1=Tóxico)')
 plt.tight_layout()
 plt.show()
 ```
+
+# 6. Conclusiones y Recomendaciones
+
+## 6.1 Conclusiones sobre la Calidad de los Datos
+
+El análisis del dataset de 1500 tweets, reveló una estructura de datos fuete con algunas observaciones importantes. **El 91.9% de valores nulos en la columna hashtags** indica que la mayoría de tweets no utilizan hashtags, lo cual es una característica importante del comportamiento comunicativo en Twitter, puede deberse al desconocimiento de esta acción. 
+
+La pérdida del **10.2% de registros por valores nulos en toxicity_score** redujo el dataset a 1347 observaciones útiles, aun así la muestra es valida.
+
+La **distribución asimétrica de la toxicidad** (media: 0.254, mediana: 0.188) confirma que la mayoría de tweets tienen niveles bajos de toxicidad, con una concentración del 75% por debajo del umbral de 0.427. 
+
+Esta distribución natural del fenómeno sugiere que **las interacciones tóxicas representan una minoría significativa pero no dominante** para el motivo de los post que origino el estudio.
+
+La **longitud promedio de 116.5 caracteres** y **16.97 palabras por tweet** proporciona suficiente contenido textual para el análisis de machine learning.
+
+
+## 6.2 Rendimiento de los Modelos
+
+### Clasificación
+**Random Forest emergió como el mejor modelo para clasificación binaria** con F1-Score de 0.7512, demostrando robustez en la identificación de contenido tóxico.
+
+**Para clasificación multi capa, SVM obtuvo el mejor F1-Score de 0.5738**, aunque el rendimiento general fue menor, reflejando la mayor complejidad de distinguir entre niveles graduales de toxicidad.
+
+### Regresión
+**Ridge Regression logró el mejor R2 de 0.3925**, explicando aproximadamente el 40% de la varianza en toxicidad. 
+
+El **análisis de overfitting reveló que todos los modelos excepto Lasso** presentan sobreajuste significativo, indicando la necesidad de regularización adicional o más datos de entrenamiento para mejorar la generalización.
+
+### Clustering
+**K-Means con k=6 clusters** obtuvo el mejor Silhouette Score de 0.0577, identificando **6 grupos naturales en los datos de texto**. 
+
+## 6.3 Patrones Encontrados
+
+### Características del lenguaje
+El análisis TF-IDF reveló que **términos como "zorra", "zurdos", "época", "única"** se encuentran entre los más discriminativos para predecir toxicidad.
+
+## 6.4 Recomendaciones
+
+### Mejoras Técnicas Inmediatas
+1. **Expandir el dataset a 3000-5000 tweets** para mejorar la robustez de los modelos y reducir overfitting
+2. **Implementar técnicas de balanceado** como SMOTE para mejorar la detección de casos tóxicos minoritarios
+4. **No se Aplicar ensemble metodos** esto se hizo para demostrar un modelo que funcione testeando medinante arrays de modelos y que pude ser mejorado con ensamble de metodos.
+
+Gracias.

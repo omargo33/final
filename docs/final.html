@@ -216,6 +216,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#visualización-2d-de-clusters" id="toc-visualización-2d-de-clusters" class="nav-link" data-scroll-target="#visualización-2d-de-clusters">5.5.1 Visualización 2D de clusters</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#conclusiones-y-recomendaciones" id="toc-conclusiones-y-recomendaciones" class="nav-link" data-scroll-target="#conclusiones-y-recomendaciones">6. Conclusiones y Recomendaciones</a>
+  <ul class="collapse">
+  <li><a href="#conclusiones-sobre-la-calidad-de-los-datos" id="toc-conclusiones-sobre-la-calidad-de-los-datos" class="nav-link" data-scroll-target="#conclusiones-sobre-la-calidad-de-los-datos">6.1 Conclusiones sobre la Calidad de los Datos</a></li>
+  <li><a href="#rendimiento-de-los-modelos" id="toc-rendimiento-de-los-modelos" class="nav-link" data-scroll-target="#rendimiento-de-los-modelos">6.2 Rendimiento de los Modelos</a>
+  <ul class="collapse">
+  <li><a href="#clasificación" id="toc-clasificación" class="nav-link" data-scroll-target="#clasificación">Clasificación</a></li>
+  <li><a href="#regresión" id="toc-regresión" class="nav-link" data-scroll-target="#regresión">Regresión</a></li>
+  <li><a href="#clustering" id="toc-clustering" class="nav-link" data-scroll-target="#clustering">Clustering</a></li>
+  </ul></li>
+  <li><a href="#patrones-encontrados" id="toc-patrones-encontrados" class="nav-link" data-scroll-target="#patrones-encontrados">6.3 Patrones Encontrados</a>
+  <ul class="collapse">
+  <li><a href="#características-del-lenguaje" id="toc-características-del-lenguaje" class="nav-link" data-scroll-target="#características-del-lenguaje">Características del lenguaje</a></li>
+  </ul></li>
+  <li><a href="#recomendaciones" id="toc-recomendaciones" class="nav-link" data-scroll-target="#recomendaciones">6.4 Recomendaciones</a>
+  <ul class="collapse">
+  <li><a href="#mejoras-técnicas-inmediatas" id="toc-mejoras-técnicas-inmediatas" class="nav-link" data-scroll-target="#mejoras-técnicas-inmediatas">Mejoras Técnicas Inmediatas</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -251,10 +269,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introducción" class="level1">
 <h1>Introducción</h1>
 <p>Proyecto final de Aprendizaje de Maquina Autor Omar Vele</p>
-<p><strong><em>Se Analizara si se debe valorar entre Toxico o No toxico</em></strong> <strong><em>Se Analizara si se debe valorar entre Toxico nivel Bajo, Medio O Alto</em></strong></p>
+<p><strong><em>Se Analizara si se debe valorar entre Toxico o No toxico</em></strong></p>
+<p><strong><em>Se Analizara si se debe valorar entre Toxico nivel Bajo, Medio O Alto</em></strong></p>
 <section id="importar-librerías" class="level2">
 <h2 class="anchored" data-anchor-id="importar-librerías">Importar librerías</h2>
-<div id="3aaa1552" class="cell" data-execution_count="1">
+<div id="6c2041c2" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -299,14 +318,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'stopwords'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>True</code></pre>
 </div>
 </div>
 </section>
 <section id="cargar-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="cargar-dataset">Cargar dataset</h2>
-<div id="aff85042" class="cell" data-execution_count="2">
+<div id="bbde7f93" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el dataset</span></span>
@@ -319,7 +338,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>1. Análisis Exploratorio de Datos (EDA)</h1>
 <section id="información-general-del-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="información-general-del-dataset">1.1 Información general del dataset</h2>
-<div id="5e721a4e" class="cell" data-execution_count="3">
+<div id="e0c0b372" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Número de filas: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -403,7 +422,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="análisis-de-valores-nulos" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-valores-nulos">1.2 Análisis de valores nulos</h2>
-<div id="4cd64168" class="cell" data-execution_count="4">
+<div id="de85b7af" class="cell" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>missing_data <span class="op">=</span> df.isnull().<span class="bu">sum</span>()</span>
@@ -429,7 +448,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="estadísticas-descriptivas" class="level2">
 <h2 class="anchored" data-anchor-id="estadísticas-descriptivas">1.3 Estadísticas descriptivas</h2>
-<div id="8995211c" class="cell" data-execution_count="5">
+<div id="e11b6fe6" class="cell" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables numéricas</span></span>
@@ -523,7 +542,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="análisis-de-la-variable-toxicity-toxicity_score" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-la-variable-toxicity-toxicity_score">1.4 Análisis de la variable TOXICITY (toxicity_score)</h2>
-<div id="b506a01c" class="cell" data-execution_count="6">
+<div id="70254361" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'toxicity_score'</span>].describe())</span>
@@ -572,7 +591,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="análisis-de-texto" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-texto">1.5 Análisis de texto</h2>
-<div id="53c49c3a" class="cell" data-execution_count="7">
+<div id="801abb8e" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas de texto</span></span>
@@ -638,7 +657,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="análisis-de-variables-categóricas" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-variables-categóricas">1.6 Análisis de variables categóricas</h2>
-<div id="432c71cc" class="cell" data-execution_count="8">
+<div id="aad99be4" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>categorical_to_analyze <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> categorical_cols <span class="cf">if</span> df[col].nunique() <span class="op">&lt;</span> <span class="dv">20</span> <span class="kw">and</span> col <span class="op">!=</span> <span class="st">'content'</span>][:<span class="dv">4</span>]</span>
@@ -669,7 +688,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="correlaciones-entre-variables-numéricas" class="level2">
 <h2 class="anchored" data-anchor-id="correlaciones-entre-variables-numéricas">1.7 Correlaciones entre variables numéricas</h2>
-<div id="742fe9b1" class="cell" data-execution_count="9">
+<div id="e5816948" class="cell" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(numeric_cols) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
@@ -714,7 +733,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis" class="level2">
 <h2 class="anchored" data-anchor-id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis">1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)</h2>
-<div id="780d9be9" class="cell" data-execution_count="10">
+<div id="f9cdf1e0" class="cell" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">1. DISTRIBUCIÓN DE LOS DATOS:"</span>)</span>
@@ -758,7 +777,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 <h1>2. Preprocesamiento y Codificación</h1>
 <section id="limpieza-de-datos-básica" class="level2">
 <h2 class="anchored" data-anchor-id="limpieza-de-datos-básica">2.1 Limpieza de datos básica</h2>
-<div id="3a60fae3" class="cell" data-execution_count="11">
+<div id="8354ddef" class="cell" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_procesar <span class="op">=</span> df[[<span class="st">'content'</span>, <span class="st">'toxicity_score'</span>]].copy()</span>
@@ -771,7 +790,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="procesamiento-del-texto-content" class="level2">
 <h2 class="anchored" data-anchor-id="procesamiento-del-texto-content">2.2 Procesamiento del texto (content)</h2>
-<div id="a91171a7" class="cell" data-execution_count="12">
+<div id="7b4ec9d5" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Función simple de limpieza de texto</span></span>
@@ -807,7 +826,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="codificación-de-texto-con-tf-idf" class="level2">
 <h2 class="anchored" data-anchor-id="codificación-de-texto-con-tf-idf">2.3 Codificación de texto con TF-IDF</h2>
-<div id="6f8767a7" class="cell" data-execution_count="13">
+<div id="8f2e7dd2" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar TF-IDF</span></span>
@@ -841,7 +860,7 @@ Primeros 10 términos: ['abre' 'abuso' 'acaba' 'acabar' 'acabar correismo' 'acas
 </section>
 <section id="pipeline-simplificado-con-columntransformer" class="level2">
 <h2 class="anchored" data-anchor-id="pipeline-simplificado-con-columntransformer">2.4 Pipeline simplificado con ColumnTransformer</h2>
-<div id="690397e4" class="cell" data-execution_count="14">
+<div id="d4b04ec6" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipeline simple: solo texto → TF-IDF</span></span>
@@ -878,7 +897,7 @@ Datos finales preparados:
 </section>
 <section id="división-de-datos-para-regresión" class="level2">
 <h2 class="anchored" data-anchor-id="división-de-datos-para-regresión">2.5 División de datos para regresión</h2>
-<div id="f6930290" class="cell" data-execution_count="15">
+<div id="30d254f9" class="cell" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># División simple para regresión</span></span>
@@ -910,7 +929,7 @@ Std: 0.2395</code></pre>
 <section id="transformación-de-toxicity_score-a-variable-categórica" class="level2">
 <h2 class="anchored" data-anchor-id="transformación-de-toxicity_score-a-variable-categórica">3.1 Transformación de toxicity_score a variable categórica</h2>
 <p>En el histograma se dibujan el promedio en ROJO y la media en VERDE</p>
-<div id="8be470be" class="cell" data-execution_count="16">
+<div id="6ce92323" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
@@ -977,7 +996,7 @@ Std: 0.2395</code></pre>
 <li>Clase 0 (No Tóxico): aprox 75%</li>
 <li>Clase 1 (Tóxico): aprox 25%</li>
 </ul>
-<div id="48918cc3" class="cell" data-execution_count="17">
+<div id="b981dee4" class="cell" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>umbral_binario <span class="op">=</span> np.percentile(df_procesar[<span class="st">'toxicity_score'</span>], <span class="dv">75</span>)</span>
@@ -1003,7 +1022,7 @@ Std: 0.2395</code></pre>
 <li>Clase 1 (Media): aprox 33.3%</li>
 <li>Clase 2 (Alta): aprox 33.3%</li>
 </ul>
-<div id="af86240e" class="cell" data-execution_count="18">
+<div id="519dd3b4" class="cell" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>p33 <span class="op">=</span> np.percentile(df_procesar[<span class="st">'toxicity_score'</span>], <span class="fl">33.33</span>)</span>
@@ -1034,7 +1053,7 @@ Std: 0.2395</code></pre>
 </section>
 <section id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual" class="level3">
 <h3 class="anchored" data-anchor-id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual">Presentación gráfica de mis estadísticas para comparación visual</h3>
-<div id="3b27ae54" class="cell" data-execution_count="19">
+<div id="138aa2e6" class="cell" data-execution_count="19">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
@@ -1066,7 +1085,7 @@ Std: 0.2395</code></pre>
 </section>
 <section id="preparación-de-datos-para-clasificación" class="level2">
 <h2 class="anchored" data-anchor-id="preparación-de-datos-para-clasificación">3.3 Preparación de datos para clasificación</h2>
-<div id="4e7a6a27" class="cell" data-execution_count="20">
+<div id="556b6626" class="cell" data-execution_count="20">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>X_classificacion <span class="op">=</span> X_final</span>
@@ -1112,7 +1131,7 @@ Std: 0.2395</code></pre>
 <blockquote class="blockquote">
 <p>Se usa OVR para que “sea uno contra el resto” en la etiquetacion de clases en multi capa.</p>
 </blockquote>
-<div id="82214159" class="cell" data-execution_count="21">
+<div id="3cefa956" class="cell" data-execution_count="21">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seteo los modelos en un arreglo.</span></span>
@@ -1242,7 +1261,7 @@ Entrenando SVC...
 <section id="evaluación-detallada-y-métricas" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-detallada-y-métricas">3.5 Evaluación detallada y métricas</h2>
 <p>Creo un data set con los resultados para poder buscar el F1-Score mas Alto y el modelo al que corresponde.</p>
-<div id="44399c20" class="cell" data-execution_count="22">
+<div id="f674c0c9" class="cell" data-execution_count="22">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> analizo_modelo_por_metrica(results, y_test, paso_nombre, class_names<span class="op">=</span><span class="va">None</span>):</span>
@@ -1289,7 +1308,7 @@ Valor del F1-Score: 0.5738</code></pre>
 </section>
 <section id="métricas-binarias" class="level2">
 <h2 class="anchored" data-anchor-id="métricas-binarias">3.6.1 Métricas binarias</h2>
-<div id="8753efc8" class="cell" data-execution_count="23">
+<div id="6352a7b8" class="cell" data-execution_count="23">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">12</span>))</span>
@@ -1324,7 +1343,7 @@ Valor del F1-Score: 0.5738</code></pre>
 </section>
 <section id="matriz-de-confusión-para-el-mejor-modelo-binario" class="level2">
 <h2 class="anchored" data-anchor-id="matriz-de-confusión-para-el-mejor-modelo-binario">3.6.2 Matriz de confusión para el mejor modelo binario</h2>
-<div id="9f0e5d8d" class="cell" data-execution_count="24">
+<div id="8ac9ae6c" class="cell" data-execution_count="24">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>best_model_bin <span class="op">=</span> results_binary[best_binary][<span class="st">'model'</span>]</span>
@@ -1342,7 +1361,7 @@ Valor del F1-Score: 0.5738</code></pre>
 <span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Verdadero'</span>)</span>
 <span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Predicho'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="58">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>Text(0.5, 25.13333333333333, 'Predicho')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1356,7 +1375,7 @@ Valor del F1-Score: 0.5738</code></pre>
 </section>
 <section id="matriz-de-confusión-para-el-mejor-modelo-multi-capa" class="level2">
 <h2 class="anchored" data-anchor-id="matriz-de-confusión-para-el-mejor-modelo-multi-capa">3.6.3 Matriz de confusión para el mejor modelo Multi Capa</h2>
-<div id="3986f0c7" class="cell" data-execution_count="25">
+<div id="7a70e343" class="cell" data-execution_count="25">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Matriz de confusión multiclase</span></span>
@@ -1389,7 +1408,7 @@ Valor del F1-Score: 0.5738</code></pre>
 <li>ROC Binaria</li>
 <li>ROC Multiclase</li>
 </ul>
-<div id="6a71f73c" class="cell" data-execution_count="26">
+<div id="52f593b6" class="cell" data-execution_count="26">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>)) <span class="co">## Dimensiones</span></span>
@@ -1443,7 +1462,7 @@ Valor del F1-Score: 0.5738</code></pre>
 <h1>4. Regresión de Toxicidad</h1>
 <section id="algoritmos-de-regresión-supervisada-con-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="algoritmos-de-regresión-supervisada-con-pipeline">4.1 Algoritmos de regresión supervisada con Pipeline</h2>
-<div id="62df8c77" class="cell" data-execution_count="27">
+<div id="76499c54" class="cell" data-execution_count="27">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> crear_pipeline_regresion(modelo_regresion):</span>
@@ -1523,37 +1542,37 @@ Valor del F1-Score: 0.5738</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Entrenando Linear Regression
-  - Tiempo entrenamiento: 0.025s
+  - Tiempo entrenamiento: 0.050s
   - MAE (test): 0.1698
   - RMSE (test): 0.2246
   - R2 (test): 0.1206
 
 Entrenando Ridge Regression
-  - Tiempo entrenamiento: 0.020s
+  - Tiempo entrenamiento: 0.026s
   - MAE (test): 0.1518
   - RMSE (test): 0.1867
   - R2 (test): 0.3925
 
 Entrenando Lasso Regression
-  - Tiempo entrenamiento: 0.018s
+  - Tiempo entrenamiento: 0.026s
   - MAE (test): 0.2079
   - RMSE (test): 0.2397
   - R2 (test): -0.0018
 
 Entrenando Random Forest
-  - Tiempo entrenamiento: 3.325s
+  - Tiempo entrenamiento: 3.594s
   - MAE (test): 0.1531
   - RMSE (test): 0.2006
   - R2 (test): 0.2986
 
 Entrenando Gradient Boosting
-  - Tiempo entrenamiento: 0.162s
+  - Tiempo entrenamiento: 0.182s
   - MAE (test): 0.1786
   - RMSE (test): 0.2070
   - R2 (test): 0.2528
 
 Entrenando SVR
-  - Tiempo entrenamiento: 0.052s
+  - Tiempo entrenamiento: 0.058s
   - MAE (test): 0.1654
   - RMSE (test): 0.2011
   - R2 (test): 0.2951</code></pre>
@@ -1562,7 +1581,7 @@ Entrenando SVR
 </section>
 <section id="evaluación-detallada-con-métricas" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-detallada-con-métricas">4.2 Evaluación detallada con métricas</h2>
-<div id="6404b347" class="cell" data-execution_count="28">
+<div id="02acd221" class="cell" data-execution_count="28">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>metricas_regresion <span class="op">=</span> pd.DataFrame({</span>
@@ -1607,12 +1626,12 @@ Entrenando SVR
 <div class="cell-output cell-output-stdout">
 <pre><code>TABLA COMPARATIVA DE MODELOS:
            Modelo  Tiempo_Entrenamiento  MAE_Train  RMSE_Train  R2_Train  MAE_Test  RMSE_Test  R2_Test
-Linear Regression                0.0247     0.0878      0.1216    0.7532    0.1698     0.2246   0.1206
- Ridge Regression                0.0202     0.1159      0.1467    0.6411    0.1518     0.1867   0.3925
- Lasso Regression                0.0184     0.2085      0.2449    0.0000    0.2079     0.2397  -0.0018
-    Random Forest                3.3251     0.0704      0.1000    0.8331    0.1531     0.2006   0.2986
-Gradient Boosting                0.1615     0.1587      0.1823    0.4455    0.1786     0.2070   0.2528
-              SVR                0.0517     0.0932      0.1097    0.7992    0.1654     0.2011   0.2951
+Linear Regression                0.0500     0.0878      0.1216    0.7532    0.1698     0.2246   0.1206
+ Ridge Regression                0.0264     0.1159      0.1467    0.6411    0.1518     0.1867   0.3925
+ Lasso Regression                0.0257     0.2085      0.2449    0.0000    0.2079     0.2397  -0.0018
+    Random Forest                3.5943     0.0704      0.1000    0.8331    0.1531     0.2006   0.2986
+Gradient Boosting                0.1820     0.1587      0.1823    0.4455    0.1786     0.2070   0.2528
+              SVR                0.0578     0.0932      0.1097    0.7992    0.1654     0.2011   0.2951
 
 MEJOR MODELO: Ridge Regression
 R2 en prueba: 0.3925
@@ -1632,7 +1651,7 @@ SVR: R2_train=0.7992, R2_Test=0.2951, Dif=0.5041 Sobreajuste</code></pre>
 <section id="visualizaciones-de-resultados-gráfico-de-barras-comparativo" class="level2">
 <h2 class="anchored" data-anchor-id="visualizaciones-de-resultados-gráfico-de-barras-comparativo">4.3 Visualizaciones de resultados Gráfico de barras comparativo</h2>
 <p>El uso de la variables relacionados son: MAE(Mean Absolute Error), Root Mean Square Error (RMSE), Coeficiente de Determinacion(R2) y el Tiempo de Entrega.</p>
-<div id="9b262c32" class="cell" data-execution_count="29">
+<div id="9fefcd09" class="cell" data-execution_count="29">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Dimensiones del grafico</span></span>
@@ -1700,7 +1719,7 @@ SVR: R2_train=0.7992, R2_Test=0.2951, Dif=0.5041 Sobreajuste</code></pre>
 <section id="determinación-del-número-óptimo-de-clusters" class="level2">
 <h2 class="anchored" data-anchor-id="determinación-del-número-óptimo-de-clusters">5.1 Determinación del número óptimo de clusters</h2>
 <p><strong>Método del Codo (Elbow Method)</strong></p>
-<div id="925d50e2" class="cell" data-execution_count="30">
+<div id="564bc8b0" class="cell" data-execution_count="30">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>k_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">11</span>)</span>
@@ -1797,7 +1816,7 @@ Probando k=10...
 </section>
 <section id="aplicación-de-k-means-con-k-óptimo" class="level2">
 <h2 class="anchored" data-anchor-id="aplicación-de-k-means-con-k-óptimo">5.2 Aplicación de K-Means con k óptimo</h2>
-<div id="31022001" class="cell" data-execution_count="31">
+<div id="68398eec" class="cell" data-execution_count="31">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar K-Means con el k óptimo</span></span>
@@ -1836,7 +1855,7 @@ Mi DF actualizado con 1347 registros totales</code></pre>
 </section>
 <section id="preparación-para-visualización-con-pca" class="level2">
 <h2 class="anchored" data-anchor-id="preparación-para-visualización-con-pca">5.3 Preparación para visualización con PCA</h2>
-<div id="2e4e5e57" class="cell" data-execution_count="32">
+<div id="2dd0c8fe" class="cell" data-execution_count="32">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>pca_2d <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
@@ -1860,7 +1879,7 @@ Mi DF actualizado con 1347 registros totales</code></pre>
 </section>
 <section id="clustering-adicional-agglomerative-clustering" class="level2">
 <h2 class="anchored" data-anchor-id="clustering-adicional-agglomerative-clustering">5.4 Clustering adicional: Agglomerative Clustering</h2>
-<div id="cb7b1fc3" class="cell" data-execution_count="33">
+<div id="b84df623" class="cell" data-execution_count="33">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar Agglomerative Clustering para comparación</span></span>
@@ -1900,7 +1919,7 @@ DISTRIBUCIÓN AGGLOMERATIVE:
 <h2 class="anchored" data-anchor-id="visualización-de-clusters">5.5 Visualización de clusters</h2>
 <section id="visualización-2d-de-clusters" class="level3">
 <h3 class="anchored" data-anchor-id="visualización-2d-de-clusters">5.5.1 Visualización 2D de clusters</h3>
-<div id="de894549" class="cell" data-execution_count="34">
+<div id="d06c2708" class="cell" data-execution_count="34">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensio de los graficos</span></span>
@@ -1950,6 +1969,53 @@ DISTRIBUCIÓN AGGLOMERATIVE:
 </div>
 </div>
 </div>
+</section>
+</section>
+</section>
+<section id="conclusiones-y-recomendaciones" class="level1">
+<h1>6. Conclusiones y Recomendaciones</h1>
+<section id="conclusiones-sobre-la-calidad-de-los-datos" class="level2">
+<h2 class="anchored" data-anchor-id="conclusiones-sobre-la-calidad-de-los-datos">6.1 Conclusiones sobre la Calidad de los Datos</h2>
+<p>El análisis del dataset de 1500 tweets, reveló una estructura de datos fuete con algunas observaciones importantes. <strong>El 91.9% de valores nulos en la columna hashtags</strong> indica que la mayoría de tweets no utilizan hashtags, lo cual es una característica importante del comportamiento comunicativo en Twitter, puede deberse al desconocimiento de esta acción.</p>
+<p>La pérdida del <strong>10.2% de registros por valores nulos en toxicity_score</strong> redujo el dataset a 1347 observaciones útiles, aun así la muestra es valida.</p>
+<p>La <strong>distribución asimétrica de la toxicidad</strong> (media: 0.254, mediana: 0.188) confirma que la mayoría de tweets tienen niveles bajos de toxicidad, con una concentración del 75% por debajo del umbral de 0.427.</p>
+<p>Esta distribución natural del fenómeno sugiere que <strong>las interacciones tóxicas representan una minoría significativa pero no dominante</strong> para el motivo de los post que origino el estudio.</p>
+<p>La <strong>longitud promedio de 116.5 caracteres</strong> y <strong>16.97 palabras por tweet</strong> proporciona suficiente contenido textual para el análisis de machine learning.</p>
+</section>
+<section id="rendimiento-de-los-modelos" class="level2">
+<h2 class="anchored" data-anchor-id="rendimiento-de-los-modelos">6.2 Rendimiento de los Modelos</h2>
+<section id="clasificación" class="level3">
+<h3 class="anchored" data-anchor-id="clasificación">Clasificación</h3>
+<p><strong>Random Forest emergió como el mejor modelo para clasificación binaria</strong> con F1-Score de 0.7512, demostrando robustez en la identificación de contenido tóxico.</p>
+<p><strong>Para clasificación multi capa, SVM obtuvo el mejor F1-Score de 0.5738</strong>, aunque el rendimiento general fue menor, reflejando la mayor complejidad de distinguir entre niveles graduales de toxicidad.</p>
+</section>
+<section id="regresión" class="level3">
+<h3 class="anchored" data-anchor-id="regresión">Regresión</h3>
+<p><strong>Ridge Regression logró el mejor R2 de 0.3925</strong>, explicando aproximadamente el 40% de la varianza en toxicidad.</p>
+<p>El <strong>análisis de overfitting reveló que todos los modelos excepto Lasso</strong> presentan sobreajuste significativo, indicando la necesidad de regularización adicional o más datos de entrenamiento para mejorar la generalización.</p>
+</section>
+<section id="clustering" class="level3">
+<h3 class="anchored" data-anchor-id="clustering">Clustering</h3>
+<p><strong>K-Means con k=6 clusters</strong> obtuvo el mejor Silhouette Score de 0.0577, identificando <strong>6 grupos naturales en los datos de texto</strong>.</p>
+</section>
+</section>
+<section id="patrones-encontrados" class="level2">
+<h2 class="anchored" data-anchor-id="patrones-encontrados">6.3 Patrones Encontrados</h2>
+<section id="características-del-lenguaje" class="level3">
+<h3 class="anchored" data-anchor-id="características-del-lenguaje">Características del lenguaje</h3>
+<p>El análisis TF-IDF reveló que <strong>términos como “zorra”, “zurdos”, “época”, “única”</strong> se encuentran entre los más discriminativos para predecir toxicidad.</p>
+</section>
+</section>
+<section id="recomendaciones" class="level2">
+<h2 class="anchored" data-anchor-id="recomendaciones">6.4 Recomendaciones</h2>
+<section id="mejoras-técnicas-inmediatas" class="level3">
+<h3 class="anchored" data-anchor-id="mejoras-técnicas-inmediatas">Mejoras Técnicas Inmediatas</h3>
+<ol type="1">
+<li><strong>Expandir el dataset a 3000-5000 tweets</strong> para mejorar la robustez de los modelos y reducir overfitting</li>
+<li><strong>Implementar técnicas de balanceado</strong> como SMOTE para mejorar la detección de casos tóxicos minoritarios</li>
+<li><strong>No se Aplicar ensemble metodos</strong> esto se hizo para demostrar un modelo que funcione testeando medinante arrays de modelos y que pude ser mejorado con ensamble de metodos.</li>
+</ol>
+<p>Gracias.</p>
 
 
 </section>
