@@ -195,9 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#evaluación-detallada-y-métricas" id="toc-evaluación-detallada-y-métricas" class="nav-link" data-scroll-target="#evaluación-detallada-y-métricas">3.5 Evaluación detallada y métricas</a></li>
   <li><a href="#visualizaciones-de-resultados" id="toc-visualizaciones-de-resultados" class="nav-link" data-scroll-target="#visualizaciones-de-resultados">3.6 Visualizaciones de resultados</a></li>
   <li><a href="#métricas-binarias" id="toc-métricas-binarias" class="nav-link" data-scroll-target="#métricas-binarias">3.6.1 Métricas binarias</a></li>
-  </ul></li>
-  <li><a href="#matriz-de-confusión-para-el-mejor-modelo-binario" id="toc-matriz-de-confusión-para-el-mejor-modelo-binario" class="nav-link" data-scroll-target="#matriz-de-confusión-para-el-mejor-modelo-binario">3.6.2 Matriz de confusión para el mejor modelo binario</a>
-  <ul class="collapse">
+  <li><a href="#matriz-de-confusión-para-el-mejor-modelo-binario" id="toc-matriz-de-confusión-para-el-mejor-modelo-binario" class="nav-link" data-scroll-target="#matriz-de-confusión-para-el-mejor-modelo-binario">3.6.2 Matriz de confusión para el mejor modelo binario</a></li>
   <li><a href="#matriz-de-confusión-para-el-mejor-modelo-multi-capa" id="toc-matriz-de-confusión-para-el-mejor-modelo-multi-capa" class="nav-link" data-scroll-target="#matriz-de-confusión-para-el-mejor-modelo-multi-capa">3.6.3 Matriz de confusión para el mejor modelo Multi Capa</a></li>
   <li><a href="#curvas-roc" id="toc-curvas-roc" class="nav-link" data-scroll-target="#curvas-roc">3.7 Curvas ROC</a></li>
   </ul></li>
@@ -206,6 +204,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#algoritmos-de-regresión-supervisada-con-pipeline" id="toc-algoritmos-de-regresión-supervisada-con-pipeline" class="nav-link" data-scroll-target="#algoritmos-de-regresión-supervisada-con-pipeline">4.1 Algoritmos de regresión supervisada con Pipeline</a></li>
   <li><a href="#evaluación-detallada-con-métricas" id="toc-evaluación-detallada-con-métricas" class="nav-link" data-scroll-target="#evaluación-detallada-con-métricas">4.2 Evaluación detallada con métricas</a></li>
   <li><a href="#visualizaciones-de-resultados-gráfico-de-barras-comparativo" id="toc-visualizaciones-de-resultados-gráfico-de-barras-comparativo" class="nav-link" data-scroll-target="#visualizaciones-de-resultados-gráfico-de-barras-comparativo">4.3 Visualizaciones de resultados Gráfico de barras comparativo</a></li>
+  </ul></li>
+  <li><a href="#clustering-de-toxicidad" id="toc-clustering-de-toxicidad" class="nav-link" data-scroll-target="#clustering-de-toxicidad">5. Clustering de Toxicidad</a>
+  <ul class="collapse">
+  <li><a href="#determinación-del-número-óptimo-de-clusters" id="toc-determinación-del-número-óptimo-de-clusters" class="nav-link" data-scroll-target="#determinación-del-número-óptimo-de-clusters">5.1 Determinación del número óptimo de clusters</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -244,60 +246,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Proyecto final de Aprendizaje de Maquina Autor Omar Vele</p>
 <section id="importar-librerías" class="level2">
 <h2 class="anchored" data-anchor-id="importar-librerías">Importar librerías</h2>
-<div id="c63e308b" class="cell" data-execution_count="1">
+<div id="d23c5ccb" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importaciones corregidas para análisis de texto</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> TfidfVectorizer, CountVectorizer</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, LabelEncoder</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer  <span class="co"># Corrección aquí</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier, RandomForestRegressor</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression, LinearRegression</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, confusion_matrix, mean_squared_error, r2_score</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, precision_score, recall_score, f1_score, roc_auc_score</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, confusion_matrix, roc_curve, auc</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, Ridge, Lasso</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor, GradientBoostingRegressor</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVR</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error, r2_score</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">## Borrar OJO</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wordcloud <span class="im">import</span> WordCloud  <span class="co"># Esta importación faltaba</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar NLTK y definir stopwords</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar stopwords en español (solo ejecutar una vez)</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'stopwords'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> joblib</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wordcloud <span class="im">import</span> WordCloud</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> Axes3D</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score, cross_validate, GridSearchCV</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, LabelEncoder, OneHotEncoder, OrdinalEncoder</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> TfidfVectorizer, CountVectorizer</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier, RandomForestRegressor, GradientBoostingRegressor</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression, LinearRegression, Ridge, Lasso</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC, SVR</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans, AgglomerativeClustering</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> (</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    accuracy_score, precision_score, recall_score, f1_score, roc_auc_score,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    classification_report, confusion_matrix, roc_curve, auc,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    homogeneity_score, completeness_score, v_measure_score,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    mean_absolute_error, mean_squared_error, r2_score,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    silhouette_score, adjusted_rand_score</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> dendrogram, linkage</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.spatial.distance <span class="im">import</span> pdist</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'stopwords'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="61">
 <pre><code>True</code></pre>
 </div>
 </div>
 </section>
 <section id="cargar-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="cargar-dataset">Cargar dataset</h2>
-<div id="1ca50528" class="cell" data-execution_count="2">
+<div id="a7280f7d" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el dataset</span></span>
@@ -310,7 +311,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>1. Análisis Exploratorio de Datos (EDA)</h1>
 <section id="información-general-del-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="información-general-del-dataset">1.1 Información general del dataset</h2>
-<div id="4753dc72" class="cell" data-execution_count="3">
+<div id="5ba4f4f8" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Número de filas: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -394,7 +395,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="análisis-de-valores-nulos" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-valores-nulos">1.2 Análisis de valores nulos</h2>
-<div id="53f8c66e" class="cell" data-execution_count="4">
+<div id="65cc4733" class="cell" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>missing_data <span class="op">=</span> df.isnull().<span class="bu">sum</span>()</span>
@@ -420,7 +421,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="estadísticas-descriptivas" class="level2">
 <h2 class="anchored" data-anchor-id="estadísticas-descriptivas">1.3 Estadísticas descriptivas</h2>
-<div id="cac8722b" class="cell" data-execution_count="5">
+<div id="3ecfd77b" class="cell" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables numéricas</span></span>
@@ -514,7 +515,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="análisis-de-la-variable-toxicity-toxicity_score" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-la-variable-toxicity-toxicity_score">1.4 Análisis de la variable TOXICITY (toxicity_score)</h2>
-<div id="7f16d73a" class="cell" data-execution_count="6">
+<div id="09b88a30" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'toxicity_score'</span>].describe())</span>
@@ -563,7 +564,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="análisis-de-texto" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-texto">1.5 Análisis de texto</h2>
-<div id="75ab953f" class="cell" data-execution_count="7">
+<div id="bb5c6df0" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas de texto</span></span>
@@ -629,7 +630,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="análisis-de-variables-categóricas" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-variables-categóricas">1.6 Análisis de variables categóricas</h2>
-<div id="97a0b657" class="cell" data-execution_count="8">
+<div id="7e004dcf" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>categorical_to_analyze <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> categorical_cols <span class="cf">if</span> df[col].nunique() <span class="op">&lt;</span> <span class="dv">20</span> <span class="kw">and</span> col <span class="op">!=</span> <span class="st">'content'</span>][:<span class="dv">4</span>]</span>
@@ -660,7 +661,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="correlaciones-entre-variables-numéricas" class="level2">
 <h2 class="anchored" data-anchor-id="correlaciones-entre-variables-numéricas">1.7 Correlaciones entre variables numéricas</h2>
-<div id="61b9b919" class="cell" data-execution_count="9">
+<div id="1e2b5a48" class="cell" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(numeric_cols) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
@@ -705,7 +706,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis" class="level2">
 <h2 class="anchored" data-anchor-id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis">1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)</h2>
-<div id="ac780410" class="cell" data-execution_count="10">
+<div id="50ad663d" class="cell" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">1. DISTRIBUCIÓN DE LOS DATOS:"</span>)</span>
@@ -749,7 +750,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 <h1>2. Preprocesamiento y Codificación</h1>
 <section id="limpieza-de-datos-básica" class="level2">
 <h2 class="anchored" data-anchor-id="limpieza-de-datos-básica">2.1 Limpieza de datos básica</h2>
-<div id="e52c8cc6" class="cell" data-execution_count="11">
+<div id="2104b3b0" class="cell" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_procesar <span class="op">=</span> df[[<span class="st">'content'</span>, <span class="st">'toxicity_score'</span>]].copy()</span>
@@ -762,7 +763,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="procesamiento-del-texto-content" class="level2">
 <h2 class="anchored" data-anchor-id="procesamiento-del-texto-content">2.2 Procesamiento del texto (content)</h2>
-<div id="1c0f90ca" class="cell" data-execution_count="12">
+<div id="8c256de5" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Función simple de limpieza de texto</span></span>
@@ -798,7 +799,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="codificación-de-texto-con-tf-idf" class="level2">
 <h2 class="anchored" data-anchor-id="codificación-de-texto-con-tf-idf">2.3 Codificación de texto con TF-IDF</h2>
-<div id="e5c18f03" class="cell" data-execution_count="13">
+<div id="47b33391" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar TF-IDF</span></span>
@@ -832,7 +833,7 @@ Primeros 10 términos: ['abre' 'abuso' 'acaba' 'acabar' 'acabar correismo' 'acas
 </section>
 <section id="pipeline-simplificado-con-columntransformer" class="level2">
 <h2 class="anchored" data-anchor-id="pipeline-simplificado-con-columntransformer">2.4 Pipeline simplificado con ColumnTransformer</h2>
-<div id="7e4fcb59" class="cell" data-execution_count="14">
+<div id="b2b05f60" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipeline simple: solo texto → TF-IDF</span></span>
@@ -869,7 +870,7 @@ Datos finales preparados:
 </section>
 <section id="división-de-datos-para-regresión" class="level2">
 <h2 class="anchored" data-anchor-id="división-de-datos-para-regresión">2.5 División de datos para regresión</h2>
-<div id="3114a7d0" class="cell" data-execution_count="15">
+<div id="9fd318ed" class="cell" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># División simple para regresión</span></span>
@@ -901,7 +902,7 @@ Std: 0.2395</code></pre>
 <section id="transformación-de-toxicity_score-a-variable-categórica" class="level2">
 <h2 class="anchored" data-anchor-id="transformación-de-toxicity_score-a-variable-categórica">3.1 Transformación de toxicity_score a variable categórica</h2>
 <p>En el histograma se dibujan el promedio en ROJO y la media en VERDE</p>
-<div id="a8648782" class="cell" data-execution_count="16">
+<div id="db85dfc3" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
@@ -968,7 +969,7 @@ Std: 0.2395</code></pre>
 <li>Clase 0 (No Tóxico): aprox 75%</li>
 <li>Clase 1 (Tóxico): aprox 25%</li>
 </ul>
-<div id="c329c7d8" class="cell" data-execution_count="17">
+<div id="21aeac72" class="cell" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>umbral_binario <span class="op">=</span> np.percentile(df_procesar[<span class="st">'toxicity_score'</span>], <span class="dv">75</span>)</span>
@@ -994,7 +995,7 @@ Std: 0.2395</code></pre>
 <li>Clase 1 (Media): aprox 33.3%</li>
 <li>Clase 2 (Alta): aprox 33.3%</li>
 </ul>
-<div id="21a1398d" class="cell" data-execution_count="18">
+<div id="24e8c4c8" class="cell" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>p33 <span class="op">=</span> np.percentile(df_procesar[<span class="st">'toxicity_score'</span>], <span class="fl">33.33</span>)</span>
@@ -1025,7 +1026,7 @@ Std: 0.2395</code></pre>
 </section>
 <section id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual" class="level3">
 <h3 class="anchored" data-anchor-id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual">Presentación gráfica de mis estadísticas para comparación visual</h3>
-<div id="221d90ef" class="cell" data-execution_count="19">
+<div id="45968253" class="cell" data-execution_count="19">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
@@ -1057,7 +1058,7 @@ Std: 0.2395</code></pre>
 </section>
 <section id="preparación-de-datos-para-clasificación" class="level2">
 <h2 class="anchored" data-anchor-id="preparación-de-datos-para-clasificación">3.3 Preparación de datos para clasificación</h2>
-<div id="a0050b45" class="cell" data-execution_count="20">
+<div id="7135296c" class="cell" data-execution_count="20">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>X_classificacion <span class="op">=</span> X_final</span>
@@ -1103,7 +1104,7 @@ Std: 0.2395</code></pre>
 <blockquote class="blockquote">
 <p>Se usa OVR para que “sea uno contra el resto” en la etiquetacion de clases en multi capa.</p>
 </blockquote>
-<div id="7528560c" class="cell" data-execution_count="21">
+<div id="3bb49e42" class="cell" data-execution_count="21">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seteo los modelos en un arreglo.</span></span>
@@ -1233,7 +1234,7 @@ Entrenando SVC...
 <section id="evaluación-detallada-y-métricas" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-detallada-y-métricas">3.5 Evaluación detallada y métricas</h2>
 <p>Creo un data set con los resultados para poder buscar el F1-Score mas Alto y el modelo al que corresponde.</p>
-<div id="bbc3b41a" class="cell" data-execution_count="22">
+<div id="e462b4e4" class="cell" data-execution_count="22">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> analizo_modelo_por_metrica(results, y_test, paso_nombre, class_names<span class="op">=</span><span class="va">None</span>):</span>
@@ -1280,7 +1281,7 @@ Valor del F1-Score: 0.5738</code></pre>
 </section>
 <section id="métricas-binarias" class="level2">
 <h2 class="anchored" data-anchor-id="métricas-binarias">3.6.1 Métricas binarias</h2>
-<div id="3f699fa0" class="cell" data-execution_count="23">
+<div id="9783cedb" class="cell" data-execution_count="23">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">12</span>))</span>
@@ -1313,10 +1314,9 @@ Valor del F1-Score: 0.5738</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="matriz-de-confusión-para-el-mejor-modelo-binario" class="level1">
-<h1>3.6.2 Matriz de confusión para el mejor modelo binario</h1>
-<div id="308cf034" class="cell" data-execution_count="24">
+<section id="matriz-de-confusión-para-el-mejor-modelo-binario" class="level2">
+<h2 class="anchored" data-anchor-id="matriz-de-confusión-para-el-mejor-modelo-binario">3.6.2 Matriz de confusión para el mejor modelo binario</h2>
+<div id="00a5cb1d" class="cell" data-execution_count="24">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>best_model_bin <span class="op">=</span> results_binary[best_binary][<span class="st">'model'</span>]</span>
@@ -1334,7 +1334,7 @@ Valor del F1-Score: 0.5738</code></pre>
 <span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Verdadero'</span>)</span>
 <span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Predicho'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="54">
+<div class="cell-output cell-output-display" data-execution_count="84">
 <pre><code>Text(0.5, 25.13333333333333, 'Predicho')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1345,9 +1345,10 @@ Valor del F1-Score: 0.5738</code></pre>
 </div>
 </div>
 </div>
+</section>
 <section id="matriz-de-confusión-para-el-mejor-modelo-multi-capa" class="level2">
 <h2 class="anchored" data-anchor-id="matriz-de-confusión-para-el-mejor-modelo-multi-capa">3.6.3 Matriz de confusión para el mejor modelo Multi Capa</h2>
-<div id="7a9106d3" class="cell" data-execution_count="25">
+<div id="7d991e91" class="cell" data-execution_count="25">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Matriz de confusión multiclase</span></span>
@@ -1380,7 +1381,7 @@ Valor del F1-Score: 0.5738</code></pre>
 <li>ROC Binaria</li>
 <li>ROC Multiclase</li>
 </ul>
-<div id="fb20cac9" class="cell" data-execution_count="26">
+<div id="1188e3ff" class="cell" data-execution_count="26">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>)) <span class="co">## Dimensiones</span></span>
@@ -1434,119 +1435,117 @@ Valor del F1-Score: 0.5738</code></pre>
 <h1>4. Regresión de Toxicidad</h1>
 <section id="algoritmos-de-regresión-supervisada-con-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="algoritmos-de-regresión-supervisada-con-pipeline">4.1 Algoritmos de regresión supervisada con Pipeline</h2>
-<div id="f9868d9b" class="cell" data-execution_count="27">
+<div id="4a94a8d1" class="cell" data-execution_count="27">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> crear_pipeline_regresion(modelo_regresion):</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    pipeline <span class="op">=</span> Pipeline([</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'preprocessor'</span>, preprocessor_simple),  <span class="co"># TF-IDF ya definido</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'regressor'</span>, modelo_regresion)</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    ])</span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pipeline</span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>pipelines_regresion <span class="op">=</span> {</span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Linear Regression'</span>: crear_pipeline_regresion(LinearRegression()),</span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Ridge Regression'</span>: crear_pipeline_regresion(Ridge(alpha<span class="op">=</span><span class="fl">1.0</span>, random_state<span class="op">=</span><span class="dv">42</span>)),</span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Lasso Regression'</span>: crear_pipeline_regresion(Lasso(alpha<span class="op">=</span><span class="fl">0.01</span>, random_state<span class="op">=</span><span class="dv">42</span>, max_iter<span class="op">=</span><span class="dv">2000</span>)),</span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Random Forest'</span>: crear_pipeline_regresion(RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)),</span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Gradient Boosting'</span>: crear_pipeline_regresion(GradientBoostingRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)),</span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SVR'</span>: crear_pipeline_regresion(SVR(kernel<span class="op">=</span><span class="st">'rbf'</span>, C<span class="op">=</span><span class="fl">1.0</span>))</span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> entrenar_evaluar_regresion_pipeline(X_train, X_test, y_train, y_test, pipelines):</span>
-<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>    resultados <span class="op">=</span> {}</span>
-<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> nombre, pipeline <span class="kw">in</span> pipelines.items():</span>
-<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Entrenando </span><span class="sc">{</span>nombre<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>        start_time <span class="op">=</span> time.time()        </span>
-<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>        pipeline.fit(X_train, y_train)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> crear_pipeline_regresion(modelo_regresion):</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'preprocessor'</span>, preprocessor_simple),  <span class="co"># TF-IDF ya definido</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'regressor'</span>, modelo_regresion)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pipeline</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Arreglo de modelos para poder ejecutarlos en Loop y Luego poder comparar.</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>pipelines_regresion <span class="op">=</span> {</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Linear Regression'</span>: crear_pipeline_regresion(LinearRegression()),</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Ridge Regression'</span>: crear_pipeline_regresion(Ridge(alpha<span class="op">=</span><span class="fl">1.0</span>, random_state<span class="op">=</span><span class="dv">42</span>)),</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Lasso Regression'</span>: crear_pipeline_regresion(Lasso(alpha<span class="op">=</span><span class="fl">0.01</span>, random_state<span class="op">=</span><span class="dv">42</span>, max_iter<span class="op">=</span><span class="dv">2000</span>)),</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Random Forest'</span>: crear_pipeline_regresion(RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)),</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Gradient Boosting'</span>: crear_pipeline_regresion(GradientBoostingRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)),</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SVR'</span>: crear_pipeline_regresion(SVR(kernel<span class="op">=</span><span class="st">'rbf'</span>, C<span class="op">=</span><span class="fl">1.0</span>))</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> entrenar_evaluar_regresion_pipeline(X_train, X_test, y_train, y_test, pipelines):</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>    resultados <span class="op">=</span> {}</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> nombre, pipeline <span class="kw">in</span> pipelines.items():</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Entrenando </span><span class="sc">{</span>nombre<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>        start_time <span class="op">=</span> time.time()        </span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>        pipeline.fit(X_train, y_train)</span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>        tiempo_entrenamiento <span class="op">=</span> time.time() <span class="op">-</span> start_time</span>
 <span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>        tiempo_entrenamiento <span class="op">=</span> time.time() <span class="op">-</span> start_time</span>
-<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>        y_pred_train <span class="op">=</span> pipeline.predict(X_train)</span>
-<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>        y_pred_test <span class="op">=</span> pipeline.predict(X_test)</span>
-<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a>        mae_train <span class="op">=</span> mean_absolute_error(y_train, y_pred_train)</span>
-<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a>        rmse_train <span class="op">=</span> np.sqrt(mean_squared_error(y_train, y_pred_train))</span>
-<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a>        r2_train <span class="op">=</span> r2_score(y_train, y_pred_train)</span>
-<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a>        mae_test <span class="op">=</span> mean_absolute_error(y_test, y_pred_test)</span>
-<span id="cb45-39"><a href="#cb45-39" aria-hidden="true" tabindex="-1"></a>        rmse_test <span class="op">=</span> np.sqrt(mean_squared_error(y_test, y_pred_test))</span>
-<span id="cb45-40"><a href="#cb45-40" aria-hidden="true" tabindex="-1"></a>        r2_test <span class="op">=</span> r2_score(y_test, y_pred_test)</span>
-<span id="cb45-41"><a href="#cb45-41" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb45-42"><a href="#cb45-42" aria-hidden="true" tabindex="-1"></a>        resultados[nombre] <span class="op">=</span> {</span>
-<span id="cb45-43"><a href="#cb45-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">'pipeline'</span>: pipeline,</span>
-<span id="cb45-44"><a href="#cb45-44" aria-hidden="true" tabindex="-1"></a>            <span class="st">'modelo'</span>: pipeline.named_steps[<span class="st">'regressor'</span>], </span>
-<span id="cb45-45"><a href="#cb45-45" aria-hidden="true" tabindex="-1"></a>            <span class="st">'tiempo_entrenamiento'</span>: tiempo_entrenamiento,</span>
-<span id="cb45-46"><a href="#cb45-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">'mae_train'</span>: mae_train,</span>
-<span id="cb45-47"><a href="#cb45-47" aria-hidden="true" tabindex="-1"></a>            <span class="st">'rmse_train'</span>: rmse_train,</span>
-<span id="cb45-48"><a href="#cb45-48" aria-hidden="true" tabindex="-1"></a>            <span class="st">'r2_train'</span>: r2_train,</span>
-<span id="cb45-49"><a href="#cb45-49" aria-hidden="true" tabindex="-1"></a>            <span class="st">'mae_test'</span>: mae_test,</span>
-<span id="cb45-50"><a href="#cb45-50" aria-hidden="true" tabindex="-1"></a>            <span class="st">'rmse_test'</span>: rmse_test,</span>
-<span id="cb45-51"><a href="#cb45-51" aria-hidden="true" tabindex="-1"></a>            <span class="st">'r2_test'</span>: r2_test,</span>
-<span id="cb45-52"><a href="#cb45-52" aria-hidden="true" tabindex="-1"></a>            <span class="st">'y_pred_train'</span>: y_pred_train,</span>
-<span id="cb45-53"><a href="#cb45-53" aria-hidden="true" tabindex="-1"></a>            <span class="st">'y_pred_test'</span>: y_pred_test</span>
-<span id="cb45-54"><a href="#cb45-54" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb45-55"><a href="#cb45-55" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb45-56"><a href="#cb45-56" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - Tiempo entrenamiento: </span><span class="sc">{</span>tiempo_entrenamiento<span class="sc">:.3f}</span><span class="ss">s"</span>)</span>
-<span id="cb45-57"><a href="#cb45-57" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - MAE (test): </span><span class="sc">{</span>mae_test<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb45-58"><a href="#cb45-58" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - RMSE (test): </span><span class="sc">{</span>rmse_test<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb45-59"><a href="#cb45-59" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - R2 (test): </span><span class="sc">{</span>r2_test<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb45-60"><a href="#cb45-60" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb45-61"><a href="#cb45-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> resultados</span>
-<span id="cb45-62"><a href="#cb45-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-63"><a href="#cb45-63" aria-hidden="true" tabindex="-1"></a><span class="co"># IMPORTANTE: Para usar pipelines necesitamos los datos SIN preprocesar</span></span>
-<span id="cb45-64"><a href="#cb45-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Usar df_procesar['text_processed'] directamente y no X_final</span></span>
-<span id="cb45-65"><a href="#cb45-65" aria-hidden="true" tabindex="-1"></a>X_raw <span class="op">=</span> df_procesar[[<span class="st">'text_processed'</span>]]  <span class="co"># DataFrame con columna text_processed</span></span>
-<span id="cb45-66"><a href="#cb45-66" aria-hidden="true" tabindex="-1"></a>y_raw <span class="op">=</span> df_procesar[<span class="st">'toxicity_score'</span>].values</span>
-<span id="cb45-67"><a href="#cb45-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-68"><a href="#cb45-68" aria-hidden="true" tabindex="-1"></a>X_train_raw, X_test_raw, y_train_raw, y_test_raw <span class="op">=</span> train_test_split(</span>
-<span id="cb45-69"><a href="#cb45-69" aria-hidden="true" tabindex="-1"></a>    X_raw, y_raw, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span></span>
-<span id="cb45-70"><a href="#cb45-70" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb45-71"><a href="#cb45-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-72"><a href="#cb45-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenar todos los pipelines</span></span>
-<span id="cb45-73"><a href="#cb45-73" aria-hidden="true" tabindex="-1"></a>resultados_regresion_pipeline <span class="op">=</span> entrenar_evaluar_regresion_pipeline(</span>
-<span id="cb45-74"><a href="#cb45-74" aria-hidden="true" tabindex="-1"></a>    X_train_raw, X_test_raw, y_train_raw, y_test_raw, pipelines_regresion</span>
-<span id="cb45-75"><a href="#cb45-75" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>        y_pred_train <span class="op">=</span> pipeline.predict(X_train)</span>
+<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>        y_pred_test <span class="op">=</span> pipeline.predict(X_test)</span>
+<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>        mae_train <span class="op">=</span> mean_absolute_error(y_train, y_pred_train)</span>
+<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>        rmse_train <span class="op">=</span> np.sqrt(mean_squared_error(y_train, y_pred_train))</span>
+<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a>        r2_train <span class="op">=</span> r2_score(y_train, y_pred_train)</span>
+<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a>        mae_test <span class="op">=</span> mean_absolute_error(y_test, y_pred_test)</span>
+<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a>        rmse_test <span class="op">=</span> np.sqrt(mean_squared_error(y_test, y_pred_test))</span>
+<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a>        r2_test <span class="op">=</span> r2_score(y_test, y_pred_test)</span>
+<span id="cb45-39"><a href="#cb45-39" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb45-40"><a href="#cb45-40" aria-hidden="true" tabindex="-1"></a>        resultados[nombre] <span class="op">=</span> {</span>
+<span id="cb45-41"><a href="#cb45-41" aria-hidden="true" tabindex="-1"></a>            <span class="st">'pipeline'</span>: pipeline,</span>
+<span id="cb45-42"><a href="#cb45-42" aria-hidden="true" tabindex="-1"></a>            <span class="st">'modelo'</span>: pipeline.named_steps[<span class="st">'regressor'</span>], </span>
+<span id="cb45-43"><a href="#cb45-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">'tiempo_entrenamiento'</span>: tiempo_entrenamiento,</span>
+<span id="cb45-44"><a href="#cb45-44" aria-hidden="true" tabindex="-1"></a>            <span class="st">'mae_train'</span>: mae_train,</span>
+<span id="cb45-45"><a href="#cb45-45" aria-hidden="true" tabindex="-1"></a>            <span class="st">'rmse_train'</span>: rmse_train,</span>
+<span id="cb45-46"><a href="#cb45-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">'r2_train'</span>: r2_train,</span>
+<span id="cb45-47"><a href="#cb45-47" aria-hidden="true" tabindex="-1"></a>            <span class="st">'mae_test'</span>: mae_test,</span>
+<span id="cb45-48"><a href="#cb45-48" aria-hidden="true" tabindex="-1"></a>            <span class="st">'rmse_test'</span>: rmse_test,</span>
+<span id="cb45-49"><a href="#cb45-49" aria-hidden="true" tabindex="-1"></a>            <span class="st">'r2_test'</span>: r2_test,</span>
+<span id="cb45-50"><a href="#cb45-50" aria-hidden="true" tabindex="-1"></a>            <span class="st">'y_pred_train'</span>: y_pred_train,</span>
+<span id="cb45-51"><a href="#cb45-51" aria-hidden="true" tabindex="-1"></a>            <span class="st">'y_pred_test'</span>: y_pred_test</span>
+<span id="cb45-52"><a href="#cb45-52" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb45-53"><a href="#cb45-53" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb45-54"><a href="#cb45-54" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - Tiempo entrenamiento: </span><span class="sc">{</span>tiempo_entrenamiento<span class="sc">:.3f}</span><span class="ss">s"</span>)</span>
+<span id="cb45-55"><a href="#cb45-55" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - MAE (test): </span><span class="sc">{</span>mae_test<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb45-56"><a href="#cb45-56" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - RMSE (test): </span><span class="sc">{</span>rmse_test<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb45-57"><a href="#cb45-57" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - R2 (test): </span><span class="sc">{</span>r2_test<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb45-58"><a href="#cb45-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb45-59"><a href="#cb45-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> resultados</span>
+<span id="cb45-60"><a href="#cb45-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-61"><a href="#cb45-61" aria-hidden="true" tabindex="-1"></a><span class="co"># IMPORTANTE: Para usar pipelines necesitamos los datos SIN preprocesar</span></span>
+<span id="cb45-62"><a href="#cb45-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Usar df_procesar['text_processed'] directamente y no X_final</span></span>
+<span id="cb45-63"><a href="#cb45-63" aria-hidden="true" tabindex="-1"></a>X_raw <span class="op">=</span> df_procesar[[<span class="st">'text_processed'</span>]]  <span class="co"># DataFrame con columna text_processed</span></span>
+<span id="cb45-64"><a href="#cb45-64" aria-hidden="true" tabindex="-1"></a>y_raw <span class="op">=</span> df_procesar[<span class="st">'toxicity_score'</span>].values</span>
+<span id="cb45-65"><a href="#cb45-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-66"><a href="#cb45-66" aria-hidden="true" tabindex="-1"></a>X_train_raw, X_test_raw, y_train_raw, y_test_raw <span class="op">=</span> train_test_split(</span>
+<span id="cb45-67"><a href="#cb45-67" aria-hidden="true" tabindex="-1"></a>    X_raw, y_raw, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb45-68"><a href="#cb45-68" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-69"><a href="#cb45-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-70"><a href="#cb45-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenar todos los pipelines</span></span>
+<span id="cb45-71"><a href="#cb45-71" aria-hidden="true" tabindex="-1"></a>resultados_regresion_pipeline <span class="op">=</span> entrenar_evaluar_regresion_pipeline(</span>
+<span id="cb45-72"><a href="#cb45-72" aria-hidden="true" tabindex="-1"></a>    X_train_raw, X_test_raw, y_train_raw, y_test_raw, pipelines_regresion</span>
+<span id="cb45-73"><a href="#cb45-73" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Entrenando Linear Regression
-  - Tiempo entrenamiento: 0.031s
+  - Tiempo entrenamiento: 0.059s
   - MAE (test): 0.1698
   - RMSE (test): 0.2246
   - R2 (test): 0.1206
 
 Entrenando Ridge Regression
-  - Tiempo entrenamiento: 0.026s
+  - Tiempo entrenamiento: 0.046s
   - MAE (test): 0.1518
   - RMSE (test): 0.1867
   - R2 (test): 0.3925
 
 Entrenando Lasso Regression
-  - Tiempo entrenamiento: 0.023s
+  - Tiempo entrenamiento: 0.051s
   - MAE (test): 0.2079
   - RMSE (test): 0.2397
   - R2 (test): -0.0018
 
 Entrenando Random Forest
-  - Tiempo entrenamiento: 3.450s
+  - Tiempo entrenamiento: 4.773s
   - MAE (test): 0.1531
   - RMSE (test): 0.2006
   - R2 (test): 0.2986
 
 Entrenando Gradient Boosting
-  - Tiempo entrenamiento: 0.171s
+  - Tiempo entrenamiento: 0.306s
   - MAE (test): 0.1786
   - RMSE (test): 0.2070
   - R2 (test): 0.2528
 
 Entrenando SVR
-  - Tiempo entrenamiento: 0.059s
+  - Tiempo entrenamiento: 0.102s
   - MAE (test): 0.1654
   - RMSE (test): 0.2011
   - R2 (test): 0.2951</code></pre>
@@ -1555,7 +1554,7 @@ Entrenando SVR
 </section>
 <section id="evaluación-detallada-con-métricas" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-detallada-con-métricas">4.2 Evaluación detallada con métricas</h2>
-<div id="6524eb1e" class="cell" data-execution_count="28">
+<div id="4dcbc56f" class="cell" data-execution_count="28">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>metricas_regresion <span class="op">=</span> pd.DataFrame({</span>
@@ -1600,12 +1599,12 @@ Entrenando SVR
 <div class="cell-output cell-output-stdout">
 <pre><code>TABLA COMPARATIVA DE MODELOS:
            Modelo  Tiempo_Entrenamiento  MAE_Train  RMSE_Train  R2_Train  MAE_Test  RMSE_Test  R2_Test
-Linear Regression                0.0306     0.0878      0.1216    0.7532    0.1698     0.2246   0.1206
- Ridge Regression                0.0261     0.1159      0.1467    0.6411    0.1518     0.1867   0.3925
- Lasso Regression                0.0231     0.2085      0.2449    0.0000    0.2079     0.2397  -0.0018
-    Random Forest                3.4503     0.0704      0.1000    0.8331    0.1531     0.2006   0.2986
-Gradient Boosting                0.1706     0.1587      0.1823    0.4455    0.1786     0.2070   0.2528
-              SVR                0.0592     0.0932      0.1097    0.7992    0.1654     0.2011   0.2951
+Linear Regression                0.0589     0.0878      0.1216    0.7532    0.1698     0.2246   0.1206
+ Ridge Regression                0.0458     0.1159      0.1467    0.6411    0.1518     0.1867   0.3925
+ Lasso Regression                0.0514     0.2085      0.2449    0.0000    0.2079     0.2397  -0.0018
+    Random Forest                4.7735     0.0704      0.1000    0.8331    0.1531     0.2006   0.2986
+Gradient Boosting                0.3056     0.1587      0.1823    0.4455    0.1786     0.2070   0.2528
+              SVR                0.1023     0.0932      0.1097    0.7992    0.1654     0.2011   0.2951
 
 MEJOR MODELO: Ridge Regression
 R2 en prueba: 0.3925
@@ -1625,7 +1624,7 @@ SVR: R2_train=0.7992, R2_Test=0.2951, Dif=0.5041 Sobreajuste</code></pre>
 <section id="visualizaciones-de-resultados-gráfico-de-barras-comparativo" class="level2">
 <h2 class="anchored" data-anchor-id="visualizaciones-de-resultados-gráfico-de-barras-comparativo">4.3 Visualizaciones de resultados Gráfico de barras comparativo</h2>
 <p>El uso de la variables relacionados son: MAE(Mean Absolute Error), Root Mean Square Error (RMSE), Coeficiente de Determinacion(R2) y el Tiempo de Entrega.</p>
-<div id="5170ca2e" class="cell" data-execution_count="29">
+<div id="d000ee6e" class="cell" data-execution_count="29">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Dimensiones del grafico</span></span>
@@ -1684,6 +1683,108 @@ SVR: R2_train=0.7992, R2_Test=0.2951, Dif=0.5041 Sobreajuste</code></pre>
 <p><img src="final_files/figure-html/cell-30-output-1.png" width="1526" height="1142" class="figure-img"></p>
 </figure>
 </div>
+</div>
+</div>
+</section>
+</section>
+<section id="clustering-de-toxicidad" class="level1">
+<h1>5. Clustering de Toxicidad</h1>
+<section id="determinación-del-número-óptimo-de-clusters" class="level2">
+<h2 class="anchored" data-anchor-id="determinación-del-número-óptimo-de-clusters">5.1 Determinación del número óptimo de clusters</h2>
+<p><strong>Método del Codo (Elbow Method)</strong></p>
+<div id="d2709fa0" class="cell" data-execution_count="30">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>k_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">11</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>inertias <span class="op">=</span> []</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>silhouette_scores <span class="op">=</span> []</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>X_clustering <span class="op">=</span> X_final.toarray()  <span class="co"># Convertir sparse matrix a dense para clustering</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Probar diferentes números de clusters entre el 2 y el 10</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> k_range:</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Probando k=</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>k, random_state<span class="op">=</span><span class="dv">42</span>, n_init<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    kmeans.fit(X_clustering)</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>    inertias.append(kmeans.inertia_)</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    silhouette_avg <span class="op">=</span> silhouette_score(X_clustering, kmeans.labels_)</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>    silhouette_scores.append(silhouette_avg)</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"- Inercia: </span><span class="sc">{</span>kmeans<span class="sc">.</span>inertia_<span class="sc">:.2f}</span><span class="ss"> - Silhouette Score: </span><span class="sc">{</span>silhouette_avg<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>best_k_silhouette <span class="op">=</span> k_range[np.argmax(silhouette_scores)]</span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>best_silhouette <span class="op">=</span> <span class="bu">max</span>(silhouette_scores)</span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="co">## Dimension del grafico</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">6</span>))</span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico del codo</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(k_range, inertias, <span class="st">'bo-'</span>)</span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Número de (k)'</span>)</span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Inercia (WCSS)'</span>)</span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Método del Codo'</span>)</span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregar valores de inercia sobre cada punto del gráfico</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, inertia <span class="kw">in</span> <span class="bu">enumerate</span>(inertias):</span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> k_range[i]  <span class="co"># Número de clusters (2, 3, 4, ...)</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Poner el texto un poco arriba del punto</span></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].text(k, inertia <span class="op">+</span> <span class="dv">100</span>, <span class="ss">f'</span><span class="sc">{</span>inertia<span class="sc">:.0f}</span><span class="ss">'</span>, </span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a>                ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico Silhouette Score</span></span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(k_range, silhouette_scores, <span class="st">'ro-'</span>)</span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Número de Clusters (k)'</span>)</span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Silhouette Score'</span>)</span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Silhouette Score vs Número de Clusters'</span>)</span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregar valores de silhouette score sobre cada punto del gráfico</span></span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, score <span class="kw">in</span> <span class="bu">enumerate</span>(silhouette_scores):</span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> k_range[i]  <span class="co"># Número de clusters (2, 3, 4, ...)</span></span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Poner el texto un poco arriba del punto</span></span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].text(k, score <span class="op">+</span> <span class="fl">0.01</span>, <span class="ss">f'</span><span class="sc">{</span>score<span class="sc">:.3f}</span><span class="ss">'</span>, </span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a>                ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- Mejor k según Silhouette Score: </span><span class="sc">{</span>best_k_silhouette<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a>k_optimo <span class="op">=</span> best_k_silhouette</span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"- K óptimo seleccionado: </span><span class="sc">{</span>k_optimo<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Probando k=2...
+- Inercia: 1143.48 - Silhouette Score: 0.0545
+Probando k=3...
+- Inercia: 1133.03 - Silhouette Score: 0.0550
+Probando k=4...
+- Inercia: 1126.40 - Silhouette Score: 0.0537
+Probando k=5...
+- Inercia: 1117.43 - Silhouette Score: 0.0544
+Probando k=6...
+- Inercia: 1109.28 - Silhouette Score: 0.0577
+Probando k=7...
+- Inercia: 1106.30 - Silhouette Score: 0.0538
+Probando k=8...
+- Inercia: 1117.58 - Silhouette Score: 0.0533
+Probando k=9...
+- Inercia: 1107.23 - Silhouette Score: 0.0555
+Probando k=10...
+- Inercia: 1107.86 - Silhouette Score: 0.0470</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-31-output-2.png" width="1197" height="1580" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>- Mejor k según Silhouette Score: 6
+- K óptimo seleccionado: 6</code></pre>
 </div>
 </div>
 

@@ -22,47 +22,46 @@ Autor Omar Vele
 ## Importar librerías
 
 ```{python}
-# Importaciones corregidas para análisis de texto
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.compose import ColumnTransformer  # Corrección aquí
-from sklearn.pipeline import Pipeline
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.linear_model import LogisticRegression, LinearRegression
-from sklearn.cluster import KMeans
-from sklearn.metrics import classification_report, confusion_matrix, mean_squared_error, r2_score
-
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
-from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
-
-from sklearn.linear_model import LinearRegression, Ridge, Lasso
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.svm import SVR
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import time
-
-## Borrar OJO
 import re
 import warnings
-warnings.filterwarnings('ignore')
+import os
+import joblib
 
-from wordcloud import WordCloud  # Esta importación faltaba
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud
+from mpl_toolkits.mplot3d import Axes3D
 
+from sklearn.model_selection import train_test_split, cross_val_score, cross_validate, GridSearchCV
+from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder, OrdinalEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.decomposition import PCA
 
-# Importar NLTK y definir stopwords
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingRegressor
+from sklearn.linear_model import LogisticRegression, LinearRegression, Ridge, Lasso
+from sklearn.svm import SVC, SVR
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.cluster import KMeans, AgglomerativeClustering
+
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score, roc_auc_score,
+    classification_report, confusion_matrix, roc_curve, auc,
+    homogeneity_score, completeness_score, v_measure_score,
+    mean_absolute_error, mean_squared_error, r2_score,
+    silhouette_score, adjusted_rand_score
+)
+
 import nltk
 from nltk.corpus import stopwords
-
-# Descargar stopwords en español (solo ejecutar una vez)
+from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.spatial.distance import pdist
+from scipy import stats
+from nltk.corpus import stopwords
 nltk.download('stopwords')
 
 
@@ -646,7 +645,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-# 3.6.2 Matriz de confusión para el mejor modelo binario
+## 3.6.2 Matriz de confusión para el mejor modelo binario
 ```{python}
 best_model_bin = results_binary[best_binary]['model']
 y_pred_best_bin = results_binary[best_binary]['y_pred']
@@ -733,8 +732,6 @@ plt.show()
 ## 4.1 Algoritmos de regresión supervisada con Pipeline
 
 ```{python}
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
 
 def crear_pipeline_regresion(modelo_regresion):
     pipeline = Pipeline([
@@ -743,6 +740,7 @@ def crear_pipeline_regresion(modelo_regresion):
     ])
     return pipeline
 
+## Arreglo de modelos para poder ejecutarlos en Loop y Luego poder comparar.
 pipelines_regresion = {
     'Linear Regression': crear_pipeline_regresion(LinearRegression()),
     'Ridge Regression': crear_pipeline_regresion(Ridge(alpha=1.0, random_state=42)),
@@ -908,3 +906,72 @@ for i, v in enumerate(metricas_regresion['Tiempo_Entrenamiento']):
 plt.tight_layout()
 plt.show()
 ```
+
+# 5. Clustering de Toxicidad
+## 5.1 Determinación del número óptimo de clusters
+
+**Método del Codo (Elbow Method)**
+
+```{python}
+
+k_range = range(2, 11)
+inertias = []
+silhouette_scores = []
+X_clustering = X_final.toarray()  # Convertir sparse matrix a dense para clustering
+
+
+# Probar diferentes números de clusters entre el 2 y el 10
+for k in k_range:
+    print(f"Probando k={k}...")
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+    kmeans.fit(X_clustering)
+    
+    inertias.append(kmeans.inertia_)
+    silhouette_avg = silhouette_score(X_clustering, kmeans.labels_)
+    silhouette_scores.append(silhouette_avg)
+    
+    print(f"- Inercia: {kmeans.inertia_:.2f} - Silhouette Score: {silhouette_avg:.4f}")
+
+best_k_silhouette = k_range[np.argmax(silhouette_scores)]
+best_silhouette = max(silhouette_scores)
+
+
+## Dimension del grafico
+fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+
+# Gráfico del codo
+axes[0].plot(k_range, inertias, 'bo-')
+axes[0].set_xlabel('Número de (k)')
+axes[0].set_ylabel('Inercia (WCSS)')
+axes[0].set_title('Método del Codo')
+axes[0].grid(True, alpha=0.3)
+
+# Agregar valores de inercia sobre cada punto del gráfico
+for i, inertia in enumerate(inertias):
+    k = k_range[i]  # Número de clusters (2, 3, 4, ...)
+    # Poner el texto un poco arriba del punto
+    axes[0].text(k, inertia + 100, f'{inertia:.0f}', 
+                ha='center', va='bottom', fontsize=9)
+
+# Gráfico Silhouette Score
+axes[1].plot(k_range, silhouette_scores, 'ro-')
+axes[1].set_xlabel('Número de Clusters (k)')
+axes[1].set_ylabel('Silhouette Score')
+axes[1].set_title('Silhouette Score vs Número de Clusters')
+axes[1].grid(True, alpha=0.3)
+
+# Agregar valores de silhouette score sobre cada punto del gráfico
+for i, score in enumerate(silhouette_scores):
+    k = k_range[i]  # Número de clusters (2, 3, 4, ...)
+    # Poner el texto un poco arriba del punto
+    axes[1].text(k, score + 0.01, f'{score:.3f}', 
+                ha='center', va='bottom', fontsize=9)
+
+plt.tight_layout()
+plt.show()
+
+print(f"- Mejor k según Silhouette Score: {best_k_silhouette}")
+k_optimo = best_k_silhouette
+print(f"- K óptimo seleccionado: {k_optimo}")
+```
+
