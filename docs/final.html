@@ -181,6 +181,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#pipeline-simplificado-con-columntransformer" id="toc-pipeline-simplificado-con-columntransformer" class="nav-link" data-scroll-target="#pipeline-simplificado-con-columntransformer">2.4 Pipeline simplificado con ColumnTransformer</a></li>
   <li><a href="#división-de-datos-para-regresión" id="toc-división-de-datos-para-regresión" class="nav-link" data-scroll-target="#división-de-datos-para-regresión">2.5 División de datos para regresión</a></li>
   </ul></li>
+  <li><a href="#clasificación-de-toxicidad" id="toc-clasificación-de-toxicidad" class="nav-link" data-scroll-target="#clasificación-de-toxicidad">3. Clasificación de Toxicidad</a>
+  <ul class="collapse">
+  <li><a href="#transformación-de-toxicity_score-a-variable-categórica" id="toc-transformación-de-toxicity_score-a-variable-categórica" class="nav-link" data-scroll-target="#transformación-de-toxicity_score-a-variable-categórica">3.1 Transformación de toxicity_score a variable categórica</a></li>
+  <li><a href="#estrategia-de-discretización-justificada" id="toc-estrategia-de-discretización-justificada" class="nav-link" data-scroll-target="#estrategia-de-discretización-justificada">3.2 Estrategia de discretización justificada</a>
+  <ul class="collapse">
+  <li><a href="#estrategia-1-clasificación-binaria-con-umbral-en-75" id="toc-estrategia-1-clasificación-binaria-con-umbral-en-75" class="nav-link" data-scroll-target="#estrategia-1-clasificación-binaria-con-umbral-en-75">ESTRATEGIA 1: Clasificación binaria con umbral en 75%</a></li>
+  <li><a href="#estrategia-2-clasificación-multiclase-a-tres-cortes" id="toc-estrategia-2-clasificación-multiclase-a-tres-cortes" class="nav-link" data-scroll-target="#estrategia-2-clasificación-multiclase-a-tres-cortes">ESTRATEGIA 2: Clasificación multiclase a tres cortes</a></li>
+  <li><a href="#presentación-gráfica-de-mis-estadísticas-para-comparación-visual" id="toc-presentación-gráfica-de-mis-estadísticas-para-comparación-visual" class="nav-link" data-scroll-target="#presentación-gráfica-de-mis-estadísticas-para-comparación-visual">Presentación gráfica de mis estadísticas para comparación visual</a></li>
+  </ul></li>
+  <li><a href="#preparación-de-datos-para-clasificación" id="toc-preparación-de-datos-para-clasificación" class="nav-link" data-scroll-target="#preparación-de-datos-para-clasificación">3.3 Preparación de datos para clasificación</a></li>
+  <li><a href="#clasificación-supervisada" id="toc-clasificación-supervisada" class="nav-link" data-scroll-target="#clasificación-supervisada">3.4 Clasificación supervisada</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -218,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Proyecto final de Aprendizaje de Maquina Autor Omar Vele</p>
 <section id="importar-librerías" class="level2">
 <h2 class="anchored" data-anchor-id="importar-librerías">Importar librerías</h2>
-<div id="b917d12b" class="cell" data-execution_count="1">
+<div id="11f66aae" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importaciones corregidas para análisis de texto</span></span>
@@ -236,29 +248,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, confusion_matrix, mean_squared_error, r2_score</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">## Borrar OJO</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wordcloud <span class="im">import</span> WordCloud  <span class="co"># Esta importación faltaba</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, precision_score, recall_score, f1_score, roc_auc_score</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, confusion_matrix, roc_curve, auc</span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar NLTK y definir stopwords</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar stopwords en español (solo ejecutar una vez)</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'stopwords'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">## Borrar OJO</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wordcloud <span class="im">import</span> WordCloud  <span class="co"># Esta importación faltaba</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar NLTK y definir stopwords</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar stopwords en español (solo ejecutar una vez)</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'stopwords'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>True</code></pre>
 </div>
 </div>
 </section>
 <section id="cargar-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="cargar-dataset">Cargar dataset</h2>
-<div id="0646d3c2" class="cell" data-execution_count="2">
+<div id="abe31f8a" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el dataset</span></span>
@@ -271,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>1. Análisis Exploratorio de Datos (EDA)</h1>
 <section id="información-general-del-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="información-general-del-dataset">1.1 Información general del dataset</h2>
-<div id="00eeeb78" class="cell" data-execution_count="3">
+<div id="3757123c" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Número de filas: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -355,7 +375,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="análisis-de-valores-nulos" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-valores-nulos">1.2 Análisis de valores nulos</h2>
-<div id="dc615741" class="cell" data-execution_count="4">
+<div id="88323018" class="cell" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>missing_data <span class="op">=</span> df.isnull().<span class="bu">sum</span>()</span>
@@ -381,7 +401,7 @@ memory usage: 285.8+ KB</code></pre>
 </section>
 <section id="estadísticas-descriptivas" class="level2">
 <h2 class="anchored" data-anchor-id="estadísticas-descriptivas">1.3 Estadísticas descriptivas</h2>
-<div id="75da68ae" class="cell" data-execution_count="5">
+<div id="ea2d5048" class="cell" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables numéricas</span></span>
@@ -475,7 +495,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="análisis-de-la-variable-toxicity-toxicity_score" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-la-variable-toxicity-toxicity_score">1.4 Análisis de la variable TOXICITY (toxicity_score)</h2>
-<div id="50b812d7" class="cell" data-execution_count="6">
+<div id="db2ffb9d" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'toxicity_score'</span>].describe())</span>
@@ -524,7 +544,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="análisis-de-texto" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-texto">1.5 Análisis de texto</h2>
-<div id="8668e203" class="cell" data-execution_count="7">
+<div id="b0cb509a" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas de texto</span></span>
@@ -590,7 +610,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="análisis-de-variables-categóricas" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-variables-categóricas">1.6 Análisis de variables categóricas</h2>
-<div id="686027ff" class="cell" data-execution_count="8">
+<div id="696c5c44" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>categorical_to_analyze <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> categorical_cols <span class="cf">if</span> df[col].nunique() <span class="op">&lt;</span> <span class="dv">20</span> <span class="kw">and</span> col <span class="op">!=</span> <span class="st">'content'</span>][:<span class="dv">4</span>]</span>
@@ -621,7 +641,7 @@ Número promedio de palabras: 16.97</code></pre>
 </section>
 <section id="correlaciones-entre-variables-numéricas" class="level2">
 <h2 class="anchored" data-anchor-id="correlaciones-entre-variables-numéricas">1.7 Correlaciones entre variables numéricas</h2>
-<div id="503266a8" class="cell" data-execution_count="9">
+<div id="0aa2ff8a" class="cell" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(numeric_cols) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
@@ -666,7 +686,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 </section>
 <section id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis" class="level2">
 <h2 class="anchored" data-anchor-id="hallazgos-clave-del-eda-explicar-de-forma-clara-al-menos-3-hallazgos-clave-del-análisis">1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)</h2>
-<div id="cce0ca08" class="cell" data-execution_count="10">
+<div id="f8eb95c6" class="cell" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== HALLAZGOS CLAVE DEL ANÁLISIS EXPLORATORIO"</span>)</span>
@@ -714,7 +734,7 @@ Name: toxicity_score, dtype: float64</code></pre>
 <h1>2. Preprocesamiento y Codificación</h1>
 <section id="limpieza-de-datos-básica" class="level2">
 <h2 class="anchored" data-anchor-id="limpieza-de-datos-básica">2.1 Limpieza de datos básica</h2>
-<div id="e44dafb6" class="cell" data-execution_count="11">
+<div id="07e38bbf" class="cell" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== LIMPIEZA DE DATOS BÁSICA"</span>)</span>
@@ -740,7 +760,7 @@ Tipos de datos:
 </section>
 <section id="procesamiento-del-texto-content" class="level2">
 <h2 class="anchored" data-anchor-id="procesamiento-del-texto-content">2.2 Procesamiento del texto (content)</h2>
-<div id="3232e55f" class="cell" data-execution_count="12">
+<div id="4807ce9f" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== PROCESAMIENTO DEL CAMPO CONTENT"</span>)</span>
@@ -784,7 +804,7 @@ Texto procesado:</code></pre>
 </section>
 <section id="codificación-de-texto-con-tf-idf" class="level2">
 <h2 class="anchored" data-anchor-id="codificación-de-texto-con-tf-idf">2.3 Codificación de texto con TF-IDF</h2>
-<div id="d9461753" class="cell" data-execution_count="13">
+<div id="96e44554" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== CODIFICACIÓN DE TEXTO CON TF-IDF"</span>)</span>
@@ -821,7 +841,7 @@ Primeros 10 términos: ['abre' 'abuso' 'acaba' 'acabar' 'acabar correismo' 'acas
 </section>
 <section id="pipeline-simplificado-con-columntransformer" class="level2">
 <h2 class="anchored" data-anchor-id="pipeline-simplificado-con-columntransformer">2.4 Pipeline simplificado con ColumnTransformer</h2>
-<div id="54fcf178" class="cell" data-execution_count="14">
+<div id="cd338129" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== PIPELINE SIMPLIFICADO ==="</span>)</span>
@@ -861,7 +881,7 @@ Datos finales preparados:
 </section>
 <section id="división-de-datos-para-regresión" class="level2">
 <h2 class="anchored" data-anchor-id="división-de-datos-para-regresión">2.5 División de datos para regresión</h2>
-<div id="e6d223e3" class="cell" data-execution_count="15">
+<div id="5bbc6733" class="cell" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== DIVISIÓN DE DATOS"</span>)</span>
@@ -887,6 +907,342 @@ Distribución del target (toxicity_score):
   Std: 0.2449
   Prueba - Media: 0.2457
   Std: 0.2395</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="clasificación-de-toxicidad" class="level1">
+<h1>3. Clasificación de Toxicidad</h1>
+<section id="transformación-de-toxicity_score-a-variable-categórica" class="level2">
+<h2 class="anchored" data-anchor-id="transformación-de-toxicity_score-a-variable-categórica">3.1 Transformación de toxicity_score a variable categórica</h2>
+<div id="c8ff9e4c" class="cell" data-execution_count="16">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== TRANSFORMACIÓN A VARIABLE CATEGÓRICA"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograma detallado</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>plt.hist(df_processed[<span class="st">'toxicity_score'</span>], bins<span class="op">=</span><span class="dv">50</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'skyblue'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>plt.axvline(df_processed[<span class="st">'toxicity_score'</span>].mean(), color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'Media: </span><span class="sc">{</span>df_processed[<span class="st">"toxicity_score"</span>]<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>plt.axvline(df_processed[<span class="st">'toxicity_score'</span>].median(), color<span class="op">=</span><span class="st">'green'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'Mediana: </span><span class="sc">{</span>df_processed[<span class="st">"toxicity_score"</span>]<span class="sc">.</span>median()<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Toxicity Score'</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frecuencia'</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribución'</span>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Percentiles</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>percentiles <span class="op">=</span> [<span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">100</span>] <span class="co">## relacionados a los quartiles</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>perc_values <span class="op">=</span> [np.percentile(df_processed[<span class="st">'toxicity_score'</span>], p) <span class="cf">for</span> p <span class="kw">in</span> percentiles]</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>plt.bar(<span class="bu">range</span>(<span class="bu">len</span>(percentiles)), perc_values, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'lightcoral'</span>)</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Percentiles'</span>)</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Toxicity Score'</span>)</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Percentiles'</span>)</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="bu">len</span>(percentiles)), [<span class="ss">f'P</span><span class="sc">{</span>p<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> p <span class="kw">in</span> percentiles])</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot con estadísticas</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>plt.boxplot(df_processed[<span class="st">'toxicity_score'</span>])</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Toxicity Score'</span>)</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Boxplot'</span>)</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar estadísticas clave para justificar umbral</span></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Estadísticas para determinar umbral, desde el inicio mediria la toxicidad en quartiles y aca se presenta los procentajes:"</span>)</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Q1 (25%): </span><span class="sc">{</span>np<span class="sc">.</span>percentile(df_processed[<span class="st">'toxicity_score'</span>], <span class="dv">25</span>)<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Q1 (50%): </span><span class="sc">{</span>np<span class="sc">.</span>percentile(df_processed[<span class="st">'toxicity_score'</span>], <span class="dv">50</span>)<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Q3 (75%): </span><span class="sc">{</span>np<span class="sc">.</span>percentile(df_processed[<span class="st">'toxicity_score'</span>], <span class="dv">75</span>)<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Q3 (100%): </span><span class="sc">{</span>np<span class="sc">.</span>percentile(df_processed[<span class="st">'toxicity_score'</span>], <span class="dv">100</span>)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== TRANSFORMACIÓN A VARIABLE CATEGÓRICA</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-17-output-2.png" width="1430" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Estadísticas para determinar umbral, desde el inicio mediria la toxicidad en quartiles y aca se presenta los procentajes:
+  - Q1 (25%): 0.0284
+  - Q1 (50%): 0.1884
+  - Q3 (75%): 0.4269
+  - Q3 (100%): 0.9391</code></pre>
+</div>
+</div>
+</section>
+<section id="estrategia-de-discretización-justificada" class="level2">
+<h2 class="anchored" data-anchor-id="estrategia-de-discretización-justificada">3.2 Estrategia de discretización justificada</h2>
+<section id="estrategia-1-clasificación-binaria-con-umbral-en-75" class="level3">
+<h3 class="anchored" data-anchor-id="estrategia-1-clasificación-binaria-con-umbral-en-75">ESTRATEGIA 1: Clasificación binaria con umbral en 75%</h3>
+<ul>
+<li>Justificación: El 75% de los tweets tienen toxicidad baja</li>
+<li>Esto permite identificar el 25% más alto</li>
+<li>Clase 0 (No Tóxico): aprox 75%</li>
+<li>Clase 1 (Tóxico): aprox 25%</li>
+</ul>
+<div id="ec0d8dc5" class="cell" data-execution_count="17">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== JUSTIFICACIÓN Y APLICACIÓN DE UMBRALES ==="</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>umbral_binario <span class="op">=</span> np.percentile(df_processed[<span class="st">'toxicity_score'</span>], <span class="dv">75</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear variable binaria</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>df_processed[<span class="st">'toxicity_binario'</span>] <span class="op">=</span> (df_processed[<span class="st">'toxicity_score'</span>] <span class="op">&gt;=</span> umbral_binario).astype(<span class="bu">int</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar distribución binaria</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>count_binary <span class="op">=</span> df_processed[<span class="st">'toxicity_binario'</span>].value_counts()</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Clase 0 (No Tóxico): </span><span class="sc">{</span>count_binary[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>count_binary[<span class="dv">0</span>]<span class="op">/</span><span class="bu">len</span>(df_processed)<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)"</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Clase 1 (Tóxico): </span><span class="sc">{</span>count_binary[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>count_binary[<span class="dv">1</span>]<span class="op">/</span><span class="bu">len</span>(df_processed)<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== JUSTIFICACIÓN Y APLICACIÓN DE UMBRALES ===
+   - Clase 0 (No Tóxico): 1000 (74.2%)
+   - Clase 1 (Tóxico): 347 (25.8%)</code></pre>
+</div>
+</div>
+</section>
+<section id="estrategia-2-clasificación-multiclase-a-tres-cortes" class="level3">
+<h3 class="anchored" data-anchor-id="estrategia-2-clasificación-multiclase-a-tres-cortes">ESTRATEGIA 2: Clasificación multiclase a tres cortes</h3>
+<ul>
+<li>Clase 0 (Baja): aprox 33.3%</li>
+<li>Clase 1 (Media): aprox 33.3%</li>
+<li>Clase 2 (Alta): aprox 33.3%</li>
+</ul>
+<div id="f684ea44" class="cell" data-execution_count="18">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>p33 <span class="op">=</span> np.percentile(df_processed[<span class="st">'toxicity_score'</span>], <span class="fl">33.33</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>p66 <span class="op">=</span> np.percentile(df_processed[<span class="st">'toxicity_score'</span>], <span class="fl">66.66</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> categorize_toxicity(score):</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> score <span class="op">&lt;=</span> p33:</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span>  <span class="co"># Baja</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> score <span class="op">&lt;=</span> p66:</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span>  <span class="co"># media</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">2</span>  <span class="co"># Alta (troll??)</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>df_processed[<span class="st">'toxicity_multi_capa'</span>] <span class="op">=</span> df_processed[<span class="st">'toxicity_score'</span>].<span class="bu">apply</span>(categorize_toxicity)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar distribución multi capa</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>count_multi <span class="op">=</span> df_processed[<span class="st">'toxicity_multi_capa'</span>].value_counts().sort_index()</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Clase 0 (Baja): </span><span class="sc">{</span>count_multi[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>count_multi[<span class="dv">0</span>]<span class="op">/</span><span class="bu">len</span>(df_processed)<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)"</span>)</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Clase 1 (Moderada): </span><span class="sc">{</span>count_multi[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>count_multi[<span class="dv">1</span>]<span class="op">/</span><span class="bu">len</span>(df_processed)<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)"</span>)</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   - Clase 2 (Alta): </span><span class="sc">{</span>count_multi[<span class="dv">2</span>]<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>count_multi[<span class="dv">2</span>]<span class="op">/</span><span class="bu">len</span>(df_processed)<span class="op">*</span><span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   - Clase 0 (Baja): 449 (33.3%)
+   - Clase 1 (Moderada): 451 (33.5%)
+   - Clase 2 (Alta): 447 (33.2%)</code></pre>
+</div>
+</div>
+</section>
+<section id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual" class="level3">
+<h3 class="anchored" data-anchor-id="presentación-gráfica-de-mis-estadísticas-para-comparación-visual">Presentación gráfica de mis estadísticas para comparación visual</h3>
+<div id="2961bbf8" class="cell" data-execution_count="19">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Textos de capas, se necesitaran luego</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>labels_multiCapas <span class="op">=</span> [<span class="st">'Baja'</span>, <span class="st">'Moderada'</span>, <span class="st">'Alta'</span>]</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Clasificación DOS clases</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].pie(count_binary.values, labels<span class="op">=</span>[<span class="st">'No Tóxico'</span>, <span class="st">'Tóxico'</span>], autopct<span class="op">=</span><span class="st">'</span><span class="sc">%1.1f%%</span><span class="st">'</span>, </span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>           colors<span class="op">=</span>[<span class="st">'lightgreen'</span>, <span class="st">'lightcoral'</span>])</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="ss">f'Clasificación Binaria</span><span class="ch">\n</span><span class="ss">(Umbral: </span><span class="sc">{</span>umbral_binario<span class="sc">:.3f}</span><span class="ss">)'</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Clasificación a Tres clases</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].pie(count_multi.values, labels<span class="op">=</span>labels_multiCapas, autopct<span class="op">=</span><span class="st">'</span><span class="sc">%1.1f%%</span><span class="st">'</span>,</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>           colors<span class="op">=</span>[<span class="st">'lightgreen'</span>, <span class="st">'gold'</span>, <span class="st">'lightcoral'</span>])</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Clasificación Multiclase</span><span class="ch">\n</span><span class="st">(Terciles)'</span>)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/cell-20-output-1.png" width="1099" height="471" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="preparación-de-datos-para-clasificación" class="level2">
+<h2 class="anchored" data-anchor-id="preparación-de-datos-para-clasificación">3.3 Preparación de datos para clasificación</h2>
+<div id="f5c59ff7" class="cell" data-execution_count="20">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>X_classificacion <span class="op">=</span> X_final</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>y_binary <span class="op">=</span> df_processed[<span class="st">'toxicity_binario'</span>].values</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>y_multi_capa <span class="op">=</span> df_processed[<span class="st">'toxicity_multi_capa'</span>].values</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>X_train_bin, X_test_bin, y_train_bin, y_test_bin <span class="op">=</span> train_test_split(</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    X_classificacion, y_binary, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y_binary</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>X_train_multi, X_test_multi, y_train_multi, y_test_multi <span class="op">=</span> train_test_split(</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    X_classificacion, y_multi_capa, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y_multi_capa</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Clasificación Capa binaria:"</span>)</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"    * X_train: </span><span class="sc">{</span>X_train_bin<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">, X_test: </span><span class="sc">{</span>X_test_bin<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"    * y_train: </span><span class="sc">{</span>y_train_bin<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">, y_test: </span><span class="sc">{</span>y_test_bin<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Entrenamiento: </span><span class="sc">{</span>np<span class="sc">.</span>bincount(y_train_bin)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Prueba: </span><span class="sc">{</span>np<span class="sc">.</span>bincount(y_test_bin)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Clasificación Multi Capa:"</span>)</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"    * X_train: </span><span class="sc">{</span>X_train_multi<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">, X_test: </span><span class="sc">{</span>X_test_multi<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"    * y_train: </span><span class="sc">{</span>y_train_multi<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">, y_test: </span><span class="sc">{</span>y_test_multi<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Entrenameinto: </span><span class="sc">{</span>np<span class="sc">.</span>bincount(y_train_multi)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  - Prueba: </span><span class="sc">{</span>np<span class="sc">.</span>bincount(y_test_multi)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  - Clasificación Capa binaria:
+    * X_train: (1077, 500), X_test: (270, 500)
+    * y_train: (1077,), y_test: (270,)
+  - Entrenamiento: [800 277]
+  - Prueba: [200  70]
+  - Clasificación Multi Capa:
+    * X_train: (1077, 500), X_test: (270, 500)
+    * y_train: (1077,), y_test: (270,)
+  - Entrenameinto: [359 361 357]
+  - Prueba: [90 90 90]</code></pre>
+</div>
+</div>
+</section>
+<section id="clasificación-supervisada" class="level2">
+<h2 class="anchored" data-anchor-id="clasificación-supervisada">3.4 Clasificación supervisada</h2>
+<p><strong>Hago un loop para entrenar el modelo, en la entrega anterior pense en que programaticamente se puede hacer un bucle para ejecutar los modelos, y puedo comparar de mejor manera al convertirla en una funcion de facil uso</strong></p>
+<p>Se usa OVR para que sea uno contra el resto en la etiquetacion de clases en multi capa.</p>
+<div id="e3f70084" class="cell" data-execution_count="21">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inicializar modelos</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'logReg'</span>: LogisticRegression(random_state<span class="op">=</span><span class="dv">42</span>, max_iter<span class="op">=</span><span class="dv">1000</span>),</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ramFor'</span>: RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Bayes'</span>: MultinomialNB(),</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SVC'</span>: SVC(probability<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> entrenamiento_evaluacion_masiva(X_train, X_test, y_train, y_test, models, task_name):</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> {}</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Entrenando </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>        model.fit(X_train, y_train)</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>        y_pred <span class="op">=</span> model.predict(X_test)</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>        accuracy <span class="op">=</span> accuracy_score(y_test, y_pred)</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>        precision <span class="op">=</span> precision_score(y_test, y_pred, average<span class="op">=</span><span class="st">'weighted'</span>)</span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>        recall <span class="op">=</span> recall_score(y_test, y_pred, average<span class="op">=</span><span class="st">'weighted'</span>)</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>        f1 <span class="op">=</span> f1_score(y_test, y_pred, average<span class="op">=</span><span class="st">'weighted'</span>)</span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">## Para multi capas o clases se revisa la documentacion en: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html para el roc_auc_score</span></span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a>        y_pred_proba <span class="op">=</span> model.predict_proba(X_test)</span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(np.unique(y_test)) <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a>            roc_auc <span class="op">=</span> roc_auc_score(y_test, y_pred_proba[:, <span class="dv">1</span>])</span>
+<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a>            <span class="co">## ovr que hace con uno (contra el resto)</span></span>
+<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a>            roc_auc <span class="op">=</span> roc_auc_score(y_test, y_pred_proba, multi_class<span class="op">=</span><span class="st">'ovr'</span>)</span>
+<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a>        results[name] <span class="op">=</span> {</span>
+<span id="cb39-34"><a href="#cb39-34" aria-hidden="true" tabindex="-1"></a>            <span class="st">'model'</span>: model,</span>
+<span id="cb39-35"><a href="#cb39-35" aria-hidden="true" tabindex="-1"></a>            <span class="st">'accuracy'</span>: accuracy,</span>
+<span id="cb39-36"><a href="#cb39-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">'precision'</span>: precision,</span>
+<span id="cb39-37"><a href="#cb39-37" aria-hidden="true" tabindex="-1"></a>            <span class="st">'recall'</span>: recall,</span>
+<span id="cb39-38"><a href="#cb39-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">'f1_score'</span>: f1,</span>
+<span id="cb39-39"><a href="#cb39-39" aria-hidden="true" tabindex="-1"></a>            <span class="st">'roc_auc'</span>: roc_auc,</span>
+<span id="cb39-40"><a href="#cb39-40" aria-hidden="true" tabindex="-1"></a>            <span class="st">'y_pred'</span>: y_pred, </span>
+<span id="cb39-41"><a href="#cb39-41" aria-hidden="true" tabindex="-1"></a>            <span class="st">'y_pred_proba'</span>: y_pred_proba</span>
+<span id="cb39-42"><a href="#cb39-42" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb39-43"><a href="#cb39-43" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb39-44"><a href="#cb39-44" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - Accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb39-45"><a href="#cb39-45" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - Precision: </span><span class="sc">{</span>precision<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb39-46"><a href="#cb39-46" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - Recall: </span><span class="sc">{</span>recall<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb39-47"><a href="#cb39-47" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - F1-Score: </span><span class="sc">{</span>f1<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb39-48"><a href="#cb39-48" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  - ROC-AUC: </span><span class="sc">{</span>roc_auc<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb39-49"><a href="#cb39-49" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb39-50"><a href="#cb39-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
+<span id="cb39-51"><a href="#cb39-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-52"><a href="#cb39-52" aria-hidden="true" tabindex="-1"></a><span class="co">## Los resultados deben ser presentados en bucle</span></span>
+<span id="cb39-53"><a href="#cb39-53" aria-hidden="true" tabindex="-1"></a>results_binary <span class="op">=</span> entrenamiento_evaluacion_masiva(</span>
+<span id="cb39-54"><a href="#cb39-54" aria-hidden="true" tabindex="-1"></a>    X_train_bin, X_test_bin, y_train_bin, y_test_bin, models, <span class="st">"Clasificación Binaria"</span></span>
+<span id="cb39-55"><a href="#cb39-55" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-56"><a href="#cb39-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-57"><a href="#cb39-57" aria-hidden="true" tabindex="-1"></a>results_multi_capa <span class="op">=</span> entrenamiento_evaluacion_masiva(</span>
+<span id="cb39-58"><a href="#cb39-58" aria-hidden="true" tabindex="-1"></a>    X_train_multi, X_test_multi, y_train_multi, y_test_multi, models, <span class="st">"Clasificación Multiclase"</span></span>
+<span id="cb39-59"><a href="#cb39-59" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Entrenando logReg...
+  - Accuracy: 0.7556
+  - Precision: 0.7427
+  - Recall: 0.7556
+  - F1-Score: 0.6798
+  - ROC-AUC: 0.7495
+
+Entrenando ramFor...
+  - Accuracy: 0.7704
+  - Precision: 0.7497
+  - Recall: 0.7704
+  - F1-Score: 0.7512
+  - ROC-AUC: 0.7269
+
+Entrenando Bayes...
+  - Accuracy: 0.7852
+  - Precision: 0.7951
+  - Recall: 0.7852
+  - F1-Score: 0.7341
+  - ROC-AUC: 0.7368
+
+Entrenando SVC...
+  - Accuracy: 0.7778
+  - Precision: 0.7778
+  - Recall: 0.7778
+  - F1-Score: 0.7249
+  - ROC-AUC: 0.7421
+
+Entrenando logReg...
+  - Accuracy: 0.5778
+  - Precision: 0.5751
+  - Recall: 0.5778
+  - F1-Score: 0.5736
+  - ROC-AUC: 0.7570
+
+Entrenando ramFor...
+  - Accuracy: 0.5593
+  - Precision: 0.5595
+  - Recall: 0.5593
+  - F1-Score: 0.5507
+  - ROC-AUC: 0.7627
+
+Entrenando Bayes...
+  - Accuracy: 0.4926
+  - Precision: 0.5142
+  - Recall: 0.4926
+  - F1-Score: 0.4959
+  - ROC-AUC: 0.7372
+
+Entrenando SVC...
+  - Accuracy: 0.5704
+  - Precision: 0.5844
+  - Recall: 0.5704
+  - F1-Score: 0.5738
+  - ROC-AUC: 0.7473</code></pre>
 </div>
 </div>
 
