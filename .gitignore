@@ -1,0 +1,64 @@
+# .gitignore para proyectos Quarto
+
+# Salida generada por Quarto
+_site/
+_book/
+_site_libs/
+
+# Cachés y archivos intermedios de Quarto
+.quarto/
+_quarto/
+_quarto-cache/
+_cache/
+_execute/
+
+# Notebooks y Python
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Entornos virtuales y dependencias
+.venv/
+venv/
+env/
+ENV/
+venv.bak/
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+
+# R / RStudio
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user
+
+# Archivos de compilación / salida (HTML/PDF/LaTeX)
+*.html
+*.pdf
+*.tex
+*.log
+*.aux
+*.out
+*.synctex.gz
+
+# Archivos de sistema y editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Variables de entorno y secretos
+.env
+.env.*
+.~lock.1500_tweets_con_toxicity_clean.csv\#
+1500_tweets_con_toxicity.csv
+1500_tweets_con_toxicity_clean.csv
+proyectoFinal.qmd_

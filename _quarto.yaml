@@ -1,0 +1,18 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Machine Learning Proyecto Final Omar Velez"
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - text: "Proyecto Final"
+        href: proyectoFinal.qmd
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+    fig-align: center

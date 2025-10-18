@@ -1,0 +1,383 @@
+---
+title: "Examen Final - Machine Learning"
+subtitle: "Análisis de Tweets Ecuatorianos con Medición de Toxicidad"
+author: "Omar Velez"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: show
+    ## fig-align: center
+execute:
+  warning: false
+  message: false
+---
+
+# Introducción
+
+Proyecto final de Aprendizaje de Maquina
+Autor Omar Vele
+
+
+## Importar librerías
+
+
+```{python}
+# Importaciones corregidas para análisis de texto
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.compose import ColumnTransformer  # Corrección aquí
+from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.linear_model import LogisticRegression, LinearRegression
+from sklearn.cluster import KMeans
+from sklearn.metrics import classification_report, confusion_matrix, mean_squared_error, r2_score
+
+## Borrar OJO
+import re
+import warnings
+warnings.filterwarnings('ignore')
+
+from wordcloud import WordCloud  # Esta importación faltaba
+
+
+# Importar NLTK y definir stopwords
+import nltk
+from nltk.corpus import stopwords
+
+# Descargar stopwords en español (solo ejecutar una vez)
+nltk.download('stopwords')
+
+
+```
+
+
+## Cargar dataset
+```{python}
+
+# Cargar el dataset
+df = pd.read_csv('./1500_tweets_con_toxicity.csv')
+
+```
+
+
+
+# 1. Análisis Exploratorio de Datos (EDA)
+
+## 1.1 Información general del dataset
+
+```{python}
+print(f"Número de filas: {df.shape[0]}")
+print(f"Número de columnas: {df.shape[1]}")
+print("\n=== TIPOS DE DATOS")
+print(df.dtypes)
+print("\n=== INFO")
+df.info()
+```
+
+## 1.2 Análisis de valores nulos
+
+```{python}
+missing_data = df.isnull().sum()
+missing_percent = (missing_data / len(df)) * 100
+missing_df = pd.DataFrame({
+    'Columna': missing_data.index,
+    'Valores_Nulos': missing_data.values,
+    'Porcentaje': missing_percent.values
+}).sort_values('Porcentaje', ascending=False)
+
+print("=== VALORES NULOS POR COLUMNA")
+print(missing_df[missing_df['Valores_Nulos'] > 0])
+
+```
+
+## 1.3 Estadísticas descriptivas
+
+```{python}
+# Variables numéricas
+numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+print("=== VARIABLES NUMÉRICAS")
+print(df[numeric_cols].describe())
+
+# Variables categóricas
+categorical_cols = df.select_dtypes(include=['object', 'bool']).columns.tolist()
+print("\n=== VARIABLES CATEGÓRICAS")
+for col in categorical_cols[:5]:  # Mostrar primeras 5
+    print(f"\n{col}:")
+    print(df[col].value_counts().head())
+```
+
+## 1.4 Análisis de la variable TOXICITY (toxicity_score)
+
+```{python}
+
+print(df['toxicity_score'].describe())
+
+# Visualizar distribución de toxicidad
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+# Histograma
+axes[0].hist(df['toxicity_score'].dropna(), bins=30, alpha=0.7, color='skyblue', edgecolor='black')
+axes[0].set_title('Distribución de Toxicidad')
+axes[0].set_xlabel('Toxicidad')
+axes[0].set_ylabel('Frecuencia')
+
+# Boxplot
+axes[1].boxplot(df['toxicity_score'].dropna())
+axes[1].set_title('Boxplot de Toxicidad')
+axes[1].set_ylabel('Toxicidad')
+
+# Q-Q plot
+from scipy import stats
+stats.probplot(df['toxicity_score'].dropna(), dist="norm", plot=axes[2])
+axes[2].set_title('Q-Q Plot vs Normal')
+
+plt.tight_layout()
+plt.show()
+```
+
+## 1.5 Análisis de texto
+
+```{python}
+# Estadísticas de texto
+df['word_count'] = df['content'].astype(str).str.split().str.len()
+    
+print("=== ESTADÍSTICAS DE TEXTO ===")
+print(f"Longitud promedio: {df['content_length'].mean():.2f} caracteres")
+print(f"Número promedio de palabras: {df['word_count'].mean():.2f}")
+
+# Visualizar longitud de textos
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+axes[0].hist(df['content_length'], bins=30, alpha=0.7, color='lightgreen')
+axes[0].set_title('Distribución de Longitud de Texto')
+axes[0].set_xlabel('Número de Caracteres')
+
+axes[1].hist(df['word_count'], bins=30, alpha=0.7, color='salmon')
+axes[1].set_title('Distribución de Número de Palabras')
+axes[1].set_xlabel('Número de Palabras')
+
+plt.tight_layout()
+plt.show()
+
+# Nube de palabras
+text_sample = ' '.join(df['content'].dropna().sample(min(1000, len(df))).astype(str))
+
+# Limpiar texto para nube de palabras
+text_clean = re.sub(r'http\S+|www\S+|@\w+|#\w+|\d+', '', text_sample)
+text_clean = re.sub(r'[^\w\s]', ' ', text_clean)
+
+
+wordcloud = WordCloud(width=800, height=400, 
+                    background_color='white',
+                    max_words=100,
+                    colormap='viridis').generate(text_clean)
+
+plt.figure(figsize=(10, 5))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.title('Nube de Palabras')
+plt.show()
+
+```
+
+## 1.6 Análisis de variables categóricas
+
+```{python}
+categorical_to_analyze = [col for col in categorical_cols if df[col].nunique() < 20 and col != 'content'][:4]
+
+if categorical_to_analyze:
+    fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+    axes = axes.ravel()
+    
+    for i, col in enumerate(categorical_to_analyze):
+        if i < 4:
+            value_counts = df[col].value_counts().head(10)
+            axes[i].bar(range(len(value_counts)), value_counts.values)
+            axes[i].set_title(f'Distribución de {col}')
+            axes[i].set_xticks(range(len(value_counts)))
+            axes[i].set_xticklabels(value_counts.index, rotation=45, ha='right')
+    
+    plt.tight_layout()
+    plt.show()
+```
+
+## 1.7 Correlaciones entre variables numéricas
+
+```{python}
+if len(numeric_cols) > 1:
+    # Matriz de correlación
+    correlation_matrix = df[numeric_cols].corr()
+    
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0,
+                square=True, fmt='.2f')
+    plt.title('Matriz de Correlación de Variables Numéricas')
+    plt.tight_layout()
+    plt.show()
+    
+    # Top correlaciones con toxicidad
+    if 'toxicity_score' in numeric_cols:
+        toxicity_corr = correlation_matrix['toxicity_score'].abs().sort_values(ascending=False)
+        print(f"=== CORRELACIONES CON {'toxicity_score'.upper()} ===")
+        print(toxicity_corr.head(10))
+```
+
+## 1.8 Hallazgos clave del EDA (Explicar de forma clara al menos 3 hallazgos clave del análisis)
+
+```{python}
+print("=== HALLAZGOS CLAVE DEL ANÁLISIS EXPLORATORIO")
+print("\n1. DISTRIBUCIÓN DE DATOS:")
+print(f"   - Mi Set de datos tiene {df.shape[0]} observaciones y {df.shape[1]} variables")
+print(f"   - Variables numéricas son: {len(numeric_cols)}")
+print(f"   - Variables categóricas son: {len(categorical_cols)}")
+
+print(f"\n2. CALIDAD DE DATOS:")
+missing_summary = missing_df[missing_df['Valores_Nulos'] > 0]
+if len(missing_summary) > 0:
+    print(f"   - Se detectaron valores nulos en {len(missing_summary)} columnas")
+    print(f"   - Columna con más nulos: {missing_summary.iloc[0]['Columna']} ({missing_summary.iloc[0]['Porcentaje']:.1f}%)")
+else:
+    print("   - No se detectaron valores nulos en el dataset")
+
+print(f"\n3. VARIABLE OBJETIVO (Score de TOXICIDAD):")
+toxicity_mean = df['toxicity_score'].mean()
+toxicity_std = df['toxicity_score'].std()
+print(f"   - Media de toxicidad: {toxicity_mean:.4f}")
+print(f"   - Desviación estándar: {toxicity_std:.4f}")
+print(f"   - La mayoría de tweets tienen baja toxicidad pues son menores a 0.5, la toxicidad media es: {toxicity_mean:.4f}"  )
+
+```
+# 2. Preprocesamiento y Codificación
+
+## 2.1 Limpieza de datos básica
+
+```{python}
+print("=== LIMPIEZA DE DATOS BÁSICA")
+
+df_processed = df[['content', 'toxicity_score']].copy()
+
+initial_rows = len(df_processed)
+df_processed = df_processed.dropna(subset=['toxicity_score', 'content'])
+final_rows = len(df_processed)
+# Verificar tipos de datos
+print(f"\nTipos de datos:")
+print(f"  - content: {df_processed['content'].dtype}")
+print(f"  - toxicity_score: {df_processed['toxicity_score'].dtype}")
+```
+
+## 2.2 Procesamiento del texto (content)
+
+```{python}
+print("=== PROCESAMIENTO DEL CAMPO CONTENT")
+
+# Función simple de limpieza de texto
+def clean_text(text):
+    if pd.isna(text):
+        return ""
+    
+    text = str(text).lower()
+    # Remover URLs, menciones, hashtags, ademas números y caracteres especiales
+    text = re.sub(r'http\S+|www\S+', '', text)
+    text = re.sub(r'@\w+', '', text)
+    text = re.sub(r'#\w+', '', text)
+    text = re.sub(r'\d+', '', text)
+    text = re.sub(r'[^\w\s]', ' ', text)
+    text = ' '.join(text.split())
+    
+    return text
+
+# Aplicar limpieza
+df_processed['content_clean'] = df_processed['content'].apply(clean_text)
+
+# Remover stopwords en español
+spanish_stopwords = set(stopwords.words('spanish'))
+
+def remove_stopwords(text):
+    words = text.split()
+    return ' '.join([word for word in words if word not in spanish_stopwords and len(word) > 2])
+
+# Crear texto procesado final
+df_processed['text_processed'] = df_processed['content_clean'].apply(remove_stopwords)
+
+print(f"Texto procesado:")
+```
+
+## 2.3 Codificación de texto con TF-IDF
+
+```{python}
+print("=== CODIFICACIÓN DE TEXTO CON TF-IDF")
+
+# Configurar TF-IDF
+tfidf_vectorizer = TfidfVectorizer(
+    max_features=1000,          
+    min_df=2,                   
+    max_df=0.8,                 
+    ngram_range=(1, 2),       
+    stop_words=list(spanish_stopwords)
+)
+
+# Aplicar TF-IDF al texto procesado
+X_tfidf = tfidf_vectorizer.fit_transform(df_processed['text_processed'])
+print(f"Dimensiones de TF-IDF: {X_tfidf.shape}")
+
+# Mostrar términos más importantes
+feature_names = tfidf_vectorizer.get_feature_names_out()
+print(f"Total de términos extraídos: {len(feature_names)}")
+print(f"Primeros 10 términos: {feature_names[:10]}")
+print(f"Últimos 10 términos: {feature_names[-10:]}")
+```
+
+## 2.4 Pipeline simplificado con ColumnTransformer
+
+```{python}
+print("=== PIPELINE SIMPLIFICADO ===")
+
+# Pipeline simple: solo texto → TF-IDF
+preprocessor_simple = ColumnTransformer(
+    transformers=[
+        ('text', TfidfVectorizer(
+            max_features=500,
+            min_df=2,
+            max_df=0.8,
+            ngram_range=(1, 2),
+            stop_words=list(spanish_stopwords)
+        ), 'text_processed')
+    ],
+    remainder='drop'
+)
+
+# Aplicar transformación
+X_final = preprocessor_simple.fit_transform(df_processed)
+y_final = df_processed['toxicity_score'].values
+
+print(f"\nDatos finales preparados:")
+print(f"  - X: {X_final.shape}")
+print(f"  - y: {y_final.shape}")
+print(f"  - Rango de toxicity_score: [{y_final.min():.4f}, {y_final.max():.4f}]")
+```
+
+## 2.5 División de datos para regresión
+
+```{python}
+print("=== DIVISIÓN DE DATOS")
+
+# División simple para regresión
+X_train, X_test, y_train, y_test = train_test_split(
+    X_final, y_final, 
+    test_size=0.2, 
+    random_state=42
+)
+
+print(f"\nDistribución del target (toxicity_score):")
+print(f"  Entrenamiento - Media: {y_train.mean():.4f}") 
+print(f"  Std: {y_train.std():.4f}")
+print(f"  Prueba - Media: {y_test.mean():.4f}")
+print(f"  Std: {y_test.std():.4f}")
+
+```
